@@ -7,4 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Clothing-Store.Common\Clothing-Store.Common.csproj" />
+    <ProjectReference Include="..\Clothing-Store.Data\Clothing-Store.Data.csproj" />
+  </ItemGroup>
+
 </Project>
