@@ -16,4 +16,14 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.11" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Clothing-Store.Common\Clothing-Store.Common.csproj" />
+    <ProjectReference Include="..\Clothing-Store.Core\Clothing-Store.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\banners\" />
+    <Folder Include="wwwroot\images\svgs\" />
+  </ItemGroup>
+
 </Project>
