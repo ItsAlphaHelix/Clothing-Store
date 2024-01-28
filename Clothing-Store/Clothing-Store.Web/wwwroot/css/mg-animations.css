@@ -1,0 +1,29 @@
+/*
+ * Hover animations
+ */
+
+/*zoom on hover*/
+.mg-img-hzoom {
+    overflow: hidden;
+}
+.mg-img-hzoom img {
+    transition: all .5s ease-out;
+}
+.mg-img-hzoom:hover img {
+    transform: scale(1.07);
+}
+/**************************/
+
+/*image hover brightness*/
+.mg-img-hdark:hover img {
+    filter: brightness(0.9);
+}
+.mg-img-hbright-95 img {
+    transition: all .7s ease-out;
+}
+.mg-img-hbright-95:hover img {
+    filter: brightness(0.95);
+}
+/*****************************/
+
+

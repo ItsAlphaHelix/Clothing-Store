@@ -1,13 +1,16 @@
 using Clothing_Store.Data;
 using Clothing_Store.Data.Data;
 using Clothing_Store.Data.Data.Models;
+using Clothing_Store.Data.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
 builder.Services.AddDbContext<ClothingStoreContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -15,6 +18,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<ApplicationUser>()
     .AddEntityFrameworkStores<ClothingStoreContext>();
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
 var app = builder.Build();
 

@@ -4,12 +4,12 @@
 */
 @font-face {
     font-family: 'optima';
-    src: url('../fonts/OPTIMA.TTF');
+    src: url('/fonts/OPTIMA.TTF');
 }
 
 @font-face {
     font-family: 'DidactGothic';
-    src: url('../fonts/DidactGothic-Regular.ttf');
+    src: url('/fonts/DidactGothic-Regular.ttf');
 }
 /*MG Global Elements*/
 body {

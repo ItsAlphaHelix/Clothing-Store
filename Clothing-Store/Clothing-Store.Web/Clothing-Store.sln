@@ -5,13 +5,13 @@ VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clothing-Store", "Clothing-Store.csproj", "{ED0D8DDF-44E1-48C4-91FF-A61309DF6D94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clothing-Store.Data", "..\Clothing-Store.Data\Clothing-Store.Data.csproj", "{E7FCC059-A332-4795-9CF3-8D641B287F61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clothing-Store.Data", "..\Clothing-Store.Data\Clothing-Store.Data.csproj", "{E7FCC059-A332-4795-9CF3-8D641B287F61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clothing-Store-Tests", "..\Clothing-Store-Tests\Clothing-Store-Tests.csproj", "{95165C03-5D2A-4915-9999-FF145D3B8E7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clothing-Store-Tests", "..\Clothing-Store-Tests\Clothing-Store-Tests.csproj", "{95165C03-5D2A-4915-9999-FF145D3B8E7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clothing-Store.Common", "..\Clothing-Store.Common\Clothing-Store.Common.csproj", "{E123AFD5-4BF0-4CFE-85C0-BB825455779E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clothing-Store.Common", "..\Clothing-Store.Common\Clothing-Store.Common.csproj", "{E123AFD5-4BF0-4CFE-85C0-BB825455779E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clothing-Store.Core", "..\Clothing-Store.Core\Clothing-Store.Core.csproj", "{BD09EB32-4BA9-46DE-AF62-BF6D54C0B7FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clothing-Store.Core", "..\Clothing-Store.Core\Clothing-Store.Core.csproj", "{BD09EB32-4BA9-46DE-AF62-BF6D54C0B7FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
