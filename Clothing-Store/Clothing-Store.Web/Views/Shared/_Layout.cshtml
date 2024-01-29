@@ -11,26 +11,36 @@
     <link rel="stylesheet" href="~/css/slick-theme.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/mg-animations.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/responsive.css" asp-apend-version="true" />
+    <link rel="stylesheet" href="~/css/responsive.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/mg-menu.css" asp-append-version="true" />
-    @* <link rel="stylesheet" href="~/css/jquery.highlight.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/magnific-popup.css" asp-append-version="true" /> *@
+    <link rel="stylesheet" href="~/css/jquery.highlight.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/magnific-popup.css" asp-append-version="true" />
 </head>
 <body class="home-2">
-    <header class="mg-transparent-header">
-        <partial name="_NavigationPartial.cshtml" />
-    </header>
-        <main role="main">
-            @RenderBody()
-        </main>
+
+    @if (this.ViewBag.IsHomePage)
+    {
+        <header class="mg-transparent-header">
+            <partial name="_NavigationHomePartial.cshtml" />
+        </header>
+    }
+    else
+    {
+        <header>
+            <partial name="_GlobalNavigationPartial.cshtml" />
+        </header>
+    }
+    <main role="main">
+        @RenderBody()
+    </main>
 
     @* <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - Clothing_Store - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+    <div class="container">
+    &copy; 2024 - Clothing_Store - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
     </footer> *@
     @* <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @*   <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
     <script src="~/js/popper.min.js" asp-append-version="true"></script>
     <script src="~/js/jquery.magnific-popup.js" asp-append-version="true"></script>
     <script src="~/js/jquery.highlight.js" asp-append-version="true"></script>

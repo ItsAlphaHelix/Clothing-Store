@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="49" viewBox="0 0 220 49">
+  <g id="Group_96" data-name="Group 96" transform="translate(-850 -25)">
+    <g id="Rectangle_3" data-name="Rectangle 3" transform="translate(850 25)" fill="none" stroke="#000" stroke-width="1" opacity="0.15">
+      <rect width="220" height="49" stroke="none"/>
+      <rect x="0.5" y="0.5" width="219" height="48" fill="none"/>
+    </g>
+    <text id="MG" transform="translate(867 59)" fill="#8f6b6c" font-size="30" font-family="Optima"><tspan x="0" y="0">MG</tspan></text>
+    <text id="fashion" transform="translate(927 59)" font-size="30" font-family="Optima"><tspan x="0" y="0">FASHION</tspan></text>
+  </g>
+</svg>

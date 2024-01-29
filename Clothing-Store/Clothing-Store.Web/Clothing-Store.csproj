@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\banners\" />
-    <Folder Include="wwwroot\images\svgs\" />
     <Folder Include="wwwroot\fonts\" />
   </ItemGroup>
 

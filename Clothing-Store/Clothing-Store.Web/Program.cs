@@ -1,3 +1,5 @@
+using Clothing_Store.Core.Contracts;
+using Clothing_Store.Core.Services;
 using Clothing_Store.Data;
 using Clothing_Store.Data.Data;
 using Clothing_Store.Data.Data.Models;
@@ -20,6 +22,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>()
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 
