@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Clothing_Store.Core.ViewModels.Products
+﻿namespace Clothing_Store.Core.ViewModels.Products
 {
     public class ProductViewModel
     {
@@ -14,6 +8,6 @@ namespace Clothing_Store.Core.ViewModels.Products
 
         public decimal Price { get; set; }
 
-        public string ImageUrl { get; set; }
+        public List<string> Images { get; set; } = new List<string>();
     }
 }

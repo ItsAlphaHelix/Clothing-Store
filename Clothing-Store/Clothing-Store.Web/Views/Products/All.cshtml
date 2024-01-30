@@ -1,360 +1,128 @@
-﻿<div>
-    @using Clothing_Store.Core.ViewModels.Products;
-    @model IEnumerable<ProductViewModel>
+﻿@using Clothing_Store.Core.Contracts;
+@using Clothing_Store.Core.ViewModels.Products;
+@model IEnumerable<ProductViewModel>
 
-    @{
-        ViewData["Title"] = "All Products";
-    }
-    <div class="modal gx-0 fade mg-search-pop-up" id="search-popup" tabindex="-1" aria-labelledby="search-popup" aria-hidden="true">
-        <div class="modal-dialog modal-fullscreen">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="btn-close mg-pop-up-close-btn" data-bs-dismiss="modal" aria-label="Close">
-                        <span class="mg-spcb-bar-one"></span>
-                        <span class="mg-spcb-bar-two"></span>
-                    </button>
-                </div>
-                <div class="modal-body align-items-center d-flex">
-                    <div class="mg-search-pop-form-outer w-100">
-                        <div class="search-heading"></div>
-                        <form>
-                            <input type="text" class="form-control" placeholder="Search here...">
-                        </form>
-                    </div>
+
+@{
+    ViewData["Title"] = "All Products";
+}
+<div class="modal gx-0 fade mg-search-pop-up" id="search-popup" tabindex="-1" aria-labelledby="search-popup" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close mg-pop-up-close-btn" data-bs-dismiss="modal" aria-label="Close">
+                    <span class="mg-spcb-bar-one"></span>
+                    <span class="mg-spcb-bar-two"></span>
+                </button>
+            </div>
+            <div class="modal-body align-items-center d-flex">
+                <div class="mg-search-pop-form-outer w-100">
+                    <div class="search-heading"></div>
+                    <form>
+                        <input type="text" class="form-control" placeholder="Search here...">
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-    <div class="mg-breadcrumb-outer">
-        <div class="container-fluid gx-5">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item active">Collection</li>
-                </ol>
-            </nav>
-        </div>
+</div>
+<div class="mg-breadcrumb-outer">
+    <div class="container-fluid gx-5">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item active">Collection</li>
+            </ol>
+        </nav>
     </div>
-    <div class="mg-page-outer collection-page-outer">
-        <div class="container-lg gx-lg-0">
-            <div class="row">
-                <div class="col-md-3">
-                    <div id="mg-filter-sidenav" class="mg-filter-outer">
-                        <span class="d-md-none mg-filter-nav-close-btn mg-fc-btn">&times;</span>
-                        <div class="mg-accordian-outer">
-                            <div class="accordion accordion-flush" id="mg-privacy-policy">
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#tab1">
-                                            Product
-                                        </button>
-                                    </h2>
-                                    <div id="tab1" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <div class="mg-filter-panel">
-                                                <div class="mg-filter-checkbox">
-                                                    <ul>
-                                                        <li><a href="javascript:void(0);">Accessories</a></li>
-                                                        <li><a href="javascript:void(0);">Jackets</a></li>
-                                                        <li><a href="javascript:void(0);">Jeans</a></li>
-                                                        <li><a href="javascript:void(0);">Shirts</a></li>
-                                                        <li><a href="javascript:void(0);">Shoes</a></li>
-                                                        <li><a href="javascript:void(0);">Sweaters</a></li>
-                                                        <li><a href="javascript:void(0);">T-shirts</a></li>
-                                                        <li><a href="javascript:void(0);">Women</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#tab2">
-                                            Brand
-                                        </button>
-                                    </h2>
-                                    <div id="tab2" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <div class="mg-filter-panel">
-                                                <div class="mg-filter-checkbox">
-                                                    <ul>
-                                                        <li><a href="javascript:void(0);">Burberry</a></li>
-                                                        <li><a href="javascript:void(0);">Kenzo</a></li>
-                                                        <li><a href="javascript:void(0);">Louis Vuitton</a></li>
-                                                        <li><a href="javascript:void(0);">Police</a></li>
-                                                        <li><a href="javascript:void(0);">Tomford</a></li>
-                                                        <li><a href="javascript:void(0);">Vinova</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#tab3">
-                                            Price
-                                        </button>
-                                    </h2>
-                                    <div id="tab3" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <div class="mg-filter-panel">
-                                                <div class="mg-filter-checkbox">
-                                                    <ul>
-                                                        <li><a href="javascript:void(0);">$10 - $100</a></li>
-                                                        <li><a href="javascript:void(0);">$101 - $200</a></li>
-                                                        <li><a href="javascript:void(0);">$201 - $300</a></li>
-                                                        <li><a href="javascript:void(0);">$301 - $400</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#tab4">
-                                            Color
-                                        </button>
-                                    </h2>
-                                    <div id="tab4" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <div class="mg-color-variant-outer">
+</div>
+<!--MG Breadcrumb End Here-->
+<!--MG Page Start Here-->
+<div class="mg-page-outer collection-page-outer">
+    <div class="container-lg gx-lg-0">
+        <div class="row">
+            <div class="col-md-3">
+                <div id="mg-filter-sidenav" class="mg-filter-outer">
+                    <span class="d-md-none mg-filter-nav-close-btn mg-fc-btn">&times;</span>
+                    <div class="mg-accordian-outer">
+                        <div class="accordion accordion-flush" id="mg-privacy-policy">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#tab1">
+                                        Product
+                                    </button>
+                                </h2>
+                                <div id="tab1" class="accordion-collapse collapse show">
+                                    <div class="accordion-body">
+                                        <div class="mg-filter-panel">
+                                            <div class="mg-filter-checkbox">
                                                 <ul>
-                                                    <li class="mg-active-variant"><a style="background-color: #242424;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                    <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                    <li><a style="background-color: #6495ED;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                    <li><a style="background-color: #483D8B;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                    <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                    <li><a style="background-color: #242424;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                    <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                    <li><a style="background-color: #6495ED;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                    <li><a style="background-color: #483D8B;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                    <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                    <li><a style="background-color: #242424;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                    <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                    <li><a style="background-color: #6495ED;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                    <li><a style="background-color: #483D8B;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                    <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                                                    <li><a href="javascript:void(0);">Accessories</a></li>
+                                                    <li><a href="javascript:void(0);">Jackets</a></li>
+                                                    <li><a href="javascript:void(0);">Jeans</a></li>
+                                                    <li><a href="javascript:void(0);">Shirts</a></li>
+                                                    <li><a href="javascript:void(0);">Shoes</a></li>
+                                                    <li><a href="javascript:void(0);">Sweaters</a></li>
+                                                    <li><a href="javascript:void(0);">T-shirts</a></li>
+                                                    <li><a href="javascript:void(0);">Women</a></li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#tab5">
-                                            Sizes
-                                        </button>
-                                    </h2>
-                                    <div id="tab5" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <div class="mg-filter-panel">
-                                                <div class="mg-filter-checkbox">
-                                                    <ul>
-                                                        <li><a href="javascript:void(0);">XS</a></li>
-                                                        <li><a href="javascript:void(0);">S</a></li>
-                                                        <li><a href="javascript:void(0);">M</a></li>
-                                                        <li><a href="javascript:void(0);">L</a></li>
-                                                        <li><a href="javascript:void(0);">XL</a></li>
-                                                    </ul>
-                                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#tab2">
+                                        Brand
+                                    </button>
+                                </h2>
+                                <div id="tab2" class="accordion-collapse collapse show">
+                                    <div class="accordion-body">
+                                        <div class="mg-filter-panel">
+                                            <div class="mg-filter-checkbox">
+                                                <ul>
+                                                    <li><a href="javascript:void(0);">Burberry</a></li>
+                                                    <li><a href="javascript:void(0);">Kenzo</a></li>
+                                                    <li><a href="javascript:void(0);">Louis Vuitton</a></li>
+                                                    <li><a href="javascript:void(0);">Police</a></li>
+                                                    <li><a href="javascript:void(0);">Tomford</a></li>
+                                                    <li><a href="javascript:void(0);">Vinova</a></li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="mg-sidenav-overlay"></div>
-                </div>
-                <div class="col-md-9">
-                    <div class="mg-collection-page-main-grid-outer">
-                        <div class="mg-collection-banner text-center">
-                            @* <div class="mg-collection-banner-tittles">
-                            <h2 class="mg-heading">New Collection</h2>
-                            <p>Get upto 20% off</p>
-                            <a href="collection.html" class="mg-btn mg-btn-white">Shop Now</a>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#tab3">
+                                        Price
+                                    </button>
+                                </h2>
+                                <div id="tab3" class="accordion-collapse collapse show">
+                                    <div class="accordion-body">
+                                        <div class="mg-filter-panel">
+                                            <div class="mg-filter-checkbox">
+                                                <ul>
+                                                    <li><a href="javascript:void(0);">$10 - $100</a></li>
+                                                    <li><a href="javascript:void(0);">$101 - $200</a></li>
+                                                    <li><a href="javascript:void(0);">$201 - $300</a></li>
+                                                    <li><a href="javascript:void(0);">$301 - $400</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            </div> *@
-                            <div class="mg-collection-grid-pannel mt-5">
-                                <div class="mg-section-tittles text-center">
-                                    <h2 class="mg-heading mg-heading-small">@this.ViewData["Title"]</h2>
-                                </div>
-                                <div class="mg-sorting-outer mb-3">
-                                    <!--Select Input Sorting-->
-                                    <form>
-                                        <div class="mg-sorting">
-                                            <label>Shorted By:</label>
-                                            <select class="form-control">
-                                                <option value="default" selected="selected">Featured</option>
-                                                <option value="popularity">Popularity</option>
-                                                <option value="rating">Average Rating</option>
-                                                <option value="date">Latest</option>
-                                                <option value="price-low">Low To High</option>
-                                                <option value="price-high">High To Low</option>
-                                            </select>
-                                        </div>
-                                    </form>
-                                    <!--Select Input Sorting-->
-                                    <!--HTML Sorting-->
-                                    <div class="mg-html-sorting-outer d-none">
-                                        <div class="mg-html-sorting-bar">Shorted By: <span class="mg-sorting-selected">Featured</span></div>
-                                        <div class="mg-html-sorting-options-pannel">
-                                            <ul>
-                                                <li class="selected"><a href="#">Featured</a></li>
-                                                <li><a href="javascript:void(0);">Popularity</a></li>
-                                                <li><a href="javascript:void(0);">Average Rating</a></li>
-                                                <li><a href="javascript:void(0);">Latest</a></li>
-                                                <li><a href="javascript:void(0);">Low To High</a></li>
-                                                <li><a href="javascript:void(0);">High To Low</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <!--HTML Sorting-->
-                                    <span class="d-md-none mg-filter-nav-btn"><i class="fa fa-filter" aria-hidden="true"></i> Filters</span>
-                                </div>
-                                <!--Products Grid Start Here-->
-                                <div>
-                                    <div class="mg-collection-product-list-outer">
-                                        <div class="row">
-                                            @foreach (var product in Model)
-                                            {
-                                                <div class="col-md-4 col-sm-6">
-                                                    <div class="mg-product-main mg-img-hdark">
-                                                        <div class="position-relative">
-                                                            <div class="mg-product-image">
-                                                                <a href="product.html"><img class="img-fluid" src="@product.ImageUrl" alt="" /></a>
-                                                                <a href="product.html"><img class="img-fluid mg-hover-img" src="" alt="" /></a>
-                                                            </div>
-                                                            <div class="mg-product-icons-outer">
-                                                                <div class="mg-product-icon">
-                                                                    <a href="#"><img class="mg-product-icon-img" src="assets/images/heart-icon.svg" alt="" /></a>
-                                                                </div>
-                                                                <div class="mg-product-icon">
-                                                                    <a data-bs-toggle="modal" data-bs-target="#mg-quick-view-modal" href="javascript:void(0)"><img class="mg-product-icon-img" src="assets/images/view-icon.svg" alt="" /></a>
-                                                                </div>
-                                                            </div>
-                                                            <div class="mg-product-add-to-cart-btn-outer">
-                                                                <a class="mg-product-add-to-cart-btn" href="cart.html">Add To Bag</a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="mg-product-tittles text-center">
-                                                            <a class="mg-product-name" href="product.html">@product.Category</a>
-                                                            <div class="mg-regular-price"><span class="mg-discount-price"></span>@product.Price</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--Products Grid End Here-->
-                                <!--MG Pagination Start Here-->
-                                <div class="mg-pagination-outer mt-3">
-                                    <nav>
-                                        <ul class="pagination justify-content-center align-items-center">
-                                            <li class="page-item pagination-nextprev">
-                                                <a class="page-link" href="#" aria-label="Previous">
-                                                    <img src="assets/images/mg-arrow-left.png" alt="" />
-                                                </a>
-                                            </li>
-                                            <li class="page-item"><a class="page-link active" href="#">1</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                            <li class="page-item pagination-nextprev">
-                                                <a class="page-link" href="#" aria-label="Next">
-                                                    <img src="assets/images/mg-arrow-right.png" alt="" />
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </nav>
-                                </div>
-                                <!--MG Pagination End Here-->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--MG Quick View Modal Start Here-->
-        <div class="modal fade mg-quick-view-modal-outer" id="mg-quick-view-modal" tabindex="-1" aria-labelledby="mg-quick-view-modal" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content mg-quick-view-modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row gx-5">
-                            <div class="col-md-6">
-                                <div class="mg-product-slider-outer">
-                                    <div class="mg-product-slider-main">
-                                        <div class="mg-product-slider mg-quick-view-slider">
-                                            <div>
-                                                <img class="img-fluid" src="assets/images/product-image.jpg" alt="" />
-                                            </div>
-                                            <div>
-                                                <img class="img-fluid" src="assets/images/product-image.jpg" alt="" />
-                                            </div>
-                                            <div>
-                                                <img class="img-fluid" src="assets/images/product-image.jpg" alt="" />
-                                            </div>
-                                            <div>
-                                                <img class="img-fluid" src="assets/images/product-image.jpg" alt="" />
-                                            </div>
-                                            <div>
-                                                <img class="img-fluid" src="assets/images/product-image.jpg" alt="" />
-                                            </div>
-                                            <div>
-                                                <img class="img-fluid" src="assets/images/product-image.jpg" alt="" />
-                                            </div>
-                                            <div>
-                                                <img class="img-fluid" src="assets/images/product-image.jpg" alt="" />
-                                            </div>
-                                        </div>
-                                        <div class="mg-product-slider-thumb mg-quick-view-slider-thumb">
-                                            <div>
-                                                <img class="img-fluid" src="assets/images/product-image.jpg" alt="" />
-                                            </div>
-                                            <div>
-                                                <img class="img-fluid" src="assets/images/product-image.jpg" alt="" />
-                                            </div>
-                                            <div>
-                                                <img class="img-fluid" src="assets/images/product-image.jpg" alt="" />
-                                            </div>
-                                            <div>
-                                                <img class="img-fluid" src="assets/images/product-image.jpg" alt="" />
-                                            </div>
-                                            <div>
-                                                <img class="img-fluid" src="assets/images/product-image.jpg" alt="" />
-                                            </div>
-                                            <div>
-                                                <img class="img-fluid" src="assets/images/product-image.jpg" alt="" />
-                                            </div>
-                                            <div>
-                                                <img class="img-fluid" src="assets/images/product-image.jpg" alt="" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--Product Slider Script-->
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mg-product-page-details-outer">
-                                    <h2 class="mg-product-page-product-tittle">Black Shiny Crop Top</h2>
-                                    <div class="row gx-2 align-items-end">
-                                        <div class="col-9">
-                                            <div class="mg-product-page-product-price">
-                                                <span class="mg-price">$199</span> <span class="mg-product-page-regular-price"><del>$223</del></span> <span class="mg-product-page-small-text">13% off</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-3 text-end">
-                                            <div class="mg-stock-text">In stock</div>
-                                        </div>
-                                    </div>
-                                    <div class="mg-variant-pannel mg-product-page-sec-spacing">
-                                        <div class="mg-product-page-small-heading">Colors</div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#tab4">
+                                        Color
+                                    </button>
+                                </h2>
+                                <div id="tab4" class="accordion-collapse collapse show">
+                                    <div class="accordion-body">
                                         <div class="mg-color-variant-outer">
                                             <ul>
                                                 <li class="mg-active-variant"><a style="background-color: #242424;" class="mg-color-variant" href="javascript:void(0);"></a></li>
@@ -362,60 +130,180 @@
                                                 <li><a style="background-color: #6495ED;" class="mg-color-variant" href="javascript:void(0);"></a></li>
                                                 <li><a style="background-color: #483D8B;" class="mg-color-variant" href="javascript:void(0);"></a></li>
                                                 <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                                                <li><a style="background-color: #242424;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                                                <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                                                <li><a style="background-color: #6495ED;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                                                <li><a style="background-color: #483D8B;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                                                <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                                                <li><a style="background-color: #242424;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                                                <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                                                <li><a style="background-color: #6495ED;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                                                <li><a style="background-color: #483D8B;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                                                <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="mg-product-page-sec-spacing">
-                                        <div class="mg-variant-pannel">
-                                            <div class="mg-product-page-small-heading">Size</div>
-                                            <div class="mg-size-variant-outer">
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#tab5">
+                                        Sizes
+                                    </button>
+                                </h2>
+                                <div id="tab5" class="accordion-collapse collapse show">
+                                    <div class="accordion-body">
+                                        <div class="mg-filter-panel">
+                                            <div class="mg-filter-checkbox">
                                                 <ul>
-                                                    <li class="active"><a href="#">XS</a></li>
-                                                    <li><a href="#">S</a></li>
-                                                    <li><a href="#">M</a></li>
-                                                    <li><a href="#">L</a></li>
-                                                    <li><a href="#">XL</a></li>
+                                                    <li><a href="javascript:void(0);">XS</a></li>
+                                                    <li><a href="javascript:void(0);">S</a></li>
+                                                    <li><a href="javascript:void(0);">M</a></li>
+                                                    <li><a href="javascript:void(0);">L</a></li>
+                                                    <li><a href="javascript:void(0);">XL</a></li>
                                                 </ul>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                    <div class="mg-variant-pannel mg-product-page-sec-spacing">
-                                        <div class="mg-product-page-small-heading">Quantity</div>
-                                        <div class="mg-quantity-variant-outer">
-                                            <div class="mg-cart-quantiy-outer">
-                                                <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="mg-quantity-step-btn"><i class="fa fa-minus" aria-hidden="true"></i></button>
-                                                <input class="mg-cart-quantity" min="0" name="quantity" value="1" type="number">
-                                                <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="mg-quantity-step-btn"><i class="fa fa-plus" aria-hidden="true"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mg-product-add-to-cart-outer mg-product-page-sec-spacing">
-                                        <button class="btn mg-btn mg-black-btn mg-form-btn mg-light-bg-btn"><span class="mg-btn-icon"><img src="assets/images/product-bag.svg" alt="" /></span>Add To Bag</button>
-                                    </div>
-                                    <div class="mg-quick-popup-more-info-btn text-center">
-                                        <a href="#">View Full Info</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="mg-sidenav-overlay"></div>
+            </div>
+            <div class="col-md-9">
+                <div class="mg-collection-page-main-grid-outer">
+                    <div class="mg-collection-banner text-center">
+                        <div class="mg-collection-banner-tittles">
+                            <h2 class="mg-heading">New Collection</h2>
+                            <p>Get upto 20% off</p>
+                            <a href="collection.html" class="mg-btn mg-btn-white">Shop Now</a>
+                        </div>
+                    </div>
+                    <div class="mg-collection-grid-pannel mt-5">
+                        <div class="mg-section-tittles text-center">
+                            <h2 class="mg-heading mg-heading-small">Women's Collection</h2>
+                        </div>
+                        <div class="mg-sorting-outer mb-3">
+                            <!--Select Input Sorting-->
+                            <form>
+                                <div class="mg-sorting">
+                                    <label>Shorted By:</label>
+                                    <select class="form-control">
+                                        <option value="default" selected="selected">Featured</option>
+                                        <option value="popularity">Popularity</option>
+                                        <option value="rating">Average Rating</option>
+                                        <option value="date">Latest</option>
+                                        <option value="price-low">Low To High</option>
+                                        <option value="price-high">High To Low</option>
+                                    </select>
+                                </div>
+                            </form>
+                            <!--Select Input Sorting-->
+                            <!--HTML Sorting-->
+                            <div class="mg-html-sorting-outer d-none">
+                                <div class="mg-html-sorting-bar">Shorted By: <span class="mg-sorting-selected">Featured</span></div>
+                                <div class="mg-html-sorting-options-pannel">
+                                    <ul>
+                                        <li class="selected"><a href="#">Featured</a></li>
+                                        <li><a href="javascript:void(0);">Popularity</a></li>
+                                        <li><a href="javascript:void(0);">Average Rating</a></li>
+                                        <li><a href="javascript:void(0);">Latest</a></li>
+                                        <li><a href="javascript:void(0);">Low To High</a></li>
+                                        <li><a href="javascript:void(0);">High To Low</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!--HTML Sorting-->
+                            <span class="d-md-none mg-filter-nav-btn"><i class="fa fa-filter" aria-hidden="true"></i> Filters</span>
+                        </div>
+                        <!--Products Grid Start Here-->
+                        <div>
+                            <div class="mg-collection-product-list-outer">
+                                <div class="row">
+                                    @foreach (var product in Model)
+                                    {
+                                        <div class="col-md-4 col-sm-6">
+                                            <div class="mg-product-main mg-img-hdark">
+                                                <div class="position-relative">
+                                                    <div class="mg-product-image">
+                                                        <a href="product.html"><img class="img-fluid" src="@product.Images[0]" alt="" /></a>
+                                                        <a href="product.html"><img class="img-fluid mg-hover-img" src="@product.Images[1]" alt="" /></a>
+                                                    </div>
+                                                    <div class="mg-product-icons-outer">
+                                                        <div class="mg-product-icon">
+                                                            <a href="#"><img class="mg-product-icon-img" src="~/images/svgs/heart-icon.svg" alt="" /></a>
+                                                        </div>
+                                                        <div class="mg-product-icon">
+                                                            <a href="javascript:void(0)" onclick="loadProductDetails(@product.Id)"><img class="mg-product-icon-img" src="~/images/svgs/view-icon.svg" alt="" /></a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mg-product-add-to-cart-btn-outer">
+                                                        <a class="mg-product-add-to-cart-btn" href="cart.html">Add To Bag</a>
+                                                    </div>
+                                                </div>
+                                                <div class="mg-product-tittles text-center">
+                                                    <a class="mg-product-name" href="product.html">@product.Category</a>
+                                                    <div class="mg-regular-price"><span class="mg-discount-price"></span>@product.Price</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <!--Products Grid End Here-->
+                        <!--MG Pagination Start Here-->
+                        <div class="mg-pagination-outer mt-3">
+                            <nav>
+                                <ul class="pagination justify-content-center align-items-center">
+                                    <li class="page-item pagination-nextprev">
+                                        <a class="page-link" href="#" aria-label="Previous">
+                                            <img src="assets/images/mg-arrow-left.png" alt="" />
+                                        </a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link active" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item pagination-nextprev">
+                                        <a class="page-link" href="#" aria-label="Next">
+                                            <img src="assets/images/mg-arrow-right.png" alt="" />
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <!--MG Pagination End Here-->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    @section Scripts {
-        <script src="~/js/jquery.min.js" asp-append-version="true"></script>
-        <script src="~/js/bootstrap.min.js" asp-append-version="true"></script>
-        <script src="~/js/slick.js" asp-append-version="true"></script>
-        <script src="~/js/mg-menu.js" asp-append-version="true"></script>
-        <script src="~/js/pages/mg-collection.js" asp-append-version="true"></script>
-        <script src="~/js/mg-common.js" asp-append-version="true"></script>
-        <script>
-            $(document).ready(function () {
-                $('.mg-transparent-header').css('display', 'none');
-            });
-        </script>
-    }
 </div>
+
+<div class="modal fade mg-quick-view-modal-outer" id="mg-quick-view-modal" tabindex="-1" aria-labelledby="mg-quick-view-modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+    </div>
+</div>
+<!--MG Quick View Modal Start Here-->
+@section Scripts {
+    <script>
+        function loadProductDetails(productId) {
+            $.ajax({
+                url: '/Products/GetSmallDetails',
+                data: { productId: productId },
+                type: 'GET',
+                success: function (data) {
+                    $.getScript('/js/mg-common.js', function () {
+                        $('#mg-quick-view-modal').find('.modal-dialog').html(data);
+                        $('#mg-quick-view-modal').modal('show');
+                    });
+                },
+                error: function () {
+                    alert('Error! Cannot retrieve product details.');
+                }
+            });
+        }
+    </script>
+}

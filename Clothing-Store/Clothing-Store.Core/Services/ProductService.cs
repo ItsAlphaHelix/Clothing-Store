@@ -25,11 +25,28 @@
                     Id = x.Id,
                     Category = x.Category,
                     Price = x.Price,
-                    ImageUrl = x.Images.FirstOrDefault().Url
+                    Images = x.Images.Select(x => x.Url).Take(2).ToList()
                 })
                 .ToListAsync();
 
             return products;
+        }
+
+        public async Task<ProductViewModel> GetProductByIdAsync(int productId)
+        {
+            var product = await this.productsRepository
+                .AllAsNoTracking()
+                .Where(x => x.Id == productId)
+                .Select(x => new ProductViewModel()
+                {
+                    Category = x.Category,
+                    Price = x.Price,
+                    Images = x.Images.Select(x => x.Url)
+                    .ToList()
+                })
+                .FirstOrDefaultAsync();
+
+            return product;
         }
     }
 }
