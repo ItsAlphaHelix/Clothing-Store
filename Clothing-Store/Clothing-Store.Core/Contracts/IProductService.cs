@@ -16,5 +16,12 @@
         /// <param name="productId"></param>
         /// <returns></returns>
         public Task<ProductViewModel> GetProductByIdAsync(int productId);
+
+        /// <summary>
+        /// Getting all products by gender.
+        /// </summary>
+        /// <returns></returns>
+        public Task<ICollection<ProductViewModel>> GetlAllProductsByGenderAsync(bool isMen);
+
     }
 }

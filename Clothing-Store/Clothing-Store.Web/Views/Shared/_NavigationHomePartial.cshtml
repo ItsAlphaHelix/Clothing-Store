@@ -3,7 +3,7 @@
         <div class="row gx-0 gx-md-2 align-items-center">
             <div class="col-md-2 col-lg-3 col-5">
                 <div class="header-logo">
-                    <a href="index.html"><img class="img-fluid" src="images/svgs/Footer-Logo.svg" alt="" /></a>
+                    <a ><img class="img-fluid" src="images/svgs/Footer-Logo.svg" alt="" /></a>
                 </div>
             </div>
             <div class="col-md-5 col-2 order-3 order-md-0 d-flex  justify-content-end mg-center-menu-align justify-content-md-center">
@@ -17,17 +17,17 @@
                         </div>
                         <ul class="menu-section mg-menu-outer">
                             <li class="menu-item-has-children">
-                                <a href="javascript:void(0);">Home</a>
+                                <a href="javascript:void(0);">Начална страница</a>
                             </li>
                             <li class="menu-item-has-children">
-                                <a asp-controller="Products" asp-action="All">Shop<i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                                <a asp-controller="Products" asp-action="All">Магазин<i class="fa fa-caret-down" aria-hidden="true"></i></a>
                                 <div class="mg-sub-menu-outer">
                                     <div class="menu-subs">
                                         <ul>
                                             @* <li><a href="collection.html">New Arrivals</a></li>
                                             <li><a href="collection.html">Top Trending</a></li> *@
-                                            <li><a href="collection.html">Men Collection</a></li>
-                                            <li><a href="collection.html">Women Collection</a></li>
+                                            <li><a asp-controller="Products" asp-action="AllMenProducts">Мъжка Колекция</a></li>
+                                            <li><a asp-controller="Products" asp-action="AllWomenProducts">Женска Колекция</a></li>
                                         </ul>
                                     </div>
                                 </div>

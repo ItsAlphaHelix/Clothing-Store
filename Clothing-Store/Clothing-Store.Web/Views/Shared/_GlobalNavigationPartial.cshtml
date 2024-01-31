@@ -12,17 +12,17 @@
                         </div>
                         <ul class="menu-section mg-menu-outer">
                             <li class="menu-item-has-children">
-                                <a asp-controller="Home" asp-action="Index">Home</a>
+                                <a asp-controller="Home" asp-action="Index">Начална страница</a>
                             </li>
                             <li class="menu-item-has-children">
-                                <a asp-action="All">Shop <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                                <a asp-action="All">Магазин <i class="fa fa-caret-down" aria-hidden="true"></i></a>
                                 <div class="mg-sub-menu-outer">
                                     <div class="menu-subs">
                                         <ul>
                                             @* <li><a href="collection.html">New Arrivals</a></li>
                                             <li><a href="collection.html">Top Trending</a></li> *@
-                                            <li><a href="collection.html">Men Collection</a></li>
-                                            <li><a href="collection.html">Women Collection</a></li>
+                                            <li><a asp-controller="Products" asp-action="AllMenProducts">Мъжка Колекция</a></li>
+                                            <li><a asp-controller="Products" asp-action="AllWomenProducts">Женска Колекция</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -62,7 +62,7 @@
             </div>
             <div class="col-lg-2 col-md-3 col-5">
                 <div class="header-logo text-center">
-                    <a href="index.html"><img class="img-fluid" src="~/images/svgs/logo.svg" alt="" /></a>
+                    <a asp-controller="Home" asp-action="Index"><img class="img-fluid" src="~/images/svgs/logo.svg" alt="" /></a>
                 </div>
             </div>
             <div class="col-lg-5 col-md-4 col-5 text-end">

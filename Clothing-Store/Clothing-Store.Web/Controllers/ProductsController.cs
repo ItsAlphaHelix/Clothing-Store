@@ -18,6 +18,21 @@
             return View(products);
         }
 
+        public async Task<IActionResult> AllMenProducts()
+        {
+            ViewBag.IsHomePage = false;
+            var products = await this.productsService.GetlAllProductsByGenderAsync(true);
+
+            return View(products);
+        }
+
+        public async Task<IActionResult> AllWomenProducts()
+        {
+            ViewBag.IsHomePage = false;
+            var products = await this.productsService.GetlAllProductsByGenderAsync(false);
+
+            return View(products);
+        }
         public async Task<IActionResult> GetSmallDetails(int productId)
         {
             var product = await this.productsService.GetProductByIdAsync(productId);

@@ -14,8 +14,25 @@
         public ProductService(IRepository<Product> productsRepository)
         {
             this.productsRepository = productsRepository;
-
         }
+
+        public async Task<ICollection<ProductViewModel>> GetlAllProductsByGenderAsync(bool isMen)
+        {
+            var products = await this.productsRepository
+                .AllAsNoTracking()
+                .Where(x => x.IsMale == isMen)
+                .Select(x => new ProductViewModel()
+                {
+                    Id = x.Id,
+                    Category = x.Category,
+                    Price = x.Price,
+                    Images = x.Images.Select(x => x.Url).Take(2).ToList()
+                })
+                .ToListAsync();
+
+            return products;
+        }
+
         public async Task<ICollection<ProductViewModel>> GetAllProductsAsync()
         {
             var products = await this.productsRepository
