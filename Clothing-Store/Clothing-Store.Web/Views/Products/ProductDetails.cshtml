@@ -1,0 +1,592 @@
+﻿@using Clothing_Store.Core.ViewModels.Products;
+@model ProductDetailsViewModel
+
+@{
+    ViewData["Title"] = "Информация за продукта";
+
+    var gender = Model.IsMale ? "Мъжки" : "Женски"; 
+    var navigation = Model.IsMale ? "AllMenProducts" : "AllWomenProducts";
+}
+<!--MG Breadcrumb-->
+<div class="mg-breadcrumb-outer">
+    <div class="container-fluid gx-5">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Products" asp-action="@navigation">@gender</a></li>
+                <li class="breadcrumb-item active">@Model.Category</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<!--MG Breadcrumb End Here-->
+<!--MG Page Start Here-->
+<div class="mg-page-outer product-page-outer">
+    <div class="container-lg gx-lg-0">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mg-product-slider-outer">
+                    <div class="mg-product-slider-main">
+                        <div class="mg-product-slider">
+                            @foreach (var image in Model.Images)
+                            {
+                                <div>
+                                    <img class="img-fluid" src="@image" alt="" />
+                                </div>
+                            }
+                        </div>
+                        <div class="mg-product-slider-thumb">
+                            @foreach (var image in Model.Images)
+                            {
+                                <div>
+                                    <img class="img-fluid" src="@image" alt="" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <!--Product Slider Script-->
+            </div>
+            <div class="col-md-6">
+                <div class="mg-product-page-details-outer">
+                    <div class="row gx-2">
+                        <div class="col-10">
+                            <h2 class="mg-product-page-product-tittle">@Model.Category</h2>
+                        </div>
+                        <div class="col-2 text-end">
+                            <div class="mg-stock-text">In stock</div>
+                        </div>
+                    </div>
+                    <div class="mg-rating-pannel">
+                        <div class="mg-rating-outer">
+                            <div class="mg-ratings-full">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <span class="mg-ratings" style="width: 80%;">
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="mg-rating-count">
+                            ( <span>100</span> Ревюта )
+                        </div>
+                    </div>
+                    <div class="mg-product-page-product-price mt-4">
+                        <span class="mg-price">@Model.Price BGN</span> <span class="mg-product-page-regular-price"><del>@* $223 *@</del></span> <span class="mg-product-page-small-text">@* 13% off *@</span>
+                    </div>
+                    @* <div class="mg-variant-pannel mg-product-page-sec-spacing">
+                        <div class="mg-product-page-small-heading">Colors</div>
+                        <div class="mg-color-variant-outer">
+                            <ul>
+                                <li class="mg-active-variant"><a style="background-color: #242424;" class="mg-color-variant" href="#"></a></li>
+                                <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="#"></a></li>
+                                <li><a style="background-color: #6495ED;" class="mg-color-variant" href="#"></a></li>
+                                <li><a style="background-color: #483D8B;" class="mg-color-variant" href="#"></a></li>
+                                <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="#"></a></li>
+                            </ul>
+                        </div>
+                    </div> *@
+                    <div class="row mg-product-page-sec-spacing align-items-end">
+                        <div class="col-8">
+                            <div class="mg-variant-pannel">
+                                <div class="mg-product-page-small-heading">Размер</div>
+                                <div class="mg-size-variant-outer">
+                                    <ul>
+                                        <li class="active"><a href="#">XS</a></li>
+                                        <li><a href="#">S</a></li>
+                                        <li><a href="#">M</a></li>
+                                        <li><a href="#">L</a></li>
+                                        <li><a href="#">XL</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="mg-size-chart-outer">
+                                <div class="mg-product-page-small-text mg-size-chart">
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#mg-size-guide-modal">
+                                        <span><img src="~/images/svgs/size-chart.svg" alt="" /></span>Таблица с размери
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- MG Size Guide Modal -->
+                            <div class="modal fade mg-default-modal" id="mg-size-guide-modal" tabindex="-1" aria-labelledby="mg-size-guide-modal" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content mg-default-modal-content">
+                                        <div class="modal-header">
+                                            <div class="size-chart-heading">Таблица с размери <span>( В СМ )</span></div>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="table-responsive">
+                                                <table class="table mg-size-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col"></th>
+                                                            <th scope="col">XXS</th>
+                                                            <th scope="col">XS</th>
+                                                            <th scope="col">S</th>
+                                                            <th scope="col">M</th>
+                                                            <th scope="col">L</th>
+                                                            <th scope="col">XL</th>
+                                                            <th scope="col">XXL</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Chest</td>
+                                                            <td>80</td>
+                                                            <td>81-85</td>
+                                                            <td>81-85</td>
+                                                            <td>81-85</td>
+                                                            <td>81-85</td>
+                                                            <td>81-85</td>
+                                                            <td>81-85</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Waist</td>
+                                                            <td>65</td>
+                                                            <td>63-68</td>
+                                                            <td>63-68</td>
+                                                            <td>63-68</td>
+                                                            <td>63-68</td>
+                                                            <td>63-68</td>
+                                                            <td>63-68</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Hips</td>
+                                                            <td>83</td>
+                                                            <td>81-85</td>
+                                                            <td>81-85</td>
+                                                            <td>81-85</td>
+                                                            <td>81-85</td>
+                                                            <td>81-85</td>
+                                                            <td>81-85</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Inseam</td>
+                                                            <td>77</td>
+                                                            <td>75-80</td>
+                                                            <td>75-80</td>
+                                                            <td>75-80</td>
+                                                            <td>75-80</td>
+                                                            <td>75-80</td>
+                                                            <td>75-80</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Body Height</td>
+                                                            <td>160</td>
+                                                            <td>75-80</td>
+                                                            <td>75-80</td>
+                                                            <td>75-80</td>
+                                                            <td>75-80</td>
+                                                            <td>75-80</td>
+                                                            <td>75-80</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="mg-variant-pannel mg-product-page-sec-spacing">
+                        <div class="mg-product-page-small-heading">Количество</div>
+                        <div class="mg-quantity-variant-outer">
+                            <div class="mg-cart-quantiy-outer">
+                                <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="mg-quantity-step-btn"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                                <input class="mg-cart-quantity" min="0" name="quantity" value="1" type="number">
+                                <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="mg-quantity-step-btn"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mg-product-add-to-cart-outer mg-product-page-sec-spacing">
+                        <div class="row gx-3">
+                            <div class="col-8">
+                                <button class="btn mg-btn mg-black-btn mg-form-btn mg-light-bg-btn"><span class="mg-btn-icon"><img src="assets/images/product-bag.svg" alt="" /></span>Добави в кошницата</button>
+                            </div>
+                            <div class="col-4">
+                                <a class="btn mg-btn mg-form-btn mg-light-bg-btn" href="#"><span class="mg-btn-icon"><img src="assets/images/product-heart.svg" alt="" /></span>Добави в любими</a>
+                            </div>
+                        </div>
+                    </div>
+                    @* <div class="mg-product-brief-details mg-product-page-sec-spacing">
+                        <div class="mb-1">SKU: <span>12527</span></div>
+                        <div class="mb-1">Vendor: <span>Bershka</span></div>
+                        <div class="mb-1">Product type: <span>Shoes</span></div>
+                        <div class="mb-1">Tags: <span>Boots</span></div>
+                    </div> *@
+                    <div class="mg-free-shipping-bar text-center mg-product-page-sec-spacing">
+                        Безплатна стандартна доставка при покупка над 100 BGN
+                    </div>
+                    <div class="mg-accordian-outer">
+                        <div class="accordion accordion-flush" id="mg-product-details">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#tab1">
+                                        Описание
+                                    </button>
+                                </h2>
+                                <div id="tab1" class="accordion-collapse collapse show" data-bs-parent="#mg-product-details">
+                                    <div class="accordion-body">
+                                        <p>
+                                            @Model.Description
+                                        </p>
+                                        @* <ul class="mg-list mt-4">
+                                            <li>
+                                                It is a long established fact that a reader will be distracted by the readable
+                                                content of a page when looking at its layout.
+                                            </li>
+                                            <li>
+                                                It is a long established fact that a reader will be distracted by the readable
+                                                content of a page when looking at its layout.
+                                            </li>
+                                            <li>
+                                                It is a long established fact that a reader will be distracted by the readable
+                                                content of a page when looking at its layout.
+                                            </li>
+                                        </ul> *@
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#tab2">
+                                        Начин на измиване
+                                    </button>
+                                </h2>
+                                <div id="tab2" class="accordion-collapse collapse" data-bs-parent="#mg-product-details">
+                                    <div class="accordion-body">
+                                        <p>
+                                            @Model.ClearInfo
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#tab3">
+                                        Ревюта
+                                    </button>
+                                </h2>
+                                <div id="tab3" class="accordion-collapse collapse" data-bs-parent="#mg-product-details">
+                                    <div class="accordion-body">
+                                        <div class="mg-reviews-outer mt-4">
+                                            <div class="mg-ratings-details text-center">
+                                                <div class="mg-rating-score">4.0</div>
+                                                <div class="mg-rating-outer">
+                                                    <div class="mg-ratings-full">
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <span class="mg-ratings" style="width: 80%;">
+                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="mg-rating-count mg-rating-count-review-tab">
+                                                    ( Based on <span>100</span> reviews )
+                                                </div>
+                                                <div class="mg-rating-progress-bar-outer mt-4">
+                                                    <div class="mg-rating-progress-bar-inner mb-1">
+                                                        <div class="mg-rating-label-outer">
+                                                            <div class="mg-rating-label">
+                                                                Excellent
+                                                            </div>
+                                                        </div>
+                                                        <div class="mg-rating-progress-outer">
+                                                            <div class="mg-rating-progress">
+                                                                <span style="width: 90%;"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mg-rating-progress-bar-inner mb-1">
+                                                        <div class="mg-rating-label-outer">
+                                                            <div class="mg-rating-label">
+                                                                Good
+                                                            </div>
+                                                        </div>
+                                                        <div class="mg-rating-progress-outer">
+                                                            <div class="mg-rating-progress">
+                                                                <span style="width: 80%;"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mg-rating-progress-bar-inner mb-1">
+                                                        <div class="mg-rating-label-outer">
+                                                            <div class="mg-rating-label">
+                                                                Average
+                                                            </div>
+                                                        </div>
+                                                        <div class="mg-rating-progress-outer">
+                                                            <div class="mg-rating-progress">
+                                                                <span style="width: 70%;"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mg-rating-progress-bar-inner mb-1">
+                                                        <div class="mg-rating-label-outer">
+                                                            <div class="mg-rating-label">
+                                                                Below Average
+                                                            </div>
+                                                        </div>
+                                                        <div class="mg-rating-progress-outer">
+                                                            <div class="mg-rating-progress">
+                                                                <span style="width: 60%;"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mg-rating-progress-bar-inner mb-1">
+                                                        <div class="mg-rating-label-outer">
+                                                            <div class="mg-rating-label">
+                                                                Poor
+                                                            </div>
+                                                        </div>
+                                                        <div class="mg-rating-progress-outer">
+                                                            <div class="mg-rating-progress">
+                                                                <span style="width: 20%;"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mg-customers-reviews-outer">
+                                                <div class="mg-customer-review-panel pt-5">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-9">
+                                                            <div class="mg-customer-review-user-details-outer">
+                                                                <div class="mg-customer-review-user-detail-image">
+                                                                    <img src="assets/images/product8.jpg" alt="" />
+                                                                </div>
+                                                                <div class="mg-customer-review-user-details">
+                                                                    <div class="mg-customer-username">Johan Smith</div>
+                                                                    <div class="mg-rating-outer">
+                                                                        <div class="mg-ratings-full">
+                                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            <span class="mg-ratings" style="width: 80%;">
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="mg-rating-count">
+                                                                        ( 5.0 )
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-3 text-end">
+                                                            <div class="mg-user-review-date">6 days Ago</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mg-customer-review-text mt-3">
+                                                        <p>
+                                                            It is a long established fact that a reader will be distracted by the readable content of a
+                                                            page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less
+                                                            normal distribution of letters, as opposed to using 'Content here, content here', making it look
+                                                            like readable English.
+                                                        </p>
+                                                    </div>
+                                                    <div class="mg-customer-review-like-comment-btn">
+                                                        <ul>
+                                                            <li class="color-acent"><a href="#">Like</a></li>
+                                                            <li><a href="#">Comments</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="mg-customer-review-panel pt-5">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-9">
+                                                            <div class="mg-customer-review-user-details-outer">
+                                                                <div class="mg-customer-review-user-detail-image">
+                                                                    <img src="assets/images/product8.jpg" alt="" />
+                                                                </div>
+                                                                <div class="mg-customer-review-user-details">
+                                                                    <div class="mg-customer-username">Johan Smith</div>
+                                                                    <div class="mg-rating-outer">
+                                                                        <div class="mg-ratings-full">
+                                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            <span class="mg-ratings" style="width: 80%;">
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="mg-rating-count">
+                                                                        ( 5.0 )
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-3 text-end">
+                                                            <div class="mg-user-review-date">Yesterday</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mg-customer-review-text mt-3">
+                                                        <p>
+                                                            It is a long established fact that a reader will be distracted by the readable content of a page
+                                                            when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal
+                                                            distribution of letters,
+                                                        </p>
+                                                    </div>
+                                                    <div class="mg-customer-review-like-comment-btn">
+                                                        <ul>
+                                                            <li class="color-acent"><a href="#">Like</a></li>
+                                                            <li><a href="#">Comments</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="mg-customer-review-panel pt-5">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-9">
+                                                            <div class="mg-customer-review-user-details-outer">
+                                                                <div class="mg-customer-review-user-detail-image">
+                                                                    <img src="assets/images/product8.jpg" alt="" />
+                                                                </div>
+                                                                <div class="mg-customer-review-user-details">
+                                                                    <div class="mg-customer-username">Johan Smith</div>
+                                                                    <div class="mg-rating-outer">
+                                                                        <div class="mg-ratings-full">
+                                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            <span class="mg-ratings" style="width: 80%;">
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="mg-rating-count">
+                                                                        ( 5.0 )
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-3 text-end">
+                                                            <div class="mg-user-review-date">Today</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mg-customer-review-text mt-3">
+                                                        <p>
+                                                            It is a long established fact that a reader will be distracted by the readable content of a page when
+                                                            looking at its layout.
+                                                        </p>
+                                                    </div>
+                                                    <div class="mg-customer-review-like-comment-btn">
+                                                        <ul>
+                                                            <li class="color-acent"><a href="#">Like</a></li>
+                                                            <li><a href="#">Comments</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mg-see-more-reviews-btn mt-4 text-center">
+                                                <a href="#">See More Reviews</a>
+                                            </div>
+                                            <div class="mg-write-review-btn">
+                                                <a class="mg-btn mg-form-btn mg-black-btn mg-write-review-toggle-btn" href="javascript:void(0);">Write a Review</a>
+                                            </div>
+                                            <div class="mg-write-review-pannel-outer">
+                                                <div class="mg-write-review-pannel-heading">
+                                                    <h3>Rate Us</h3>
+                                                    <p>Your Rating</p>
+                                                </div>
+                                                <form class="mg-form mg-write-review-form">
+                                                    <div class="row">
+                                                        <div class="mb-3 col-12 mg-review-star-rating-form">
+                                                            <div class="mg-review-star-rating-form-inner">
+                                                                <input type="radio" name="rate" id="star5" value="1">
+                                                                <label for="star5"></label>
+                                                                <input type="radio" name="rate" id="star4" value="2">
+                                                                <label for="star4"></label>
+                                                                <input type="radio" name="rate" id="star3" value="3">
+                                                                <label for="star3"></label>
+                                                                <input type="radio" name="rate" id="star2" value="4">
+                                                                <label for="star2"></label>
+                                                                <input type="radio" name="rate" id="star1" value="5">
+                                                                <label for="star1"></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mb-3 col-6">
+                                                            <label class="form-label">Name</label>
+                                                            <input type="text" class="form-control mg-input" placeholder="Enter your name">
+                                                        </div>
+                                                        <div class="mb-3 col-6">
+                                                            <label class="form-label">Email Address</label>
+                                                            <input type="text" class="form-control mg-input" placeholder="Enter your email address">
+                                                        </div>
+                                                        <div class="mb-3 col-12">
+                                                            <label class="form-label">Review Content</label>
+                                                            <textarea class="form-control  mg-input" placeholder="Your message"></textarea>
+                                                        </div>
+                                                        <div class="text-center mt-2 mb-3 col-12">
+                                                            <button type="submit" class="btn mg-btn mg-light-bg-btn mg-form-btn">Submit Your Review</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#tab4">
+                                        Доставка, въщане и обмен
+                                    </button>
+                                </h2>
+                                <div id="tab4" class="accordion-collapse collapse" data-bs-parent="#mg-product-details">
+                                    <div class="accordion-body">
+                                        <p>
+                                            Поръчките обикновено се доставят в рамките на 2 до 30 работни дни след приемане на поръчката.
+                                            Графикът за доставка обикновено се спазва, въпреки че Clothing-Store не може да гарантира точност.
+                                            Във всеки случай, Clothing-Store ще положи всички разумни усилия, за да осигури доставката на Продуктите до вас в рамките на 30 дни от датата на приемане.
+                                            Ако не сте доволни от закупените от вас артикули, те могат да бъдат върнати с куриер в рамките на 30 дни.
+                                            Използвайте формуляра за връщане и етикета, предоставени в опаковката, като доставката ще бъде безплатна само с куриер на DPD.
+
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

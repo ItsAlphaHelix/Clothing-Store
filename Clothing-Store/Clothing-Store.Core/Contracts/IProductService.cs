@@ -18,6 +18,13 @@
         public Task<ProductViewModel> GetProductByIdAsync(int productId);
 
         /// <summary>
+        /// Getting current product's information.
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        public Task<ProductDetailsViewModel> GetProductDetailsByIdAsync(int productId);
+
+        /// <summary>
         /// Getting all products by gender.
         /// </summary>
         /// <returns></returns>

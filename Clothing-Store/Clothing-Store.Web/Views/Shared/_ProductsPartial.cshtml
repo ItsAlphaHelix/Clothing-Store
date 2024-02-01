@@ -216,8 +216,8 @@
                                             <div class="mg-product-main mg-img-hdark">
                                                 <div class="position-relative">
                                                     <div class="mg-product-image">
-                                                        <a href="product.html"><img class="img-fluid" src="@product.Images[0]" alt="" /></a>
-                                                        <a href="product.html"><img class="img-fluid mg-hover-img" src="@product.Images[1]" alt="" /></a>
+                                                        <a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id"><img class="img-fluid" src="@product.Images[0]" alt="" /></a>
+                                                        <a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id"><img class="img-fluid mg-hover-img" src="@product.Images[1]" alt="" /></a>
                                                     </div>
                                                     <div class="mg-product-icons-outer">
                                                         <div class="mg-product-icon">

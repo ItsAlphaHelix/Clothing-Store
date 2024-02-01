@@ -39,5 +39,14 @@
 
             return PartialView("_ProductModalPartial", product);
         }
+
+        public async Task<IActionResult> ProductDetails(int id)
+        {
+            ViewBag.IsHomePage = false;
+
+            var product = await this.productsService.GetProductDetailsByIdAsync(id);
+
+            return View(product);
+        }
     }
 }

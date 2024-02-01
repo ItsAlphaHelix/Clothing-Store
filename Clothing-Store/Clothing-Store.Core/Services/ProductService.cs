@@ -56,8 +56,30 @@
                 .Where(x => x.Id == productId)
                 .Select(x => new ProductViewModel()
                 {
+                    Id = x.Id,
                     Category = x.Category,
                     Price = x.Price,
+                    Images = x.Images.Select(x => x.Url)
+                    .ToList()
+                })
+                .FirstOrDefaultAsync();
+
+            return product;
+        }
+
+        public async Task<ProductDetailsViewModel> GetProductDetailsByIdAsync(int productId)
+        {
+            var product = await this.productsRepository
+                .AllAsNoTracking()
+                .Where(x => x.Id == productId)
+                .Select(x => new ProductDetailsViewModel()
+                {
+                    Id = x.Id,
+                    Category = x.Category,
+                    Price = x.Price,
+                    Description = x.Description,
+                    ClearInfo = x.ClearInfo,
+                    IsMale = x.IsMale,
                     Images = x.Images.Select(x => x.Url)
                     .ToList()
                 })
