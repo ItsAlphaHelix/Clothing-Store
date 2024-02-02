@@ -1,7 +1,9 @@
 ﻿namespace Clothing_Store.Controllers
 {
     using Clothing_Store.Core.Contracts;
+    using Clothing_Store.Core.ViewModels.Products;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Infrastructure;
 
     public class ProductsController : Controller
     {
@@ -48,5 +50,30 @@
 
             return View(product);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> PostProductReview(PostProductReviewViewModel productReview)
+        {
+
+            if (ModelState.IsValid)
+            {
+                await this.productsService.PostProductReviewAsync(productReview);
+                return Json(productReview); ;
+            }
+
+            return RedirectToAction(nameof(ProductDetails));
+        }
+
+        //public async Task<IActionResult> GetProductReviews(int productId)
+        //{
+        //    var reviews = await this.productsService.GetReviewsForProductAsync(productId);
+
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    return PartialView("_GetReviewsPartial", reviews);
+        //}
     }
 }

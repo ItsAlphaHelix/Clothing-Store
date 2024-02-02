@@ -11,9 +11,13 @@
     public class ProductService : IProductService
     {
         private readonly IRepository<Product> productsRepository;
-        public ProductService(IRepository<Product> productsRepository)
+        private readonly IRepository<ProductReviews> productReviewsRepository;
+        public ProductService(
+            IRepository<Product> productsRepository,
+            IRepository<ProductReviews> productReviewsRepository)
         {
             this.productsRepository = productsRepository;
+            this.productReviewsRepository = productReviewsRepository;
         }
 
         public async Task<ICollection<ProductViewModel>> GetlAllProductsByGenderAsync(bool isMen)
@@ -86,6 +90,39 @@
                 .FirstOrDefaultAsync();
 
             return product;
+        }
+
+        public async Task PostProductReviewAsync(PostProductReviewViewModel productReview)
+        {
+            var postProductReview = new ProductReviews()
+            {
+                ProductId = productReview.ProductId,
+                Name = productReview.Username,
+                EmailAddress = productReview.EmailAddress,
+                Rating = productReview.Rating,
+                Message = productReview.Message,
+                Date = DateTime.Now
+            };
+
+            await this.productReviewsRepository.AddAsync(postProductReview);
+            await this.productReviewsRepository.SaveChangesAsync();
+        }
+
+        public async Task<ICollection<GetProductReviewViewModel>> GetReviewsForProductAsync(int productId)
+        {
+            var reviews = await this.productReviewsRepository.AllAsNoTracking()
+                .Where(x => x.ProductId == productId)
+                .Select(x => new GetProductReviewViewModel()
+                {
+                    ProductId = x.ProductId,
+                    Username = x.Name,
+                    Rating = x.Rating,
+                    Message = x.Message,
+                    Date = x.Date
+                })
+                .ToListAsync();
+
+            return reviews;
         }
     }
 }

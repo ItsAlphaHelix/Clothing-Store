@@ -1,0 +1,39 @@
+﻿@using Clothing_Store.Core.ViewModels.Products;
+@model PostProductReviewViewModel
+
+<div class="mg-write-review-pannel-heading">
+    <h3>Rate Us</h3>
+    <p>Your Rating</p>
+</div>
+<form class="mg-form mg-write-review-form" >
+    <div class="row">
+        <div class="mb-3 col-12 mg-review-star-rating-form">
+            <div class="mg-review-star-rating-form-inner">
+                @for (int i = 5; i >= 1; i--)
+                {
+                    <input type="radio" id="@($"star{i}")" name="Rating" value="@i" asp-for="Rating" />
+                    <label for="@($"star{i}")"></label>
+                }
+            </div>
+        </div>
+        <div class="mb-3 col-6">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-control mg-input" asp-for="@Model.Username" placeholder="Enter your name">
+            <span asp-validation-for="@Model.Username" class="text-danger"></span>
+        </div>
+        <div class="mb-3 col-6">
+            <label class="form-label">Email Address</label>
+            <input type="text" class="form-control mg-input" asp-for="@Model.EmailAddress" placeholder="Enter your email address">
+            <span asp-validation-for="@Model.EmailAddress" class="text-danger"></span>
+        </div>
+        <div class="mb-3 col-12">
+            <label class="form-label">Review Content</label>
+            <textarea class="form-control  mg-input" asp-for="@Model.Message" placeholder="Your message"></textarea>
+            <span asp-validation-for="@Model.Message" class="text-danger"></span>
+        </div>
+        <div class="text-center mt-2 mb-3 col-12">
+            <button type="submit" class="btn mg-btn mg-light-bg-btn mg-form-btn" onclick="SubmitReview(event)">Submit Your Review</button>
+        </div>
+    </div>
+</form>
+

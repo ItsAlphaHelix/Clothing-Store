@@ -1,10 +1,18 @@
-﻿@using Clothing_Store.Core.ViewModels.Products;
-@model ProductDetailsViewModel
+﻿@using Clothing_Store.Core.Contracts;
+@using Clothing_Store.Core.ViewModels.Products;
+@using Clothing_Store.Data.Data.Models;
+@inject IProductService productsService;
 
+@model ProductDetailsViewModel
 @{
     ViewData["Title"] = "Информация за продукта";
+    var productReview = new PostProductReviewViewModel();
+    productReview.ProductId = Model.Id;
 
-    var gender = Model.IsMale ? "Мъжки" : "Женски"; 
+    var reviews = await this.productsService.GetReviewsForProductAsync(Model.Id);
+    var averageRatingOfProduct = (reviews.Sum(x => x.Rating) / reviews.Count) * 20;
+
+    var gender = Model.IsMale ? "Мъжки" : "Женски";
     var navigation = Model.IsMale ? "AllMenProducts" : "AllWomenProducts";
 }
 <!--MG Breadcrumb-->
@@ -65,7 +73,7 @@
                                 <i class="fa fa-star" aria-hidden="true"></i>
                                 <i class="fa fa-star" aria-hidden="true"></i>
                                 <i class="fa fa-star" aria-hidden="true"></i>
-                                <span class="mg-ratings" style="width: 80%;">
+                                <span class="mg-ratings" style="width: @averageRatingOfProduct%;">
                                     <i class="fa fa-star" aria-hidden="true"></i>
                                     <i class="fa fa-star" aria-hidden="true"></i>
                                     <i class="fa fa-star" aria-hidden="true"></i>
@@ -75,23 +83,23 @@
                             </div>
                         </div>
                         <div class="mg-rating-count">
-                            ( <span>100</span> Ревюта )
+                            ( <span>@reviews.Count</span> Ревюта )
                         </div>
                     </div>
                     <div class="mg-product-page-product-price mt-4">
                         <span class="mg-price">@Model.Price BGN</span> <span class="mg-product-page-regular-price"><del>@* $223 *@</del></span> <span class="mg-product-page-small-text">@* 13% off *@</span>
                     </div>
                     @* <div class="mg-variant-pannel mg-product-page-sec-spacing">
-                        <div class="mg-product-page-small-heading">Colors</div>
-                        <div class="mg-color-variant-outer">
-                            <ul>
-                                <li class="mg-active-variant"><a style="background-color: #242424;" class="mg-color-variant" href="#"></a></li>
-                                <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="#"></a></li>
-                                <li><a style="background-color: #6495ED;" class="mg-color-variant" href="#"></a></li>
-                                <li><a style="background-color: #483D8B;" class="mg-color-variant" href="#"></a></li>
-                                <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="#"></a></li>
-                            </ul>
-                        </div>
+                    <div class="mg-product-page-small-heading">Colors</div>
+                    <div class="mg-color-variant-outer">
+                    <ul>
+                    <li class="mg-active-variant"><a style="background-color: #242424;" class="mg-color-variant" href="#"></a></li>
+                    <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="#"></a></li>
+                    <li><a style="background-color: #6495ED;" class="mg-color-variant" href="#"></a></li>
+                    <li><a style="background-color: #483D8B;" class="mg-color-variant" href="#"></a></li>
+                    <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="#"></a></li>
+                    </ul>
+                    </div>
                     </div> *@
                     <div class="row mg-product-page-sec-spacing align-items-end">
                         <div class="col-8">
@@ -221,10 +229,10 @@
                         </div>
                     </div>
                     @* <div class="mg-product-brief-details mg-product-page-sec-spacing">
-                        <div class="mb-1">SKU: <span>12527</span></div>
-                        <div class="mb-1">Vendor: <span>Bershka</span></div>
-                        <div class="mb-1">Product type: <span>Shoes</span></div>
-                        <div class="mb-1">Tags: <span>Boots</span></div>
+                    <div class="mb-1">SKU: <span>12527</span></div>
+                    <div class="mb-1">Vendor: <span>Bershka</span></div>
+                    <div class="mb-1">Product type: <span>Shoes</span></div>
+                    <div class="mb-1">Tags: <span>Boots</span></div>
                     </div> *@
                     <div class="mg-free-shipping-bar text-center mg-product-page-sec-spacing">
                         Безплатна стандартна доставка при покупка над 100 BGN
@@ -243,18 +251,18 @@
                                             @Model.Description
                                         </p>
                                         @* <ul class="mg-list mt-4">
-                                            <li>
-                                                It is a long established fact that a reader will be distracted by the readable
-                                                content of a page when looking at its layout.
-                                            </li>
-                                            <li>
-                                                It is a long established fact that a reader will be distracted by the readable
-                                                content of a page when looking at its layout.
-                                            </li>
-                                            <li>
-                                                It is a long established fact that a reader will be distracted by the readable
-                                                content of a page when looking at its layout.
-                                            </li>
+                                        <li>
+                                        It is a long established fact that a reader will be distracted by the readable
+                                        content of a page when looking at its layout.
+                                        </li>
+                                        <li>
+                                        It is a long established fact that a reader will be distracted by the readable
+                                        content of a page when looking at its layout.
+                                        </li>
+                                        <li>
+                                        It is a long established fact that a reader will be distracted by the readable
+                                        content of a page when looking at its layout.
+                                        </li>
                                         </ul> *@
                                     </div>
                                 </div>
@@ -291,7 +299,7 @@
                                                         <i class="fa fa-star" aria-hidden="true"></i>
                                                         <i class="fa fa-star" aria-hidden="true"></i>
                                                         <i class="fa fa-star" aria-hidden="true"></i>
-                                                        <span class="mg-ratings" style="width: 80%;">
+                                                        <span class="mg-ratings" style="width: @averageRatingOfProduct%;">
                                                             <i class="fa fa-star" aria-hidden="true"></i>
                                                             <i class="fa fa-star" aria-hidden="true"></i>
                                                             <i class="fa fa-star" aria-hidden="true"></i>
@@ -301,8 +309,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="mg-rating-count mg-rating-count-review-tab">
-                                                    ( Based on <span>100</span> reviews )
+                                                    ( Based on <span>@reviews.Count</span> reviews )
                                                 </div>
+                                                
                                                 <div class="mg-rating-progress-bar-outer mt-4">
                                                     <div class="mg-rating-progress-bar-inner mb-1">
                                                         <div class="mg-rating-label-outer">
@@ -310,9 +319,16 @@
                                                                 Excellent
                                                             </div>
                                                         </div>
+                                                        @{
+                                                            double percentageOfExcellent = (reviews.Where(x => x.Rating == 5).Sum(x => x.Rating) / reviews.Count) * 100;
+                                                            double percentageOfGood = (reviews.Where(x => x.Rating == 4).Sum(x => x.Rating) / reviews.Count) * 100;
+                                                            double percentageOfAverage = (reviews.Where(x => x.Rating == 3).Sum(x => x.Rating) / reviews.Count) * 100;
+                                                            double percentageOfBelowAverage = (reviews.Where(x => x.Rating == 2).Sum(x => x.Rating) / reviews.Count) * 100;
+                                                            double percentageOfPoor = (reviews.Where(x => x.Rating == 1).Sum(x => x.Rating) / reviews.Count) * 100;
+                                                         }
                                                         <div class="mg-rating-progress-outer">
                                                             <div class="mg-rating-progress">
-                                                                <span style="width: 90%;"></span>
+                                                                <span style="width: @percentageOfExcellent%;"></span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -324,7 +340,7 @@
                                                         </div>
                                                         <div class="mg-rating-progress-outer">
                                                             <div class="mg-rating-progress">
-                                                                <span style="width: 80%;"></span>
+                                                                <span style="width:  @percentageOfGood%;"></span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -336,7 +352,7 @@
                                                         </div>
                                                         <div class="mg-rating-progress-outer">
                                                             <div class="mg-rating-progress">
-                                                                <span style="width: 70%;"></span>
+                                                                <span style="width:  @percentageOfAverage%;"></span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -348,7 +364,7 @@
                                                         </div>
                                                         <div class="mg-rating-progress-outer">
                                                             <div class="mg-rating-progress">
-                                                                <span style="width: 60%;"></span>
+                                                                <span style="width:  @percentageOfBelowAverage%;"></span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -360,160 +376,123 @@
                                                         </div>
                                                         <div class="mg-rating-progress-outer">
                                                             <div class="mg-rating-progress">
-                                                                <span style="width: 20%;"></span>
+                                                                <span style="width:  @percentageOfPoor%;"></span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="mg-customers-reviews-outer">
-                                                <div class="mg-customer-review-panel pt-5">
-                                                    <div class="row align-items-center">
-                                                        <div class="col-9">
-                                                            <div class="mg-customer-review-user-details-outer">
-                                                                <div class="mg-customer-review-user-detail-image">
-                                                                    <img src="assets/images/product8.jpg" alt="" />
-                                                                </div>
-                                                                <div class="mg-customer-review-user-details">
-                                                                    <div class="mg-customer-username">Johan Smith</div>
-                                                                    <div class="mg-rating-outer">
-                                                                        <div class="mg-ratings-full">
-                                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            <span class="mg-ratings" style="width: 80%;">
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            </span>
-                                                                        </div>
+                                                @foreach (var review in reviews)
+                                                {
+                                                    var widthPercentage = review.Rating * 20;
+
+                                                    <div class="mg-customer-review-panel pt-5">
+                                                        <div class="row align-items-center">
+                                                            <div class="col-9">
+                                                                <div class="mg-customer-review-user-details-outer">
+                                                                    <div class="mg-customer-review-user-detail-image">
+                                                                        <img src="assets/images/product8.jpg" alt="" />
                                                                     </div>
-                                                                    <div class="mg-rating-count">
-                                                                        ( 5.0 )
+                                                                    <div class="mg-customer-review-user-details">
+                                                                        <div class="mg-customer-username">@review.Username</div>
+                                                                        <div class="mg-rating-outer">
+                                                                            <div class="mg-ratings-full">
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+
+                                                                                <span class="mg-ratings" style="width: @widthPercentage%;">
+                                                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="mg-rating-count">
+                                                                            ( @review.Rating.ToString("F1") )
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-3 text-end">
-                                                            <div class="mg-user-review-date">6 days Ago</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="mg-customer-review-text mt-3">
-                                                        <p>
-                                                            It is a long established fact that a reader will be distracted by the readable content of a
-                                                            page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less
-                                                            normal distribution of letters, as opposed to using 'Content here, content here', making it look
-                                                            like readable English.
-                                                        </p>
-                                                    </div>
-                                                    <div class="mg-customer-review-like-comment-btn">
-                                                        <ul>
-                                                            <li class="color-acent"><a href="#">Like</a></li>
-                                                            <li><a href="#">Comments</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="mg-customer-review-panel pt-5">
-                                                    <div class="row align-items-center">
-                                                        <div class="col-9">
-                                                            <div class="mg-customer-review-user-details-outer">
-                                                                <div class="mg-customer-review-user-detail-image">
-                                                                    <img src="assets/images/product8.jpg" alt="" />
-                                                                </div>
-                                                                <div class="mg-customer-review-user-details">
-                                                                    <div class="mg-customer-username">Johan Smith</div>
-                                                                    <div class="mg-rating-outer">
-                                                                        <div class="mg-ratings-full">
-                                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            <span class="mg-ratings" style="width: 80%;">
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="mg-rating-count">
-                                                                        ( 5.0 )
-                                                                    </div>
-                                                                </div>
+                                                            <div class="col-3 text-end">
+                                                                @{
+                                                                    DateTime currentDateTime = DateTime.Now;
+                                                                    TimeSpan timeDifference = currentDateTime - review.Date;
+                                                                    string timeDiffDisplay;
+                                                                    string formater;
+                                                                    if (timeDifference.TotalDays >= 1)
+                                                                    {
+                                                                        if (Math.Floor(timeDifference.TotalDays) > 1)
+                                                                        {
+                                                                            formater = "дни";
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            formater = "ден";
+                                                                        }
+                                                                        timeDiffDisplay = $"преди {Math.Floor(timeDifference.TotalDays)} {formater}";
+                                                                    }
+                                                                    else if (timeDifference.TotalHours >= 1)
+                                                                    {
+                                                                        if (Math.Floor(timeDifference.TotalHours) > 1)
+                                                                        {
+                                                                            formater = "часа";
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            formater = "час";
+                                                                        }
+                                                                        timeDiffDisplay = $"преди {Math.Floor(timeDifference.TotalHours)} {formater}";
+                                                                    }
+                                                                    else if (timeDifference.TotalMinutes >= 1)
+                                                                    {
+                                                                        if (Math.Floor(timeDifference.TotalMinutes) > 1)
+                                                                        {
+                                                                            formater = "минути";
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            formater = "минута";
+                                                                        }
+
+                                                                        timeDiffDisplay = $" преди {Math.Floor(timeDifference.TotalMinutes)} {formater}";
+                                                                    }
+                                                                    else
+                                                                    {
+
+                                                                        if (Math.Floor(timeDifference.TotalSeconds) > 1)
+                                                                        {
+                                                                            formater = "секунди";
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            formater = "секунда";
+                                                                        }
+
+                                                                        timeDiffDisplay = $"{Math.Floor(timeDifference.TotalSeconds)} {formater}";
+                                                                    }
+                                                                }
+                                                                <div class="mg-user-review-date">@timeDiffDisplay</div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-3 text-end">
-                                                            <div class="mg-user-review-date">Yesterday</div>
+                                                        <div class="mg-customer-review-text mt-3">
+                                                            <p>
+                                                                @review.Message
+                                                            </p>
+                                                        </div>
+                                                        <div class="mg-customer-review-like-comment-btn">
+                                                            <ul>
+                                                                <li class="color-acent"><a href="#">Like</a></li>
+                                                                <li><a href="#">Comments</a></li>
+                                                            </ul>
                                                         </div>
                                                     </div>
-                                                    <div class="mg-customer-review-text mt-3">
-                                                        <p>
-                                                            It is a long established fact that a reader will be distracted by the readable content of a page
-                                                            when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal
-                                                            distribution of letters,
-                                                        </p>
-                                                    </div>
-                                                    <div class="mg-customer-review-like-comment-btn">
-                                                        <ul>
-                                                            <li class="color-acent"><a href="#">Like</a></li>
-                                                            <li><a href="#">Comments</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="mg-customer-review-panel pt-5">
-                                                    <div class="row align-items-center">
-                                                        <div class="col-9">
-                                                            <div class="mg-customer-review-user-details-outer">
-                                                                <div class="mg-customer-review-user-detail-image">
-                                                                    <img src="assets/images/product8.jpg" alt="" />
-                                                                </div>
-                                                                <div class="mg-customer-review-user-details">
-                                                                    <div class="mg-customer-username">Johan Smith</div>
-                                                                    <div class="mg-rating-outer">
-                                                                        <div class="mg-ratings-full">
-                                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            <span class="mg-ratings" style="width: 80%;">
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="mg-rating-count">
-                                                                        ( 5.0 )
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-3 text-end">
-                                                            <div class="mg-user-review-date">Today</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="mg-customer-review-text mt-3">
-                                                        <p>
-                                                            It is a long established fact that a reader will be distracted by the readable content of a page when
-                                                            looking at its layout.
-                                                        </p>
-                                                    </div>
-                                                    <div class="mg-customer-review-like-comment-btn">
-                                                        <ul>
-                                                            <li class="color-acent"><a href="#">Like</a></li>
-                                                            <li><a href="#">Comments</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
+                                                }
                                             </div>
                                             <div class="mg-see-more-reviews-btn mt-4 text-center">
                                                 <a href="#">See More Reviews</a>
@@ -521,44 +500,9 @@
                                             <div class="mg-write-review-btn">
                                                 <a class="mg-btn mg-form-btn mg-black-btn mg-write-review-toggle-btn" href="javascript:void(0);">Write a Review</a>
                                             </div>
+                                            <!--Write a review-->
                                             <div class="mg-write-review-pannel-outer">
-                                                <div class="mg-write-review-pannel-heading">
-                                                    <h3>Rate Us</h3>
-                                                    <p>Your Rating</p>
-                                                </div>
-                                                <form class="mg-form mg-write-review-form">
-                                                    <div class="row">
-                                                        <div class="mb-3 col-12 mg-review-star-rating-form">
-                                                            <div class="mg-review-star-rating-form-inner">
-                                                                <input type="radio" name="rate" id="star5" value="1">
-                                                                <label for="star5"></label>
-                                                                <input type="radio" name="rate" id="star4" value="2">
-                                                                <label for="star4"></label>
-                                                                <input type="radio" name="rate" id="star3" value="3">
-                                                                <label for="star3"></label>
-                                                                <input type="radio" name="rate" id="star2" value="4">
-                                                                <label for="star2"></label>
-                                                                <input type="radio" name="rate" id="star1" value="5">
-                                                                <label for="star1"></label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="mb-3 col-6">
-                                                            <label class="form-label">Name</label>
-                                                            <input type="text" class="form-control mg-input" placeholder="Enter your name">
-                                                        </div>
-                                                        <div class="mb-3 col-6">
-                                                            <label class="form-label">Email Address</label>
-                                                            <input type="text" class="form-control mg-input" placeholder="Enter your email address">
-                                                        </div>
-                                                        <div class="mb-3 col-12">
-                                                            <label class="form-label">Review Content</label>
-                                                            <textarea class="form-control  mg-input" placeholder="Your message"></textarea>
-                                                        </div>
-                                                        <div class="text-center mt-2 mb-3 col-12">
-                                                            <button type="submit" class="btn mg-btn mg-light-bg-btn mg-form-btn">Submit Your Review</button>
-                                                        </div>
-                                                    </div>
-                                                </form>
+                                                @await Html.PartialAsync("_PostReviewPartial", productReview)
                                             </div>
                                         </div>
                                     </div>
@@ -590,3 +534,75 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@2.3.0/dist/purify.min.js"></script>
+    <script>
+        function SubmitReview(event) {
+            event.preventDefault();
+            var productId = '@Model.Id';
+            var data = $(".mg-form").serialize() + "&productId=" + productId;
+            $.ajax({
+                type: 'POST',
+                url: '/Products/PostProductReview',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: data,
+                success: function (result) {
+                    var newReviewHtml = `
+                                    <div class="mg-customer-review-panel pt-5">
+                                        <div class="row align-items-center">
+                                            <div class="col-9">
+                                                <div class="mg-customer-review-user-details-outer">
+                                                    <div class="mg-customer-review-user-detail-image">
+                                                        <img src="assets/images/product8.jpg" alt="" /> <!-- Consider dynamically setting this based on user data -->
+                                                    </div>
+                                                    <div class="mg-customer-review-user-details">
+                                                                        <div class="mg-customer-username">${DOMPurify.sanitize(result.username)}</div>
+                                                        <div class="mg-rating-outer">
+                                                        <div class="mg-ratings-full">
+                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                            <i class="fa fa-star" aria-hidden="true"></i>
+
+                                                            <span class="mg-ratings" style="width: ${result.rating * 20}%;">
+                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                            </span>
+                                                        </div>
+
+                                                            <div class="mg-ratings-full">
+                                                                <!-- Dynamically generate rating stars based on the review rating -->
+                                                            </div>
+                                                        </div>
+                                                                                <div class="mg-rating-count">( ${DOMPurify.sanitize(result.rating.toFixed(1))} )</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                             <div class="col-3 text-end">
+                                                <div class="mg-user-review-date">преди 0 секунди</div>
+                                            </div>
+                                        </div>
+                                        <div class="mg-customer-review-text mt-3">
+                                                            <p>${DOMPurify.sanitize(result.message)}</p>
+                                        </div>
+                                    </div>
+                                `;
+
+                    // Append the new review HTML to the reviews container
+                    $('.mg-customers-reviews-outer').append(newReviewHtml);
+                    console.log(result);
+                    //accordion - collapse collapse show
+                },
+                error: function () {
+                    console.log('Failed ');
+                }
+            })
+        }
+    </script>
+}

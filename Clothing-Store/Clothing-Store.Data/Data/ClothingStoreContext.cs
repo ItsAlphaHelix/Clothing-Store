@@ -14,6 +14,8 @@
 
         public DbSet<Image> Images { get; set; }
 
+        public DbSet<ProductReviews> ProductsReviews { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         { 
             base.OnModelCreating(builder);

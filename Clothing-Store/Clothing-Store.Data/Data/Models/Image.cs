@@ -8,7 +8,7 @@ namespace Clothing_Store.Data.Data.Models
         [Key]
         public int Id { get; set; }
 
-        public string Url { get; set; }
+        public string Url { get; set; } = null!;
 
         [ForeignKey(nameof(Product))]
         public int ProductID { get; set; }
