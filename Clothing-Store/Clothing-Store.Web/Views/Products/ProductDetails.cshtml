@@ -10,10 +10,19 @@
     productReview.ProductId = Model.Id;
 
     var reviews = await this.productsService.GetReviewsForProductAsync(Model.Id);
-    var averageRatingOfProduct = (reviews.Sum(x => x.Rating) / reviews.Count) * 20;
+    var averageRatingOfProduct = reviews.Any() ? (reviews.Sum(x => x.Rating) / reviews.Count) : 0;
 
     var gender = Model.IsMale ? "Мъжки" : "Женски";
     var navigation = Model.IsMale ? "AllMenProducts" : "AllWomenProducts";
+
+    var exellentRatings = reviews.Where(x => x.Rating == 5.0).Count() != 100 ? reviews.Where(x => x.Rating == 5.0).Count() : 100;
+    var goodRatings = reviews.Where(x => x.Rating == 4.0).Count() != 100 ? reviews.Where(x => x.Rating == 4.0).Count() : 100;
+    var averageRatings = reviews.Where(x => x.Rating == 3.0).Count() != 100 ? reviews.Where(x => x.Rating == 3.0).Count() : 100;
+    var belowAverageRatings = reviews.Where(x => x.Rating == 2.0).Count() != 100 ? reviews.Where(x => x.Rating == 2.0).Count() : 100;
+    var poorRatings = reviews.Where(x => x.Rating == 1.0).Count() != 100 ? reviews.Where(x => x.Rating == 1.0).Count() : 100;
+
+
+    double percentageOfAverageStars = double.Parse(averageRatingOfProduct.ToString("F1")) * 20;
 }
 <!--MG Breadcrumb-->
 <div class="mg-breadcrumb-outer">
@@ -73,7 +82,7 @@
                                 <i class="fa fa-star" aria-hidden="true"></i>
                                 <i class="fa fa-star" aria-hidden="true"></i>
                                 <i class="fa fa-star" aria-hidden="true"></i>
-                                <span class="mg-ratings" style="width: @averageRatingOfProduct%;">
+                                <span class="mg-ratings" style="width: @percentageOfAverageStars%;">
                                     <i class="fa fa-star" aria-hidden="true"></i>
                                     <i class="fa fa-star" aria-hidden="true"></i>
                                     <i class="fa fa-star" aria-hidden="true"></i>
@@ -291,7 +300,7 @@
                                     <div class="accordion-body">
                                         <div class="mg-reviews-outer mt-4">
                                             <div class="mg-ratings-details text-center">
-                                                <div class="mg-rating-score">4.0</div>
+                                                <div class="mg-rating-score">@averageRatingOfProduct.ToString("F1")</div>
                                                 <div class="mg-rating-outer">
                                                     <div class="mg-ratings-full">
                                                         <i class="fa fa-star" aria-hidden="true"></i>
@@ -299,7 +308,7 @@
                                                         <i class="fa fa-star" aria-hidden="true"></i>
                                                         <i class="fa fa-star" aria-hidden="true"></i>
                                                         <i class="fa fa-star" aria-hidden="true"></i>
-                                                        <span class="mg-ratings" style="width: @averageRatingOfProduct%;">
+                                                        <span class="mg-ratings" style="width: @percentageOfAverageStars%;">
                                                             <i class="fa fa-star" aria-hidden="true"></i>
                                                             <i class="fa fa-star" aria-hidden="true"></i>
                                                             <i class="fa fa-star" aria-hidden="true"></i>
@@ -319,16 +328,9 @@
                                                                 Excellent
                                                             </div>
                                                         </div>
-                                                        @{
-                                                            double percentageOfExcellent = (reviews.Where(x => x.Rating == 5).Sum(x => x.Rating) / reviews.Count) * 100;
-                                                            double percentageOfGood = (reviews.Where(x => x.Rating == 4).Sum(x => x.Rating) / reviews.Count) * 100;
-                                                            double percentageOfAverage = (reviews.Where(x => x.Rating == 3).Sum(x => x.Rating) / reviews.Count) * 100;
-                                                            double percentageOfBelowAverage = (reviews.Where(x => x.Rating == 2).Sum(x => x.Rating) / reviews.Count) * 100;
-                                                            double percentageOfPoor = (reviews.Where(x => x.Rating == 1).Sum(x => x.Rating) / reviews.Count) * 100;
-                                                         }
                                                         <div class="mg-rating-progress-outer">
                                                             <div class="mg-rating-progress">
-                                                                <span style="width: @percentageOfExcellent%;"></span>
+                                                                <span style="width: @exellentRatings%;"></span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -340,7 +342,7 @@
                                                         </div>
                                                         <div class="mg-rating-progress-outer">
                                                             <div class="mg-rating-progress">
-                                                                <span style="width:  @percentageOfGood%;"></span>
+                                                                <span style="width:  @goodRatings%;"></span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -352,7 +354,7 @@
                                                         </div>
                                                         <div class="mg-rating-progress-outer">
                                                             <div class="mg-rating-progress">
-                                                                <span style="width:  @percentageOfAverage%;"></span>
+                                                                <span style="width: @averageRatings%;"></span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -364,7 +366,7 @@
                                                         </div>
                                                         <div class="mg-rating-progress-outer">
                                                             <div class="mg-rating-progress">
-                                                                <span style="width:  @percentageOfBelowAverage%;"></span>
+                                                                <span style="width: @belowAverageRatings%;"></span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -376,7 +378,7 @@
                                                         </div>
                                                         <div class="mg-rating-progress-outer">
                                                             <div class="mg-rating-progress">
-                                                                <span style="width:  @percentageOfPoor%;"></span>
+                                                                <span style="width: @poorRatings%;"></span>
                                                             </div>
                                                         </div>
                                                     </div>
