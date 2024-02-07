@@ -1,9 +1,13 @@
-﻿<div class="mg-header-outer">
+﻿@using Clothing_Store.Data.Data.Models;
+@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<ApplicationUser> SignInManager
+
+<div class="mg-header-outer">
     <div class="container-fluid gx-lg-5">
         <div class="row gx-0 gx-md-2 align-items-center">
             <div class="col-md-2 col-lg-3 col-5">
                 <div class="header-logo">
-                    <a ><img class="img-fluid" src="images/svgs/Footer-Logo.svg" alt="" /></a>
+                    <a><img class="img-fluid" src="images/svgs/Footer-Logo.svg" alt="" /></a>
                 </div>
             </div>
             <div class="col-md-5 col-2 order-3 order-md-0 d-flex  justify-content-end mg-center-menu-align justify-content-md-center">
@@ -81,7 +85,14 @@
                             </div>
                         </li>
                         <li><a href="wishlist.html"><img src="~/images/svgs/wishlist-white.svg" alt="" /><span class="mg-header-icon-counter">1</span></a></li>
-                        <li><a href="#" data-bs-toggle="modal" data-bs-target="#account-modal"><img src="~/images/svgs/account-white.svg" alt="" /></a></li>
+                        @if (this.SignInManager.IsSignedIn(this.User))
+                        {
+                            <li><a href="#" id="logout"><img src="~/images/white-logout.png" alt="" /></a></li>
+                        }
+                        else
+                        {
+                            <li><a href="#" onclick="getAuthPartialView(event)" data-bs-toggle="modal" data-bs-target="#account-modal"><img src="~/images/svgs/account-white.svg" alt="" /></a></li>
+                        }
                         <li><a href="cart.html"><img src="~/images/svgs/shopping-bag-white.svg" alt="" /><span class="mg-header-icon-counter cart-counter">1</span></a></li>
                     </ul>
                 </div>

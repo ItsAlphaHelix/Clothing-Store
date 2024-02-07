@@ -1,0 +1,47 @@
+﻿@using Clothing_Store.Core.ViewModels.Account;
+@model RegisterViewModel
+
+<div class="tab-pane fade" id="mg-signup" role="tabpanel" aria-labelledby="mg-signup-tab">
+    <div class="mg-account-form-outer">
+        <form class="mg-form" id="register">
+            <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="FullName" class="form-control mg-input" id="fullName" asp-for="@Model.FullName" placeholder="Enter your full name">
+                <span asp-validation-for="@Model.FullName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email Address</label>
+                <input type="text" name="Email" class="form-control mg-input" id="email" asp-for="@Model.Email" placeholder="Enter Email">
+                <span asp-validation-for="@Model.Email" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Phone</label>
+                <input type="text" name="Phone" class="form-control mg-input" id="phone" asp-for="@Model.Phone" placeholder="Enter Phone Number">
+                <span asp-validation-for="@Model.Phone" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="text" name="Password" class="form-control mg-input" id="password" asp-for="@Model.Password" placeholder="Enter Password">
+                <span asp-validation-for="@Model.Password" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Confirm Password</label>
+                <input type="text" class="form-control mg-input" id="confirmPass" asp-for="@Model.ConfirmPassword" placeholder="Confirm Password">
+                <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="text-center mt-5">
+                <button type="submit" class="btn mg-btn mg-light-bg-btn mg-form-btn">Sign Up</button>
+            </div>
+        </form>
+        <div class="mg-login-other-options mg-signup-other-options text-center">
+            <div class="mg-login-other-heading">
+                <div class="mg-form-text">Sign up with</div>
+            </div>
+            <ul>
+                <li><a href="#"><img src="assets/images/FB.svg" alt="" /></a></li>
+                <li><a href="#"><img src="assets/images/Twitter.svg" alt="" /></a></li>
+                <li><a href="#"><img src="assets/images/Insta.svg" alt="" /></a></li>
+            </ul>
+        </div>
+    </div>
+</div>

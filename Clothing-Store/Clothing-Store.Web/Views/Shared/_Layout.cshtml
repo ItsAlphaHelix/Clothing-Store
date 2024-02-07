@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="~/css/mg-menu.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/jquery.highlight.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/magnific-popup.css" asp-append-version="true" />
+
+    <partial name="_ValidationScriptsPartial" />
 </head>
 <body class="home-2">
 
@@ -30,6 +32,10 @@
             <partial name="_GlobalNavigationPartial.cshtml" />
         </header>
     }
+    <div class="modal fade mg-account-modal-outer" id="account-modal" tabindex="-1" aria-labelledby="account-modal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+        </div>
+    </div>
     <main role="main">
         @RenderBody()
     </main>
@@ -39,9 +45,13 @@
     &copy; 2024 - Clothing_Store - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
     </div>
     </footer> *@
-     <script src="~/js/jquery.min.js" asp-append-version="true"></script>
-     <script src="~/js/bootstrap.min.js" asp-append-version="true"></script> 
-     @* <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script> 
+
+    <script src="~/js/jquery.min.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/bootstrap.min.js" asp-append-version="true"></script>
+    <script src="~/js/account.js" asp-append-version="true"></script>
+    @* <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script> *@
     <script src="~/js/popper.min.js" asp-append-version="true"></script>
     <script src="~/js/jquery.magnific-popup.js" asp-append-version="true"></script>
@@ -52,7 +62,7 @@
     <script src="~/js/mg-product.js" asp-append-version="true"></script>
     <script src="~/js/pages/mg-collection.js" asp-append-version="true"></script>
     <script src="~/js/mg-common.js" asp-append-version="true"></script>
-    
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

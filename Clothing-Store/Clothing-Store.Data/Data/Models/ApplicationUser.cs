@@ -11,13 +11,6 @@
         }
 
         [Required]
-        public string Country { get; set; }
-
-        [Required]
-        public string City { get; set; }
-
-        [Required]
-        [Phone]
-        public string PhoneNumber { get; set; } = null!;
+        public string FullName { get; set; }
     }
 }

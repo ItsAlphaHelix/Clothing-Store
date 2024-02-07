@@ -71,7 +71,7 @@
                             <h2 class="mg-product-page-product-tittle">@Model.Category</h2>
                         </div>
                         <div class="col-2 text-end">
-                            <div class="mg-stock-text">In stock</div>
+                            <div class="mg-stock-text">В наличност</div>
                         </div>
                     </div>
                     <div class="mg-rating-pannel">
@@ -318,14 +318,14 @@
                                                     </div>
                                                 </div>
                                                 <div class="mg-rating-count mg-rating-count-review-tab">
-                                                    ( Based on <span>@reviews.Count</span> reviews )
+                                                    ( Има <span>@reviews.Count</span> ревюта )
                                                 </div>
                                                 
                                                 <div class="mg-rating-progress-bar-outer mt-4">
                                                     <div class="mg-rating-progress-bar-inner mb-1">
                                                         <div class="mg-rating-label-outer">
                                                             <div class="mg-rating-label">
-                                                                Excellent
+                                                                5 звезди (@exellentRatings)
                                                             </div>
                                                         </div>
                                                         <div class="mg-rating-progress-outer">
@@ -337,7 +337,7 @@
                                                     <div class="mg-rating-progress-bar-inner mb-1">
                                                         <div class="mg-rating-label-outer">
                                                             <div class="mg-rating-label">
-                                                                Good
+                                                                4 звезди (@goodRatings)
                                                             </div>
                                                         </div>
                                                         <div class="mg-rating-progress-outer">
@@ -349,7 +349,7 @@
                                                     <div class="mg-rating-progress-bar-inner mb-1">
                                                         <div class="mg-rating-label-outer">
                                                             <div class="mg-rating-label">
-                                                                Average
+                                                                3 звезди (@averageRatings)
                                                             </div>
                                                         </div>
                                                         <div class="mg-rating-progress-outer">
@@ -361,7 +361,7 @@
                                                     <div class="mg-rating-progress-bar-inner mb-1">
                                                         <div class="mg-rating-label-outer">
                                                             <div class="mg-rating-label">
-                                                                Below Average
+                                                                2 звезди (@belowAverageRatings)
                                                             </div>
                                                         </div>
                                                         <div class="mg-rating-progress-outer">
@@ -373,12 +373,12 @@
                                                     <div class="mg-rating-progress-bar-inner mb-1">
                                                         <div class="mg-rating-label-outer">
                                                             <div class="mg-rating-label">
-                                                                Poor
+                                                                1 звезда (@poorRatings)
                                                             </div>
                                                         </div>
                                                         <div class="mg-rating-progress-outer">
                                                             <div class="mg-rating-progress">
-                                                                <span style="width: @poorRatings%;"></span>
+                                                                <span style="width: @poorRatings%;"></span>                                                               
                                                             </div>
                                                         </div>
                                                     </div>
@@ -541,7 +541,7 @@
     <partial name="_ValidationScriptsPartial" />
     <script src="https://cdn.jsdelivr.net/npm/dompurify@2.3.0/dist/purify.min.js"></script>
     <script>
-        function SubmitReview(event) {
+        function submitReview(event) {
             event.preventDefault();
             var productId = '@Model.Id';
             var data = $(".mg-form").serialize() + "&productId=" + productId;
