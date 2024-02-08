@@ -10,7 +10,7 @@ namespace Clothing_Store.Core.ViewModels.Products
     {
         public int ProductId { get; set; }
 
-        public string Username { get; set; } = null!;
+        public string UserFullName { get; set; } = null!;
 
         public double Rating { get; set; }
 

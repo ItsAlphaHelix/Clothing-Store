@@ -23,6 +23,8 @@
 
 
     double percentageOfAverageStars = double.Parse(averageRatingOfProduct.ToString("F1")) * 20;
+
+    var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 }
 <!--MG Breadcrumb-->
 <div class="mg-breadcrumb-outer">
@@ -320,7 +322,7 @@
                                                 <div class="mg-rating-count mg-rating-count-review-tab">
                                                     ( Има <span>@reviews.Count</span> ревюта )
                                                 </div>
-                                                
+
                                                 <div class="mg-rating-progress-bar-outer mt-4">
                                                     <div class="mg-rating-progress-bar-inner mb-1">
                                                         <div class="mg-rating-label-outer">
@@ -378,7 +380,7 @@
                                                         </div>
                                                         <div class="mg-rating-progress-outer">
                                                             <div class="mg-rating-progress">
-                                                                <span style="width: @poorRatings%;"></span>                                                               
+                                                                <span style="width: @poorRatings%;"></span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -397,7 +399,7 @@
                                                                         <img src="assets/images/product8.jpg" alt="" />
                                                                     </div>
                                                                     <div class="mg-customer-review-user-details">
-                                                                        <div class="mg-customer-username">@review.Username</div>
+                                                                        <div class="mg-customer-username">@review.UserFullName</div>
                                                                         <div class="mg-rating-outer">
                                                                             <div class="mg-ratings-full">
                                                                                 <i class="fa fa-star" aria-hidden="true"></i>
@@ -497,10 +499,10 @@
                                                 }
                                             </div>
                                             <div class="mg-see-more-reviews-btn mt-4 text-center">
-                                                <a href="#">See More Reviews</a>
+                                                <a href="#">Вижте повече ревюта</a>
                                             </div>
                                             <div class="mg-write-review-btn">
-                                                <a class="mg-btn mg-form-btn mg-black-btn mg-write-review-toggle-btn" href="javascript:void(0);">Write a Review</a>
+                                                <a class="mg-btn mg-form-btn mg-black-btn mg-write-review-toggle-btn" href="javascript:void(0);" id="write-review">Напишете Ревю</a>
                                             </div>
                                             <!--Write a review-->
                                             <div class="mg-write-review-pannel-outer">
@@ -538,13 +540,18 @@
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    @* <partial name="_ValidationScriptsPartial" /> *@
     <script src="https://cdn.jsdelivr.net/npm/dompurify@2.3.0/dist/purify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
     <script>
         function submitReview(event) {
+
             event.preventDefault();
+            var fullName = '@ViewBag.FullName';
+            var Email = '@ViewBag.Email';
             var productId = '@Model.Id';
-            var data = $(".mg-form").serialize() + "&productId=" + productId;
+            var data = $(".mg-form").serialize() + "&productId=" + productId + "&userFullName=" + fullName;
             $.ajax({
                 type: 'POST',
                 url: '/Products/PostProductReview',
@@ -552,59 +559,92 @@
                 data: data,
                 success: function (result) {
                     var newReviewHtml = `
-                                    <div class="mg-customer-review-panel pt-5">
-                                        <div class="row align-items-center">
-                                            <div class="col-9">
-                                                <div class="mg-customer-review-user-details-outer">
-                                                    <div class="mg-customer-review-user-detail-image">
-                                                        <img src="assets/images/product8.jpg" alt="" /> <!-- Consider dynamically setting this based on user data -->
-                                                    </div>
-                                                    <div class="mg-customer-review-user-details">
-                                                                        <div class="mg-customer-username">${DOMPurify.sanitize(result.username)}</div>
-                                                        <div class="mg-rating-outer">
-                                                        <div class="mg-ratings-full">
-                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                            <div class="mg-customer-review-panel pt-5">
+                                                <div class="row align-items-center">
+                                                    <div class="col-9">
+                                                        <div class="mg-customer-review-user-details-outer">
+                                                            <div class="mg-customer-review-user-detail-image">
+                                                                <img src="assets/images/product8.jpg" alt="" /> <!-- Consider dynamically setting this based on user data -->
+                                                            </div>
+                                                            <div class="mg-customer-review-user-details">
+                                                                                        <div class="mg-customer-username">${DOMPurify.sanitize(result.userFullName)}</div>
+                                                                <div class="mg-rating-outer">
+                                                                <div class="mg-ratings-full">
+                                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                                    <i class="fa fa-star" aria-hidden="true"></i>
 
-                                                            <span class="mg-ratings" style="width: ${result.rating * 20}%;">
-                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                            </span>
-                                                        </div>
+                                                                    <span class="mg-ratings" style="width: ${result.rating * 20}%;">
+                                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                                    </span>
+                                                                </div>
 
-                                                            <div class="mg-ratings-full">
-                                                                <!-- Dynamically generate rating stars based on the review rating -->
+                                                                    <div class="mg-ratings-full">
+                                                                        <!-- Dynamically generate rating stars based on the review rating -->
+                                                                    </div>
+                                                                </div>
+                                                                                        <div class="mg-rating-count">( ${DOMPurify.sanitize(result.rating.toFixed(1))} )</div>
                                                             </div>
                                                         </div>
-                                                                                <div class="mg-rating-count">( ${DOMPurify.sanitize(result.rating.toFixed(1))} )</div>
+                                                    </div>
+                                                     <div class="col-3 text-end">
+                                                        <div class="mg-user-review-date">преди 0 секунди</div>
                                                     </div>
                                                 </div>
+                                                <div class="mg-customer-review-text mt-3">
+                                                                    <p>${DOMPurify.sanitize(result.message)}</p>
+                                                </div>
                                             </div>
-                                             <div class="col-3 text-end">
-                                                <div class="mg-user-review-date">преди 0 секунди</div>
-                                            </div>
-                                        </div>
-                                        <div class="mg-customer-review-text mt-3">
-                                                            <p>${DOMPurify.sanitize(result.message)}</p>
-                                        </div>
-                                    </div>
-                                `;
+                                        `;
 
-                    // Append the new review HTML to the reviews container
                     $('.mg-customers-reviews-outer').append(newReviewHtml);
-                    console.log(result);
-                    //accordion - collapse collapse show
+                    $("#message").val('');
+                    $(".mg-review-star-rating-form-inner input[type='radio'][name='Rating']").prop('checked', false);
                 },
-                error: function () {
-                    console.log('Failed ');
+                error: function (xhr, status, error) {
+
+                    var response = JSON.parse(xhr.responseText);
+
+                    var form = $('#form-review');
+                    form.find('.text-danger').each(function () {
+                        $(this).text('');
+                    });
+
+                    form.find("span[data-valmsg-for='Message']").text(response[0]).show();
                 }
             })
         }
+
+        $(document).on('click', '#write-review', function (event) {
+            $.ajax({
+                type: "GET",
+                url: '/Products/IsUserLogin',
+                success: function (response) {
+
+                    if (!response.isLoggedIn) {
+                        $(".mg-write-review-pannel-outer").remove();
+                        $.ajax({
+                            url: '/Accounts/GetAuthPartialView',
+                            success: function (data) {
+                                console.log(data);
+                                $('#account-modal').find('.modal-dialog').html(data);
+                                $('#account-modal').modal('show');
+                            },
+                            error: function (xhr, status, error) {
+                                console.log("Error:", xhr.responseText);
+                            }
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                }
+            });
+        });
     </script>
 }

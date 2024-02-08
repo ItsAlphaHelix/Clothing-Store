@@ -4,6 +4,7 @@ using Clothing_Store.Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clothing_Store.Data.Migrations
 {
     [DbContext(typeof(ClothingStoreContext))]
-    partial class ClothingStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20240208140248_RenameColumnNameToUserFullNameINTableProductReviewsAlsoRemoveEmailAddressColumn")]
+    partial class RenameColumnNameToUserFullNameINTableProductReviewsAlsoRemoveEmailAddressColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -110,7 +113,7 @@ namespace Clothing_Store.Data.Migrations
 
                     b.HasIndex("ProductID");
 
-                    b.ToTable("Images", (string)null);
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("Clothing_Store.Data.Data.Models.Product", b =>
@@ -143,7 +146,7 @@ namespace Clothing_Store.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Clothing_Store.Data.Data.Models.ProductReviews", b =>
@@ -177,7 +180,7 @@ namespace Clothing_Store.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductsReviews", (string)null);
+                    b.ToTable("ProductsReviews");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

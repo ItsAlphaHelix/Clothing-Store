@@ -57,7 +57,16 @@ $(document).on('submit', '#login', function (event) {
         data: data,
         success: function (response) {
             console.log("Successfully logged in!");
-            window.location.href = '/';
+
+            $('#account').attr('id', 'logout');
+            if (window.location.pathname !== '/') {
+                $('#logout img').attr('src', '../images/logout.png');
+            } else {
+                $('#logout img').attr('src', '../images/white-logout.png');
+            }
+
+            $('#account-modal').hide(); 
+            $('.modal-backdrop').remove();
         },
         error: function (xhr, status, error) {
             var response = JSON.parse(xhr.responseText);
@@ -80,8 +89,14 @@ $(document).on('click', '#logout', () => {
         type: "GET",
         url: '/Accounts/Logout',
         success: function (response) {
+
             console.log("Successfully logouted!");
-            window.location.href = '/';
+            if (window.location.pathname !== '/') {
+                $('#logout img').attr('src', '../images/svgs/profile.svg');
+            } else {
+                $('#logout img').attr('src', '../images/svgs/account-white.svg');
+            }
+
         }
     });
 });

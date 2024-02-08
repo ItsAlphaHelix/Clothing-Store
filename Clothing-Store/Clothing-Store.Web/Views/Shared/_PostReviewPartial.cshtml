@@ -2,10 +2,10 @@
 @model PostProductReviewViewModel
 
 <div class="mg-write-review-pannel-heading">
-    <h3>Rate Us</h3>
-    <p>Your Rating</p>
+    <h3>Рейтинг</h3>
+    <p>Можете да дадете рейтинг на продукта</p>
 </div>
-<form class="mg-form mg-write-review-form" >
+<form class="mg-form mg-write-review-form" id="form-review">
     <div class="row">
         <div class="mb-3 col-12 mg-review-star-rating-form">
             <div class="mg-review-star-rating-form-inner">
@@ -16,7 +16,7 @@
                 }
             </div>
         </div>
-        <div class="mb-3 col-6">
+         @* <div class="mb-3 col-6">
             <label class="form-label">Name</label>
             <input type="text" class="form-control mg-input" asp-for="@Model.Username" placeholder="Enter your name">
             <span asp-validation-for="@Model.Username" class="text-danger"></span>
@@ -25,14 +25,14 @@
             <label class="form-label">Email Address</label>
             <input type="text" class="form-control mg-input" asp-for="@Model.EmailAddress" placeholder="Enter your email address">
             <span asp-validation-for="@Model.EmailAddress" class="text-danger"></span>
-        </div>
+        </div>  *@
         <div class="mb-3 col-12">
-            <label class="form-label">Review Content</label>
-            <textarea class="form-control  mg-input" asp-for="@Model.Message" placeholder="Your message"></textarea>
+            <label class="form-label">Ревю</label>
+            <textarea id="message" class="form-control mg-input" asp-for="@Model.Message" placeholder="Напишете ревю..."></textarea>
             <span asp-validation-for="@Model.Message" class="text-danger"></span>
         </div>
         <div class="text-center mt-2 mb-3 col-12">
-            <button type="submit" class="btn mg-btn mg-light-bg-btn mg-form-btn" onclick="submitReview(event)">Submit Your Review</button>
+            <button type="submit" class="btn mg-btn mg-light-bg-btn mg-form-btn" onclick="submitReview(event)">Изпратете вашето ревю</button>
         </div>
     </div>
 </form>

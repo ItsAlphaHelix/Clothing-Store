@@ -13,16 +13,11 @@
         public Product Product { get; set; } = null!;
 
         [Required]
-        [StringLength(50)]
-        public string Name { get; set; } = null!;
+        [MaxLength(50)]
+        public string UserFullName { get; set; } = null!;
 
         [Required]
-        [StringLength(50)]
-        [EmailAddress]
-        public string EmailAddress{ get; set; } = null!;
-
-        [Required]
-        [StringLength(250)]
+        [MaxLength(250)]
         public string Message{ get; set; } = null!;
 
         public int Rating { get; set; }

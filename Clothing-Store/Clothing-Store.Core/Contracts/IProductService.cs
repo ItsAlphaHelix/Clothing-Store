@@ -30,7 +30,8 @@
         /// <returns></returns>
         public Task<ICollection<ProductViewModel>> GetlAllProductsByGenderAsync(bool isMen);
 
-        public Task PostProductReviewAsync(PostProductReviewViewModel productReview);
+        public Task PostProductReviewAsync(PostProductReviewViewModel productReview, string userId);
+        //public Task PostProductReviewAsync(PostProductReviewViewModel productReview);
 
         public Task<ICollection<GetProductReviewViewModel>> GetReviewsForProductAsync(int productId);
     }
