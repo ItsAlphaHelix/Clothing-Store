@@ -3,6 +3,7 @@
     using Clothing_Store.Core.Contracts;
     using Clothing_Store.Core.ViewModels.Products;
     using Clothing_Store.Data.Data.Models;
+    using Clothing_Store.Data.Migrations;
     using HtmlAgilityPack;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -61,7 +62,7 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> ProductDetails(int id)
+        public async Task<IActionResult> ProductDetails(int id, int pageNumber, int pageSize = 3)
         {
             ViewBag.IsHomePage = false;
 
@@ -73,9 +74,17 @@
                 ViewBag.FullName = user.FullName;
             }
 
-            var product = await this.productsService.GetProductDetailsByIdAsync(id);
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                var product = await this.productsService.GetProductDetailsByIdAsync(id, pageNumber, pageSize);
+                return PartialView("_ProductReviewsPartial", product);
+            }
+            else
+            {
+                var product = await this.productsService.GetProductDetailsByIdAsync(id, 1, pageSize);
+                return View(product);
+            }
 
-            return View(product);
         }
 
         [Authorize]

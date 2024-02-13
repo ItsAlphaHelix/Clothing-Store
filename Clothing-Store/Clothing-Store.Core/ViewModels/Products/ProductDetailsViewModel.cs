@@ -13,6 +13,8 @@
 
         public bool IsMale { get; set; }
 
+        public List<GetProductReviewViewModel> Reviews { get; set; } = new List<GetProductReviewViewModel>();
+
         public List<string> Images { get; set; } = new List<string>();
     }
 }

@@ -22,7 +22,7 @@
         /// </summary>
         /// <param name="productId"></param>
         /// <returns></returns>
-        public Task<ProductDetailsViewModel> GetProductDetailsByIdAsync(int productId);
+        public Task<ProductDetailsViewModel> GetProductDetailsByIdAsync(int productId, int pageNumber, int pageSize);
 
         /// <summary>
         /// Getting all products by gender.
@@ -31,8 +31,7 @@
         public Task<ICollection<ProductViewModel>> GetlAllProductsByGenderAsync(bool isMen);
 
         public Task PostProductReviewAsync(PostProductReviewViewModel productReview, string userId);
-        //public Task PostProductReviewAsync(PostProductReviewViewModel productReview);
 
-        public Task<ICollection<GetProductReviewViewModel>> GetReviewsForProductAsync(int productId);
+        public Task<ICollection<GetProductReviewViewModel>> GetProductReviewsAsync(int productId);
     }
 }

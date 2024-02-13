@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Accounts\" />
     <Folder Include="wwwroot\images\banners\" />
     <Folder Include="wwwroot\fonts\" />
   </ItemGroup>

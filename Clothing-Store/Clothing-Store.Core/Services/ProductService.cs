@@ -79,8 +79,23 @@
             return product;
         }
 
-        public async Task<ProductDetailsViewModel> GetProductDetailsByIdAsync(int productId)
+        public async Task<ProductDetailsViewModel> GetProductDetailsByIdAsync(int productId, int pageNumber, int pageSize)
         {
+            var reviews = await this.productReviewsRepository.AllAsNoTracking()
+               .Select(x => new GetProductReviewViewModel()
+               {
+                   ProductId = x.ProductId,
+                   UserFullName = x.UserFullName,
+                   Rating = x.Rating,
+                   Message = x.Message,
+                   Date = x.Date
+               })
+               .Where(x => x.ProductId == productId)
+               .OrderByDescending(x => x.Date)
+               .Skip((pageNumber - 1) * pageSize)
+               .Take(pageSize)
+               .ToListAsync();
+
             var product = await this.productsRepository
                 .AllAsNoTracking()
                 .Where(x => x.Id == productId)
@@ -92,6 +107,7 @@
                     Description = x.Description,
                     ClearInfo = x.ClearInfo,
                     IsMale = x.IsMale,
+                    Reviews = reviews,
                     Images = x.Images.Select(x => x.Url)
                     .ToList()
                 })
@@ -102,7 +118,6 @@
 
         public async Task PostProductReviewAsync(PostProductReviewViewModel productReview, string userId)
         {
-           // var user = await this.usersRepository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Id == productReview.UserId);
             var user = await this.usersManager.FindByIdAsync(userId);
 
             var postProductReview = new ProductReviews()
@@ -118,23 +133,7 @@
             await this.productReviewsRepository.SaveChangesAsync();
         }
 
-        //public async Task PostProductReviewAsync(PostProductReviewViewModel productReview)
-        //{
-        //    var postProductReview = new ProductReviews()
-        //    {
-        //        ProductId = productReview.ProductId,
-        //        Name = productReview.Username,
-        //        EmailAddress = productReview.EmailAddress,
-        //        Rating = productReview.Rating,
-        //        Message = productReview.Message,
-        //        Date = DateTime.Now
-        //    };
-
-        //    await this.productReviewsRepository.AddAsync(postProductReview);
-        //    await this.productReviewsRepository.SaveChangesAsync();
-        // }
-
-        public async Task<ICollection<GetProductReviewViewModel>> GetReviewsForProductAsync(int productId)
+        public async Task<ICollection<GetProductReviewViewModel>> GetProductReviewsAsync(int productId)
         {
             var reviews = await this.productReviewsRepository.AllAsNoTracking()
                 .Where(x => x.ProductId == productId)

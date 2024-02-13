@@ -1,0 +1,108 @@
+﻿@using Clothing_Store.Core.ViewModels.Products;
+@model ProductDetailsViewModel
+
+    @foreach (var review in Model.Reviews)
+    {
+        var widthPercentage = review.Rating * 20;
+
+        <div class="mg-customer-review-panel pt-5">
+            <div class="row align-items-center">
+                <div class="col-9">
+                    <div class="mg-customer-review-user-details-outer">
+                        <div class="mg-customer-review-user-detail-image">
+                            <img src="assets/images/product8.jpg" alt="" />
+                        </div>
+                        <div class="mg-customer-review-user-details">
+                            <div class="mg-customer-username">@review.UserFullName</div>
+                            <div class="mg-rating-outer">
+                                <div class="mg-ratings-full">
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+
+                                    <span class="mg-ratings" style="width: @widthPercentage%;">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="mg-rating-count">
+                                ( @review.Rating.ToString("F1") )
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3 text-end">
+                    @{
+                        DateTime currentDateTime = DateTime.Now;
+                        TimeSpan timeDifference = currentDateTime - review.Date;
+                        string timeDiffDisplay;
+                        string formater;
+                        if (timeDifference.TotalDays >= 1)
+                        {
+                            if (Math.Floor(timeDifference.TotalDays) > 1)
+                            {
+                                formater = "дни";
+                            }
+                            else
+                            {
+                                formater = "ден";
+                            }
+                            timeDiffDisplay = $"преди {Math.Floor(timeDifference.TotalDays)} {formater}";
+                        }
+                        else if (timeDifference.TotalHours >= 1)
+                        {
+                            if (Math.Floor(timeDifference.TotalHours) > 1)
+                            {
+                                formater = "часа";
+                            }
+                            else
+                            {
+                                formater = "час";
+                            }
+                            timeDiffDisplay = $"преди {Math.Floor(timeDifference.TotalHours)} {formater}";
+                        }
+                        else if (timeDifference.TotalMinutes >= 1)
+                        {
+                            if (Math.Floor(timeDifference.TotalMinutes) > 1)
+                            {
+                                formater = "минути";
+                            }
+                            else
+                            {
+                                formater = "минута";
+                            }
+
+                            timeDiffDisplay = $" преди {Math.Floor(timeDifference.TotalMinutes)} {formater}";
+                        }
+                        else
+                        {
+
+                            if (Math.Floor(timeDifference.TotalSeconds) > 1)
+                            {
+                                formater = "секунди";
+                            }
+                            else
+                            {
+                                formater = "секунда";
+                            }
+
+                            timeDiffDisplay = $"преди {Math.Floor(timeDifference.TotalSeconds)} {formater}";
+                        }
+                    }
+                    <div class="mg-user-review-date">@timeDiffDisplay</div>
+                </div>
+            </div>
+            <div class="mg-customer-review-text mt-3">
+                <p>
+                    @review.Message
+                </p>
+            </div>
+ 
+        </div>
+    }

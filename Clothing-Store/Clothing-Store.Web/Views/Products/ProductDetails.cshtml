@@ -9,7 +9,7 @@
     var productReview = new PostProductReviewViewModel();
     productReview.ProductId = Model.Id;
 
-    var reviews = await this.productsService.GetReviewsForProductAsync(Model.Id);
+    var reviews = await this.productsService.GetProductReviewsAsync(Model.Id);
     var averageRatingOfProduct = reviews.Any() ? (reviews.Sum(x => x.Rating) / reviews.Count) : 0;
 
     var gender = Model.IsMale ? "Мъжки" : "Женски";
@@ -23,8 +23,6 @@
 
 
     double percentageOfAverageStars = double.Parse(averageRatingOfProduct.ToString("F1")) * 20;
-
-    var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 }
 <!--MG Breadcrumb-->
 <div class="mg-breadcrumb-outer">
@@ -387,120 +385,15 @@
                                                 </div>
                                             </div>
                                             <div class="mg-customers-reviews-outer">
-                                                @foreach (var review in reviews)
-                                                {
-                                                    var widthPercentage = review.Rating * 20;
-
-                                                    <div class="mg-customer-review-panel pt-5">
-                                                        <div class="row align-items-center">
-                                                            <div class="col-9">
-                                                                <div class="mg-customer-review-user-details-outer">
-                                                                    <div class="mg-customer-review-user-detail-image">
-                                                                        <img src="assets/images/product8.jpg" alt="" />
-                                                                    </div>
-                                                                    <div class="mg-customer-review-user-details">
-                                                                        <div class="mg-customer-username">@review.UserFullName</div>
-                                                                        <div class="mg-rating-outer">
-                                                                            <div class="mg-ratings-full">
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-
-                                                                                <span class="mg-ratings" style="width: @widthPercentage%;">
-                                                                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="mg-rating-count">
-                                                                            ( @review.Rating.ToString("F1") )
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-3 text-end">
-                                                                @{
-                                                                    DateTime currentDateTime = DateTime.Now;
-                                                                    TimeSpan timeDifference = currentDateTime - review.Date;
-                                                                    string timeDiffDisplay;
-                                                                    string formater;
-                                                                    if (timeDifference.TotalDays >= 1)
-                                                                    {
-                                                                        if (Math.Floor(timeDifference.TotalDays) > 1)
-                                                                        {
-                                                                            formater = "дни";
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            formater = "ден";
-                                                                        }
-                                                                        timeDiffDisplay = $"преди {Math.Floor(timeDifference.TotalDays)} {formater}";
-                                                                    }
-                                                                    else if (timeDifference.TotalHours >= 1)
-                                                                    {
-                                                                        if (Math.Floor(timeDifference.TotalHours) > 1)
-                                                                        {
-                                                                            formater = "часа";
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            formater = "час";
-                                                                        }
-                                                                        timeDiffDisplay = $"преди {Math.Floor(timeDifference.TotalHours)} {formater}";
-                                                                    }
-                                                                    else if (timeDifference.TotalMinutes >= 1)
-                                                                    {
-                                                                        if (Math.Floor(timeDifference.TotalMinutes) > 1)
-                                                                        {
-                                                                            formater = "минути";
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            formater = "минута";
-                                                                        }
-
-                                                                        timeDiffDisplay = $" преди {Math.Floor(timeDifference.TotalMinutes)} {formater}";
-                                                                    }
-                                                                    else
-                                                                    {
-
-                                                                        if (Math.Floor(timeDifference.TotalSeconds) > 1)
-                                                                        {
-                                                                            formater = "секунди";
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            formater = "секунда";
-                                                                        }
-
-                                                                        timeDiffDisplay = $"{Math.Floor(timeDifference.TotalSeconds)} {formater}";
-                                                                    }
-                                                                }
-                                                                <div class="mg-user-review-date">@timeDiffDisplay</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="mg-customer-review-text mt-3">
-                                                            <p>
-                                                                @review.Message
-                                                            </p>
-                                                        </div>
-                                                        <div class="mg-customer-review-like-comment-btn">
-                                                            <ul>
-                                                                <li class="color-acent"><a href="#">Like</a></li>
-                                                                <li><a href="#">Comments</a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                }
+                                                @await Html.PartialAsync("_ProductReviewsPartial")
                                             </div>
-                                            <div class="mg-see-more-reviews-btn mt-4 text-center">
-                                                <a href="#">Вижте повече ревюта</a>
-                                            </div>
+
+                                            @if (Model.Reviews.Count >= 3)
+                                            {
+                                                <div class="mg-see-more-reviews-btn mt-4 text-center" data-page-number="2">
+                                                    <a href="#">Вижте повече ревюта</a>
+                                                </div>
+                                            }
                                             <div class="mg-write-review-btn">
                                                 <a class="mg-btn mg-form-btn mg-black-btn mg-write-review-toggle-btn" href="javascript:void(0);" id="write-review">Напишете Ревю</a>
                                             </div>
@@ -545,13 +438,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
     <script>
+
         function submitReview(event) {
 
             event.preventDefault();
-            var fullName = '@ViewBag.FullName';
-            var Email = '@ViewBag.Email';
+            var user = JSON.parse(localStorage.getItem('User'));
+            var fullName = user ? user.fullName : '@ViewBag.FullName'
             var productId = '@Model.Id';
             var data = $(".mg-form").serialize() + "&productId=" + productId + "&userFullName=" + fullName;
+
             $.ajax({
                 type: 'POST',
                 url: '/Products/PostProductReview',
@@ -559,49 +454,49 @@
                 data: data,
                 success: function (result) {
                     var newReviewHtml = `
-                                            <div class="mg-customer-review-panel pt-5">
-                                                <div class="row align-items-center">
-                                                    <div class="col-9">
-                                                        <div class="mg-customer-review-user-details-outer">
-                                                            <div class="mg-customer-review-user-detail-image">
-                                                                <img src="assets/images/product8.jpg" alt="" /> <!-- Consider dynamically setting this based on user data -->
-                                                            </div>
-                                                            <div class="mg-customer-review-user-details">
-                                                                                        <div class="mg-customer-username">${DOMPurify.sanitize(result.userFullName)}</div>
-                                                                <div class="mg-rating-outer">
-                                                                <div class="mg-ratings-full">
-                                                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                    <div class="mg-customer-review-panel pt-5">
+                                                        <div class="row align-items-center">
+                                                            <div class="col-9">
+                                                                <div class="mg-customer-review-user-details-outer">
+                                                                    <div class="mg-customer-review-user-detail-image">
+                                                                        <img src="assets/images/product8.jpg" alt="" /> <!-- Consider dynamically setting this based on user data -->
+                                                                    </div>
+                                                                    <div class="mg-customer-review-user-details">
+                                                                                                <div class="mg-customer-username">${DOMPurify.sanitize(result.userFullName)}</div>
+                                                                        <div class="mg-rating-outer">
+                                                                        <div class="mg-ratings-full">
+                                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            <i class="fa fa-star" aria-hidden="true"></i>
 
-                                                                    <span class="mg-ratings" style="width: ${result.rating * 20}%;">
-                                                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                                                    </span>
-                                                                </div>
+                                                                            <span class="mg-ratings" style="width: ${result.rating * 20}%;">
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                                            </span>
+                                                                        </div>
 
-                                                                    <div class="mg-ratings-full">
-                                                                        <!-- Dynamically generate rating stars based on the review rating -->
+                                                                            <div class="mg-ratings-full">
+                                                                                <!-- Dynamically generate rating stars based on the review rating -->
+                                                                            </div>
+                                                                        </div>
+                                                                                                <div class="mg-rating-count">( ${DOMPurify.sanitize(result.rating.toFixed(1))} )</div>
                                                                     </div>
                                                                 </div>
-                                                                                        <div class="mg-rating-count">( ${DOMPurify.sanitize(result.rating.toFixed(1))} )</div>
+                                                            </div>
+                                                             <div class="col-3 text-end">
+                                                                <div class="mg-user-review-date">преди 0 секунди</div>
                                                             </div>
                                                         </div>
+                                                        <div class="mg-customer-review-text mt-3">
+                                                                            <p>${DOMPurify.sanitize(result.message)}</p>
+                                                        </div>
                                                     </div>
-                                                     <div class="col-3 text-end">
-                                                        <div class="mg-user-review-date">преди 0 секунди</div>
-                                                    </div>
-                                                </div>
-                                                <div class="mg-customer-review-text mt-3">
-                                                                    <p>${DOMPurify.sanitize(result.message)}</p>
-                                                </div>
-                                            </div>
-                                        `;
+                                                `;
 
                     $('.mg-customers-reviews-outer').append(newReviewHtml);
                     $("#message").val('');
@@ -628,7 +523,7 @@
                 success: function (response) {
 
                     if (!response.isLoggedIn) {
-                        $(".mg-write-review-pannel-outer").remove();
+                        $(".mg-write-review-pannel-outer").hide();
                         $.ajax({
                             url: '/Accounts/GetAuthPartialView',
                             success: function (data) {
@@ -646,5 +541,25 @@
                 }
             });
         });
+
+        $(document).on('click', '.mg-see-more-reviews-btn', function (event) {
+            event.preventDefault();
+            var nextPageNumber = $(this).data('pageNumber');
+            var productId = '@Model.Id';
+
+            $.ajax({
+                type: "GET",
+                url: '/Products/ProductDetails',
+                data: { id: productId, pageNumber: nextPageNumber },
+                success: function (response) {
+                    $('.mg-customers-reviews-outer').append(response);
+                    $('.mg-see-more-reviews-btn').data('pageNumber', nextPageNumber + 1)
+                },
+                error: function (xhr, status, error) {
+                    console.log('An error occurred while loading the next page of movies: ' + error);
+                }
+            });
+        });
     </script>
+
 }

@@ -11,7 +11,7 @@
             $.getScript("https://code.jquery.com/jquery-3.6.0.min.js", function () {
                 $.getScript("https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js", function () {
 
-                $.getScript("https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js");
+                    $.getScript("https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js");
 
                 });
             });
@@ -37,7 +37,7 @@ $(document).on('submit', '#register', function (event) {
         error: function (xhr, status, error) {
             var response = JSON.parse(xhr.responseText);
 
-            var form = $('#register'); 
+            var form = $('#register');
             form.find('.text-danger').each(function () {
                 $(this).text('');
             });
@@ -57,21 +57,25 @@ $(document).on('submit', '#login', function (event) {
         data: data,
         success: function (response) {
             console.log("Successfully logged in!");
-
+            
             $('#account').attr('id', 'logout');
             if (window.location.pathname !== '/') {
-                $('#logout img').attr('src', '../images/logout.png');
+                $('#logout img').attr('src', '/images/logout.png');
             } else {
-                $('#logout img').attr('src', '../images/white-logout.png');
+                $('#logout img').attr('src', '/images/white-logout.png');
             }
 
-            $('#account-modal').hide(); 
-            $('.modal-backdrop').remove();
+            $('#account-modal').hide();
+            $('.modal-backdrop').hide();
+            $('body').css('overflow', '');
+
+            localStorage.setItem('User', JSON.stringify({ fullName: response.fullName }));
+
         },
         error: function (xhr, status, error) {
             var response = JSON.parse(xhr.responseText);
 
-            var form = $('#login'); 
+            var form = $('#login');
             form.find('.text-danger').each(function () {
                 $(this).text('');
             });
@@ -89,12 +93,16 @@ $(document).on('click', '#logout', () => {
         type: "GET",
         url: '/Accounts/Logout',
         success: function (response) {
-
             console.log("Successfully logouted!");
+
+            $('#logout').attr('onclick', "getAuthPartialView(event);");
+            $('#logout').attr('data-bs-toggle', "modal");
+            $('#logout').attr('data-bs-target', "#account-modal");
+
             if (window.location.pathname !== '/') {
-                $('#logout img').attr('src', '../images/svgs/profile.svg');
+                $('#logout img').attr('src', '/images/svgs/profile.svg');
             } else {
-                $('#logout img').attr('src', '../images/svgs/account-white.svg');
+                $('#logout img').attr('src', '/images/svgs/account-white.svg');
             }
 
         }

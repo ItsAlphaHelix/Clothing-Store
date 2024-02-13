@@ -14,13 +14,16 @@ namespace Clothing_Store.Controllers
     {
         private readonly IAccountService accountsService;
         private readonly IRepository<ApplicationUser> usersRepository;
+        private readonly UserManager<ApplicationUser> usersManager;
 
         public AccountsController(
             IAccountService accountsService,
-            IRepository<ApplicationUser> usersRepository)
+            IRepository<ApplicationUser> usersRepository,
+            UserManager<ApplicationUser> usersManager)
         {
             this.accountsService = accountsService;
             this.usersRepository = usersRepository;
+            this.usersManager = usersManager;
         }
 
         [HttpGet]
@@ -63,7 +66,9 @@ namespace Clothing_Store.Controllers
                 var result = await this.accountsService.LoginAsync(model);
                 if (result.Succeeded)
                 {
-                    return Ok();
+                    var user = await usersManager.FindByNameAsync(model.Email);
+
+                    return Json(new {user.FullName});
                 }
                 else
                 {
