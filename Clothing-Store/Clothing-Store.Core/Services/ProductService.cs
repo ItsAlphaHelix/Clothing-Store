@@ -1,6 +1,8 @@
 ﻿namespace Clothing_Store.Core.Services
 {
+    using Azure;
     using Clothing_Store.Core.Contracts;
+    using Clothing_Store.Core.ViewModels;
     using Clothing_Store.Core.ViewModels.Products;
     using Clothing_Store.Data.Data.Models;
     using Clothing_Store.Data.Repositories;
@@ -15,22 +17,24 @@
         private readonly IRepository<ProductReviews> productReviewsRepository;
         private readonly UserManager<ApplicationUser> usersManager;
         private readonly IRepository<ApplicationUser> usersRepository;
+        private readonly IRepository<Cart> cartsRepository;
         public ProductService(
             IRepository<Product> productsRepository,
             IRepository<ProductReviews> productReviewsRepository,
             UserManager<ApplicationUser> usersManager,
-            IRepository<ApplicationUser> usersRepository)
+            IRepository<ApplicationUser> usersRepository,
+            IRepository<Cart> cartsRepository)
         {
             this.productsRepository = productsRepository;
             this.productReviewsRepository = productReviewsRepository;
             this.usersManager = usersManager;
             this.usersRepository = usersRepository;
-
+            this.cartsRepository = cartsRepository;
         }
 
-        public async Task<ICollection<ProductViewModel>> GetlAllProductsByGenderAsync(bool isMen)
+        public IQueryable<ProductViewModel> GetlAllProductsByGenderAsQueryable(bool isMen)
         {
-            var products = await this.productsRepository
+            var products = this.productsRepository
                 .AllAsNoTracking()
                 .Where(x => x.IsMale == isMen)
                 .Select(x => new ProductViewModel()
@@ -40,14 +44,14 @@
                     Price = x.Price,
                     Images = x.Images.Select(x => x.Url).Take(2).ToList()
                 })
-                .ToListAsync();
+                .AsQueryable();
 
             return products;
         }
 
-        public async Task<ICollection<ProductViewModel>> GetAllProductsAsync()
+        public IQueryable<ProductViewModel> GetAllProductsAsQueryable()
         {
-            var products = await this.productsRepository
+            var products = this.productsRepository
                 .AllAsNoTracking()
                 .Select(x => new ProductViewModel()
                 {
@@ -56,7 +60,7 @@
                     Price = x.Price,
                     Images = x.Images.Select(x => x.Url).Take(2).ToList()
                 })
-                .ToListAsync();
+                .AsQueryable();
 
             return products;
         }
@@ -82,6 +86,10 @@
         public async Task<ProductDetailsViewModel> GetProductDetailsByIdAsync(int productId, int pageNumber, int pageSize)
         {
             var reviews = await this.productReviewsRepository.AllAsNoTracking()
+               .Where(x => x.ProductId == productId)
+               .OrderByDescending(x => x.Date)
+               .Skip((pageNumber - 1) * pageSize)
+               .Take(pageSize)
                .Select(x => new GetProductReviewViewModel()
                {
                    ProductId = x.ProductId,
@@ -90,10 +98,6 @@
                    Message = x.Message,
                    Date = x.Date
                })
-               .Where(x => x.ProductId == productId)
-               .OrderByDescending(x => x.Date)
-               .Skip((pageNumber - 1) * pageSize)
-               .Take(pageSize)
                .ToListAsync();
 
             var product = await this.productsRepository
@@ -133,7 +137,7 @@
             await this.productReviewsRepository.SaveChangesAsync();
         }
 
-        public async Task<ICollection<GetProductReviewViewModel>> GetProductReviewsAsync(int productId)
+        public async Task<IEnumerable<GetProductReviewViewModel>> GetProductReviewsAsync(int productId)
         {
             var reviews = await this.productReviewsRepository.AllAsNoTracking()
                 .Where(x => x.ProductId == productId)

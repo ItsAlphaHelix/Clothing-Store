@@ -1,10 +1,9 @@
 ﻿namespace Clothing_Store.Controllers
 {
     using Clothing_Store.Core.Contracts;
+    using Clothing_Store.Core.ViewModels;
     using Clothing_Store.Core.ViewModels.Products;
     using Clothing_Store.Data.Data.Models;
-    using Clothing_Store.Data.Migrations;
-    using HtmlAgilityPack;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -27,30 +26,55 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All(int pageNumber = 1)
         {
             ViewBag.IsHomePage = false;
 
-            var products = await this.productsService.GetAllProductsAsync();
-            return View(products);
+            var products = this.productsService.GetAllProductsAsQueryable();
+
+            var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, pageNumber, 12);
+
+            var viewModel = new ProductPaginatedViewModel()
+            {
+                Products = paginated,
+                TotalCount = products.Count()
+            };
+
+            return View(viewModel);
         }
 
         [HttpGet]
-        public async Task<IActionResult> AllMenProducts()
+        public async Task<IActionResult> AllMenProducts(int pageNumber = 1)
         {
             ViewBag.IsHomePage = false;
-            var products = await this.productsService.GetlAllProductsByGenderAsync(true);
+            var products = this.productsService.GetlAllProductsByGenderAsQueryable(true);
 
-            return View(products);
+            var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, pageNumber, 12);
+
+            var viewModel = new ProductPaginatedViewModel()
+            {
+                Products = paginated,
+                TotalCount = products.Count()
+            };
+
+            return View(viewModel);
         }
 
         [HttpGet]
-        public async Task<IActionResult> AllWomenProducts()
+        public async Task<IActionResult> AllWomenProducts(int pageNumber = 1)
         {
             ViewBag.IsHomePage = false;
-            var products = await this.productsService.GetlAllProductsByGenderAsync(false);
+            var products = this.productsService.GetlAllProductsByGenderAsQueryable(false);
 
-            return View(products);
+            var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, pageNumber, 12);
+
+            var viewModel = new ProductPaginatedViewModel()
+            {
+                Products = paginated,
+                TotalCount = products.Count()
+            };
+
+            return View(viewModel);
         }
 
         [HttpGet]

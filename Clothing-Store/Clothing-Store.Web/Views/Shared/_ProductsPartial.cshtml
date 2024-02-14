@@ -1,4 +1,7 @@
-﻿<div class="modal gx-0 fade mg-search-pop-up" id="search-popup" tabindex="-1" aria-labelledby="search-popup" aria-hidden="true">
+﻿@using Clothing_Store.Core.ViewModels.Products;
+@model ProductPaginatedViewModel
+
+<div class="modal gx-0 fade mg-search-pop-up" id="search-popup" tabindex="-1" aria-labelledby="search-popup" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen">
         <div class="modal-content">
             <div class="modal-header">
@@ -208,7 +211,7 @@
                         <div>
                             <div class="mg-collection-product-list-outer">
                                 <div class="row">
-                                    @foreach (var product in Model)
+                                    @foreach (var product in Model.Products)
                                     {
                                         <div class="col-md-4 col-sm-6">
                                             <div class="mg-product-main mg-img-hdark">
@@ -241,25 +244,34 @@
                         </div>
                         <!--Products Grid End Here-->
                         <!--MG Pagination Start Here-->
-                        <div class="mg-pagination-outer mt-3">
-                            <nav>
-                                <ul class="pagination justify-content-center align-items-center">
-                                    <li class="page-item pagination-nextprev">
-                                        <a class="page-link" href="#" aria-label="Previous">
-                                            <img src="assets/images/mg-arrow-left.png" alt="" />
-                                        </a>
-                                    </li>
-                                    <li class="page-item"><a class="page-link active" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item pagination-nextprev">
-                                        <a class="page-link" href="#" aria-label="Next">
-                                            <img src="assets/images/mg-arrow-right.png" alt="" />
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
+                        @if (Model.Products.TotalPages > 1)
+                        {
+                            <div class="mg-pagination-outer mt-3">
+                                <nav>
+                                    <ul class="pagination justify-content-center align-items-center">
+                                        <li class="page-item pagination-nextprev  @(Model.Products.HasPreviousPage ? "" : "disabled")">
+                                            <a class="page-link" asp-route-pageNumber="@(Model.Products.PageNumber - 1)" aria-label="Previous">
+                                                <img src="~/images/mg-arrow-left.png" alt="" />
+                                            </a>
+                                        </li>
+                                        @for (int i = 1; i <= Model.Products.TotalPages; i++)
+                                        {
+                                            <li class="page-item">
+                                                <a class="page-link @(Model.Products.PageNumber == i ? "active" : "")"
+                                                   asp-route-pageNumber="@i">
+                                                    @i
+                                                </a>
+                                            </li>
+                                        }
+                                        <li class="page-item pagination-nextprev @(Model.Products.HasNextPage ? "" : "disabled")">
+                                            <a class="page-link" asp-route-pageNumber="@(Model.Products.PageNumber + 1)" aria-label="Next">
+                                                <img src="~/images/mg-arrow-right.png" alt="" />
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        }
                         <!--MG Pagination End Here-->
                     </div>
                 </div>

@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Clothing_Store.Core.ViewModels.Products
+{
+    public class ProductPaginatedViewModel
+    {
+        public PaginatedList<ProductViewModel> Products { get; set; }
+
+        public int TotalCount { get; set; }
+    }
+}

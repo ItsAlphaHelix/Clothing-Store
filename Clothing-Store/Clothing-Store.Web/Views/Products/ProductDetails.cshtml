@@ -10,7 +10,7 @@
     productReview.ProductId = Model.Id;
 
     var reviews = await this.productsService.GetProductReviewsAsync(Model.Id);
-    var averageRatingOfProduct = reviews.Any() ? (reviews.Sum(x => x.Rating) / reviews.Count) : 0;
+    var averageRatingOfProduct = reviews.Any() ? (reviews.Sum(x => x.Rating) / reviews.Count()) : 0;
 
     var gender = Model.IsMale ? "Мъжки" : "Женски";
     var navigation = Model.IsMale ? "AllMenProducts" : "AllWomenProducts";
@@ -92,7 +92,7 @@
                             </div>
                         </div>
                         <div class="mg-rating-count">
-                            ( <span>@reviews.Count</span> Ревюта )
+                            ( <span>@reviews.Count()</span> Ревюта )
                         </div>
                     </div>
                     <div class="mg-product-page-product-price mt-4">
@@ -230,7 +230,7 @@
                     <div class="mg-product-add-to-cart-outer mg-product-page-sec-spacing">
                         <div class="row gx-3">
                             <div class="col-8">
-                                <button class="btn mg-btn mg-black-btn mg-form-btn mg-light-bg-btn"><span class="mg-btn-icon"><img src="assets/images/product-bag.svg" alt="" /></span>Добави в кошницата</button>
+                                <button class="btn mg-btn mg-black-btn mg-form-btn mg-light-bg-btn" ><span class="mg-btn-icon"><img src="assets/images/product-bag.svg" alt="" /></span>Добави в кошницата</button>
                             </div>
                             <div class="col-4">
                                 <a class="btn mg-btn mg-form-btn mg-light-bg-btn" href="#"><span class="mg-btn-icon"><img src="assets/images/product-heart.svg" alt="" /></span>Добави в любими</a>
@@ -318,7 +318,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="mg-rating-count mg-rating-count-review-tab">
-                                                    ( Има <span>@reviews.Count</span> ревюта )
+                                                    ( Има <span>@reviews.Count()</span> ревюта )
                                                 </div>
 
                                                 <div class="mg-rating-progress-bar-outer mt-4">

@@ -8,7 +8,7 @@
         /// Getting all products.
         /// </summary>
         /// <returns></returns>
-        public Task<ICollection<ProductViewModel>> GetAllProductsAsync();
+        public IQueryable<ProductViewModel> GetAllProductsAsQueryable();
 
         /// <summary>
         /// Getting current product by his id.
@@ -28,10 +28,10 @@
         /// Getting all products by gender.
         /// </summary>
         /// <returns></returns>
-        public Task<ICollection<ProductViewModel>> GetlAllProductsByGenderAsync(bool isMen);
+        public IQueryable<ProductViewModel> GetlAllProductsByGenderAsQueryable(bool isMen);
 
         public Task PostProductReviewAsync(PostProductReviewViewModel productReview, string userId);
 
-        public Task<ICollection<GetProductReviewViewModel>> GetProductReviewsAsync(int productId);
+        public Task<IEnumerable<GetProductReviewViewModel>> GetProductReviewsAsync(int productId);
     }
 }
