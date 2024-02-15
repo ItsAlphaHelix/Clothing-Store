@@ -1,26 +1,8 @@
 ﻿@using Clothing_Store.Core.ViewModels.Products;
 @model ProductPaginatedViewModel
 
-<div class="modal gx-0 fade mg-search-pop-up" id="search-popup" tabindex="-1" aria-labelledby="search-popup" aria-hidden="true">
-    <div class="modal-dialog modal-fullscreen">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="btn-close mg-pop-up-close-btn" data-bs-dismiss="modal" aria-label="Close">
-                    <span class="mg-spcb-bar-one"></span>
-                    <span class="mg-spcb-bar-two"></span>
-                </button>
-            </div>
-            <div class="modal-body align-items-center d-flex">
-                <div class="mg-search-pop-form-outer w-100">
-                    <div class="search-heading"></div>
-                    <form>
-                        <input type="text" class="form-control" placeholder="Search here...">
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<partial name="_SearchPartial" />
+
 <div class="mg-breadcrumb-outer">
     <div class="container-fluid gx-5">
         <nav aria-label="breadcrumb">
@@ -44,7 +26,7 @@
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#tab1">
-                                      Продукти
+                                        Продукти
                                     </button>
                                 </h2>
                                 <div id="tab1" class="accordion-collapse collapse show">
@@ -61,27 +43,27 @@
                                 </div>
                             </div>
                             @* <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#tab2">
-                                        Brand
-                                    </button>
-                                </h2>
-                                <div id="tab2" class="accordion-collapse collapse show">
-                                    <div class="accordion-body">
-                                        <div class="mg-filter-panel">
-                                            <div class="mg-filter-checkbox">
-                                                <ul>
-                                                    <li><a href="javascript:void(0);">Burberry</a></li>
-                                                    <li><a href="javascript:void(0);">Kenzo</a></li>
-                                                    <li><a href="javascript:void(0);">Louis Vuitton</a></li>
-                                                    <li><a href="javascript:void(0);">Police</a></li>
-                                                    <li><a href="javascript:void(0);">Tomford</a></li>
-                                                    <li><a href="javascript:void(0);">Vinova</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#tab2">
+                            Brand
+                            </button>
+                            </h2>
+                            <div id="tab2" class="accordion-collapse collapse show">
+                            <div class="accordion-body">
+                            <div class="mg-filter-panel">
+                            <div class="mg-filter-checkbox">
+                            <ul>
+                            <li><a href="javascript:void(0);">Burberry</a></li>
+                            <li><a href="javascript:void(0);">Kenzo</a></li>
+                            <li><a href="javascript:void(0);">Louis Vuitton</a></li>
+                            <li><a href="javascript:void(0);">Police</a></li>
+                            <li><a href="javascript:void(0);">Tomford</a></li>
+                            <li><a href="javascript:void(0);">Vinova</a></li>
+                            </ul>
+                            </div>
+                            </div>
+                            </div>
+                            </div>
                             </div> *@
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
@@ -104,35 +86,35 @@
                                     </div>
                                 </div>
                             </div>
-@*                             <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#tab4">
-                                        Color
-                                    </button>
-                                </h2>
-                                <div id="tab4" class="accordion-collapse collapse show">
-                                    <div class="accordion-body">
-                                        <div class="mg-color-variant-outer">
-                                            <ul>
-                                                <li class="mg-active-variant"><a style="background-color: #242424;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                <li><a style="background-color: #6495ED;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                <li><a style="background-color: #483D8B;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                <li><a style="background-color: #242424;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                <li><a style="background-color: #6495ED;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                <li><a style="background-color: #483D8B;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                <li><a style="background-color: #242424;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                <li><a style="background-color: #6495ED;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                <li><a style="background-color: #483D8B;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                                <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
+                            @*                             <div class="accordion-item">
+                            <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#tab4">
+                            Color
+                            </button>
+                            </h2>
+                            <div id="tab4" class="accordion-collapse collapse show">
+                            <div class="accordion-body">
+                            <div class="mg-color-variant-outer">
+                            <ul>
+                            <li class="mg-active-variant"><a style="background-color: #242424;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                            <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                            <li><a style="background-color: #6495ED;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                            <li><a style="background-color: #483D8B;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                            <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                            <li><a style="background-color: #242424;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                            <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                            <li><a style="background-color: #6495ED;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                            <li><a style="background-color: #483D8B;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                            <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                            <li><a style="background-color: #242424;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                            <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                            <li><a style="background-color: #6495ED;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                            <li><a style="background-color: #483D8B;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                            <li><a style="background-color: #CD5C5C;" class="mg-color-variant" href="javascript:void(0);"></a></li>
+                            </ul>
+                            </div>
+                            </div>
+                            </div>
                             </div> *@
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
@@ -164,11 +146,11 @@
             <div class="col-md-9">
                 <div class="mg-collection-page-main-grid-outer">
                     @* <div class="mg-collection-banner text-center">
-                        <div class="mg-collection-banner-tittles">
-                            <h2 class="mg-heading">New Collection</h2>
-                            <p>Get upto 20% off</p>
-                            <a href="collection.html" class="mg-btn mg-btn-white">Shop Now</a>
-                        </div>
+                    <div class="mg-collection-banner-tittles">
+                    <h2 class="mg-heading">New Collection</h2>
+                    <p>Get upto 20% off</p>
+                    <a href="collection.html" class="mg-btn mg-btn-white">Shop Now</a>
+                    </div>
                     </div> *@
                     <div class="mg-collection-grid-pannel mt-5">
                         <div class="mg-section-tittles text-center">
@@ -250,21 +232,30 @@
                                 <nav>
                                     <ul class="pagination justify-content-center align-items-center">
                                         <li class="page-item pagination-nextprev  @(Model.Products.HasPreviousPage ? "" : "disabled")">
-                                            <a class="page-link" asp-route-pageNumber="@(Model.Products.PageNumber - 1)" aria-label="Previous">
+                                            <a class="page-link" asp-route-pageNumber="@(Model.Products.PageNumber - 1)" asp-route-query="@this.ViewData["CurrentSearchWord"]" aria-label="Previous">
                                                 <img src="~/images/mg-arrow-left.png" alt="" />
                                             </a>
                                         </li>
-                                        @for (int i = 1; i <= Model.Products.TotalPages; i++)
+
+                                        @{
+                                            int startPage = Math.Max(1, Model.Products.PageNumber - 4);
+                                            int endPage = Math.Min(Model.Products.TotalPages, startPage + 9);
+
+                                            if (Model.Products.TotalPages >= 10 && endPage - startPage < 9)
+                                            {
+                                                startPage = Math.Max(1, endPage - 9);
+                                            }
+                                        }
+
+                                        @for (int i = startPage; i <= endPage; i++)
                                         {
                                             <li class="page-item">
-                                                <a class="page-link @(Model.Products.PageNumber == i ? "active" : "")"
-                                                   asp-route-pageNumber="@i">
-                                                    @i
-                                                </a>
+                                                <a class="page-link @(Model.Products.PageNumber == i ? "active" : "")" asp-route-pageNumber="@i" asp-route-query="@this.ViewData["CurrentSearchWord"]">@i</a>
                                             </li>
                                         }
+
                                         <li class="page-item pagination-nextprev @(Model.Products.HasNextPage ? "" : "disabled")">
-                                            <a class="page-link" asp-route-pageNumber="@(Model.Products.PageNumber + 1)" aria-label="Next">
+                                            <a class="page-link" asp-route-pageNumber="@(Model.Products.PageNumber + 1)" asp-route-query="@this.ViewData["CurrentSearchWord"]" aria-label="Next">
                                                 <img src="~/images/mg-arrow-right.png" alt="" />
                                             </a>
                                         </li>

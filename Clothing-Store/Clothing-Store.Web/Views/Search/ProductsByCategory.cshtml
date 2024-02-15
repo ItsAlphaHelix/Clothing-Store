@@ -1,0 +1,8 @@
+﻿@using Clothing_Store.Core.ViewModels.Products;
+@model ProductPaginatedViewModel
+
+@{
+    this.ViewData["Title"] = "Намерени продукти";
+}
+
+@await Html.PartialAsync("_ProductsPartial", Model)

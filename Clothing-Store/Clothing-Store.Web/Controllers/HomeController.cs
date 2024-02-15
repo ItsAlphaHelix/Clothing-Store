@@ -15,7 +15,7 @@ namespace Clothing_Store.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.IsHomePage = true;
+            ViewData["IsHomePage"] = true;
             return View();
         }
 

@@ -28,11 +28,16 @@
         [HttpGet]
         public async Task<IActionResult> All(int pageNumber = 1)
         {
-            ViewBag.IsHomePage = false;
+            ViewData["IsHomePage"] = false;
 
             var products = this.productsService.GetAllProductsAsQueryable();
 
             var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, pageNumber, 12);
+
+            //if (paginated.Count == 0)
+            //{
+            //    return NotFound();
+            //}
 
             var viewModel = new ProductPaginatedViewModel()
             {
@@ -46,7 +51,7 @@
         [HttpGet]
         public async Task<IActionResult> AllMenProducts(int pageNumber = 1)
         {
-            ViewBag.IsHomePage = false;
+            ViewData["IsHomePage"] = false;
             var products = this.productsService.GetlAllProductsByGenderAsQueryable(true);
 
             var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, pageNumber, 12);
@@ -63,7 +68,7 @@
         [HttpGet]
         public async Task<IActionResult> AllWomenProducts(int pageNumber = 1)
         {
-            ViewBag.IsHomePage = false;
+            ViewData["IsHomePage"] = false;
             var products = this.productsService.GetlAllProductsByGenderAsQueryable(false);
 
             var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, pageNumber, 12);
@@ -88,7 +93,7 @@
         [HttpGet]
         public async Task<IActionResult> ProductDetails(int id, int pageNumber, int pageSize = 3)
         {
-            ViewBag.IsHomePage = false;
+            ViewData["IsHomePage"] = false;
 
             if (this.signInManager.IsSignedIn(this.User))
             {

@@ -73,16 +73,19 @@
                 <div class="header-icons-outer mg-header-icon-style2">
                     <ul>
                         <li class="mg-search-icon mg-search-box-main">
+                            
                             <div class="mg-search-box">
                                 <div class="input-group">
                                     <div class="form-outline">
-                                        <input type="search" placeholder="Search Here.." class="form-control">
+                                        <form id="searchForm" asp-controller="Search" asp-action="ProductsByCategory" method="get">
+                                        <input name="Query" type="search" placeholder="Search Here.." class="form-control">
+                                        </form>
                                     </div>
-                                    <button type="button" class="btn">
-                                        <img src="/images/svgs/search-white.svg" alt="" />
+                                    <button type="button" class="btn" id="searchButton">
+                                        <img src="/images/svgs/search-white.svg" alt=""/>
                                     </button>
                                 </div>
-                            </div>
+                            </div>                         
                         </li>
                         <li><a href="wishlist.html"><img src="~/images/svgs/wishlist-white.svg" alt="" /><span class="mg-header-icon-counter">1</span></a></li>
                         @if (this.SignInManager.IsSignedIn(this.User))
@@ -100,3 +103,9 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById("searchButton").addEventListener('click', function () {
+        document.getElementById("searchForm").submit();
+    });
+</script>
