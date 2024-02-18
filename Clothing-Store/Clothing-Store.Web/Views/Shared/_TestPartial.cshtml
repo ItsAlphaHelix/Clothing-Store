@@ -1,0 +1,7 @@
+﻿@using Clothing_Store.Controllers;
+@model CategoryProductViewModel
+
+@foreach(var product in Model.Products)
+{
+    <li>@product.Name - @product.Price</li>
+}

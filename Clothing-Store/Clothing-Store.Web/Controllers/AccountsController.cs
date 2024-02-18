@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace Clothing_Store.Controllers
 {
     using Clothing_Store.Core.Contracts;
@@ -9,8 +11,7 @@ namespace Clothing_Store.Controllers
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
-
-    public class AccountsController : Controller
+public class AccountsController : Controller
     {
         private readonly IAccountService accountsService;
         private readonly IRepository<ApplicationUser> usersRepository;
