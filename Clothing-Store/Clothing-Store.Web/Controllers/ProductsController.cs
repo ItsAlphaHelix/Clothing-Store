@@ -40,7 +40,7 @@
             
             var products = this.productsService.GetAllProductsAsQueryable(model);
             ViewData["CurrentSort"] = model.Sorting;
-            ViewData["CurredSelectedProduct"] = model.SelectedProducts;
+            ViewData["CurrentSelectedProduct"] = model.SelectedProducts;
             var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, page, 12);
 
             //if (paginated.Count == 0)

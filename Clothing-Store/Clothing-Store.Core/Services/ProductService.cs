@@ -55,9 +55,20 @@
                 })
                 .AsQueryable();
 
-            if (string.IsNullOrWhiteSpace(model.SelectedProducts))
+            if (!string.IsNullOrWhiteSpace(model.SelectedProducts))
             {
                 products = products.Where(x => model.SelectedProducts.Contains(x.Category));
+            }
+
+            if (!string.IsNullOrEmpty(model.SelectedPrices))
+            {
+                switch (model.SelectedPrices)
+                {
+                    case "5-15": products = products.Where(x => x.Price >= 5 && x.Price <= 15); break;
+                    case "15-30": products = products.Where(x => x.Price >= 15 && x.Price <= 30); break;
+                    case "30-50": products = products.Where(x => x.Price >= 30 && x.Price <= 50); break;
+                    case "50-100": products = products.Where(x => x.Price >= 50 && x.Price <= 100); break;
+                }
             }
 
             switch (model.Sorting)

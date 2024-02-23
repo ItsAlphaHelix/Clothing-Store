@@ -76,13 +76,16 @@
                                         <div class="mg-filter-panel">
                                             <div class="mg-filter-checkbox">
                                                 <ul>
-                                                    <li><a href="javascript:void(0);">10 BGN - 100 BGN</a></li>
-                                                    <li><a href="javascript:void(0);">101 BGN - 200 BGN</a></li>
-                                                    <li><a href="javascript:void(0);">201 BGN - 300 BGN</a></li>
-                                                    <li><a href="javascript:void(0);">301 BGN - 400 BGN</a></li>
+                                                    <li><a href="#" name="selectedPrices" value="5-15" onclick="callOnChangePrices(this)">5 BGN - 15 BGN</a></li>
+                                                    <li><a href="#" name="selectedPrices" value="15-30" onclick="callOnChangePrices(this)">15 BGN - 30 BGN</a></li>
+                                                    <li><a href="#" name="selectedPrices" value="30-50" onclick="callOnChangePrices(this)">30 BGN - 50 BGN</a></li>
+                                                    <li><a href="#" name="selectedPrices" value="50-100" onclick="callOnChangePrices(this)">50 BGN - 100 BGN</a></li>
                                                 </ul>
                                             </div>
                                         </div>
+                                        <br />
+                                        <input placeholder="Цена..." style="width: 100px;">
+                                        @*  <span asp-validation-for="@Model.Email" class="text-danger"></span> *@
                                     </div>
                                 </div>
                             </div>
@@ -190,7 +193,7 @@
                                             <a class="page-link" aria-label="Previous"
                                                 asp-route-page="@(Model.Products.PageNumber - 1)"
                                                 asp-route-sorting="@ViewData["CurrentSort"]"
-                                                asp-route-selectedProducts="@ViewData["CurredSelectedProduct"]">
+                                               asp-route-selectedProducts="@ViewData["CurrentSelectedProduct"]">
                                                 <img src="~/images/mg-arrow-left.png" alt="" />
                                             </a>
                                         </li>
@@ -211,7 +214,7 @@
                                                 <a class="page-link @(Model.Products.PageNumber == i ? "active" : "")" 
                                                 asp-route-page="@i"
                                                 asp-route-sorting="@ViewData["CurrentSort"]"
-                                                asp-route-selectedProducts="@ViewData["CurredSelectedProduct"]">@i</a>
+                                                   asp-route-selectedProducts="@ViewData["CurrentSelectedProduct"]">@i</a>
                                             </li>
                                         }
 
@@ -219,7 +222,7 @@
                                             <a class="page-link" aria-label="Next" 
                                                 asp-route-page="@(Model.Products.PageNumber + 1)"
                                                 asp-route-sorting="@ViewData["CurrentSort"]"
-                                                asp-route-selectedProducts="@ViewData["CurredSelectedProduct"]">
+                                               asp-route-selectedProducts="@ViewData["CurrentSelectedProduct"]">
                                                 <img src="~/images/mg-arrow-right.png" alt="" />
                                             </a>
                                         </li>

@@ -35,9 +35,32 @@
 
         function callChangeOrder(sorting) {
             var selectedProducts = getSelectedProducts();
-            console.log(selectedProducts);
-            window.location.href = `/Products/All?page=1&sorting=${sorting}&selectedProducts=${selectedProducts.join(',')}`;
+            var selectedPrice = localStorage.getItem("selectedPrice");
+            var resultSelectedProducts = selectedProducts.length != 0 ? `&selectedProducts=${selectedProducts.join(',')}` : " ";
+            var resultSelectedPrice = selectedPrice != null ? `&selectedPrices=@Model.SelectedPrices` : " ";
+            window.location.href = `/Products/All?page=1&sorting=${sorting}${resultSelectedProducts}${resultSelectedPrice}`;
         }
+
+        function callOnChangePrices(element) {
+
+            var checkboxValue = element.getAttribute('value');
+            localStorage.setItem("selectedPrice", checkboxValue)
+            var selectedPrice = localStorage.getItem("selectedPrice");
+            var selectedProducts = getSelectedProducts();
+            var anchorPrice = document.querySelector('a[value="' + selectedPrice + '"]');
+            var isActive = anchorPrice.parentNode.classList.contains("active");
+            if (isActive) {
+                anchorPrice.parentNode.classList.remove('remove');
+                localStorage.removeItem("selectedPrice");
+                var resultSelectedProducts = selectedProducts.length != 0 ? `&selectedProducts=${selectedProducts.join(',')}` : " ";
+                return window.location.href = `/Products/All?page=1&sorting=@Model.Sorting${resultSelectedProducts}`;
+            }
+
+            window.location.href = `/Products/All?page=1&sorting=@Model.Sorting&selectedProducts=${selectedProducts.join(',')}&selectedPrices=${selectedPrice}`;
+        }
+
+
+
         function getSelectedProducts() {
             var storedProducts = localStorage.getItem('selectedProducts');
             return storedProducts ? storedProducts.split(',') : [];
@@ -48,13 +71,13 @@
         }
 
         function callChangeProducts(element) {
-            console.log(element)
+
             var checkboxValue = element.getAttribute('value');
             var selectedProducts = getSelectedProducts();
 
             if (selectedProducts.includes(checkboxValue)) {
                 
-                selectedProducts = selectedProducts.filter(course => course !== checkboxValue);
+                selectedProducts = selectedProducts.filter(product => product !== checkboxValue);
             } else {
 
                 selectedProducts.push(checkboxValue);
@@ -63,24 +86,30 @@
             setSelectedProducts(selectedProducts);
 
             var sorting = '@Model.Sorting';
-            var url = `/Products/All?page=1&sorting=${sorting}&selectedProducts=${selectedProducts.join(',')}`;
-
-
-           window.location.href = url;
+            var selectedPrice = localStorage.getItem("selectedPrice");
+            var resultSelectedProducts = selectedProducts.length != 0 ? `&selectedProducts=${selectedProducts.join(',')}` : " ";
+            var resultSelectedPrice = selectedPrice != null ? `&selectedPrices=@Model.SelectedPrices` : " ";
+            window.location.href = `/Products/All?page=1&sorting=${sorting}${resultSelectedProducts}${resultSelectedPrice}`;
 
         }
 
 
         document.addEventListener('DOMContentLoaded', function () {
             var selectedProducts = getSelectedProducts();
-            selectedProducts.forEach(function (course) {
-                var anchor = document.querySelector('a[value="' + course + '"]');
-                if (anchor) {
-                    anchor.parentNode.classList.add('active'); 
+            selectedProducts.forEach(function (product) {
+                var anchorProduct = document.querySelector('a[value="' + product + '"]');
+                if (anchorProduct) {
+                    anchorProduct.parentNode.classList.add('active');
                 }
             });
 
-        });
+            var price = localStorage.getItem("selectedPrice");
+            var anchorPrice = document.querySelector('a[value="' + price + '"]');
+
+            if (anchorPrice) {
+                anchorPrice.parentNode.classList.add('active');
+            }
+         });
 
     </script>
 
