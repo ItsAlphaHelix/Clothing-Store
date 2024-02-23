@@ -40,19 +40,5 @@
 
             return null;
         }
-        public IQueryable<ProductViewModel> FilterProductsAsQueryable(string[] queries)
-        {
-            var products = this.productsRepository.AllAsNoTracking()
-                .Where(x => queries.Contains(x.Category))
-                .Select(x => new ProductViewModel()
-                {
-                    Id = x.Id,
-                    Category = x.Category,
-                    Price = x.Price,
-                    Images = x.Images.Select(i => i.Url).ToList()
-                }).AsQueryable();
-
-            return products;
-        }
     }
 }

@@ -1,4 +1,7 @@
-﻿<partial name="_SearchPartial" />
+﻿@using Clothing_Store.Core.ViewModels.Products;
+@model ProductPaginatedViewModel
+
+<partial name="_SearchPartial" />
 
 <div class="mg-breadcrumb-outer">
     <div class="container-fluid gx-5">
@@ -31,8 +34,8 @@
                                         <div class="mg-filter-panel">
                                             <div class="mg-filter-checkbox">
                                                 <ul>
-                                                    <li><a class="filter-link" data-query="Пуловер">Пуловери</a></li>
-                                                    <li><a class="filter-link" data-query="Тениска">Тениски</a></li>
+                                                    <li><a href="#" name="selectedProducts" value="Пуловер" class="filter-link" onclick="callChangeProducts(this)">Пуловери</a></li>
+                                                    <li><a href="#" name="selectedProducts" value="Тениска" class="filter-link" onclick="callChangeProducts(this)">Тениски</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -144,9 +147,9 @@
                 <div class="mg-collection-page-main-grid-outer">
                     @* <div class="mg-collection-banner text-center">
                     <div class="mg-collection-banner-tittles">
-                    <h2 class="mg-heading">New Collection</h2>
-                    <p>Get upto 20% off</p>
-                    <a href="collection.html" class="mg-btn mg-btn-white">Shop Now</a>
+                    <h2 class="mg-heading">new collection</h2>
+                    <p>get up to 20% off</p>
+                    <a href="collection.html" class="mg-btn mg-btn-white">shop now</a>
                     </div>
                     </div> *@
                     <div class="mg-collection-grid-pannel mt-5">
@@ -154,37 +157,26 @@
                             <h2 class="mg-heading mg-heading-small">@this.ViewData["Title"]</h2>
                         </div>
                         <div class="mg-sorting-outer mb-3">
-                            <!--Select Input Sorting-->
-                            <form>
+                            <!--Select Input Sorting-->                     
                                 <div class="mg-sorting">
                                     <label>Shorted By:</label>
-                                    <select class="form-control">
-                                        <option value="default" selected="selected">Featured</option>
-                                        <option value="popularity">Popularity</option>
-                                        <option value="rating">Average Rating</option>
-                                        <option value="date">Latest</option>
-                                        <option value="price-low">Low To High</option>
-                                        <option value="price-high">High To Low</option>
+                                    <select asp-for="@Model.Sorting" class="form-control" onchange="callChangeOrder(this.value)">
+                                        @* <option value="0" selected="selected">Featured</option> *@
+                                        @* <option value="1">Popularity</option> *@
+                                        @* <option value="2">Average Rating</option> *@
+                                        @* <option value="3">Latest</option> *@
+                                        <option value="Default">Default</option>
+                                        <option value="PriceAsc">Low To High</option>
+                                        <option value="PriceDesc">High To Low</option>
+                                        <option value="Newest">Newest</option>
+                                        <option value="Oldest">Oldest</option>
+                                        @* Default = 0,
+                                        PriceAsc = 1,
+                                        PriceDesc = 2,
+                                        Newest = 3,
+                                        Oldest = 4 *@
                                     </select>
                                 </div>
-                            </form>
-                            <!--Select Input Sorting-->
-                            <!--HTML Sorting-->
-                            <div class="mg-html-sorting-outer d-none">
-                                <div class="mg-html-sorting-bar">Shorted By: <span class="mg-sorting-selected">Featured</span></div>
-                                <div class="mg-html-sorting-options-pannel">
-                                    <ul>
-                                        <li class="selected"><a href="#">Featured</a></li>
-                                        <li><a href="javascript:void(0);">Popularity</a></li>
-                                        <li><a href="javascript:void(0);">Average Rating</a></li>
-                                        <li><a href="javascript:void(0);">Latest</a></li>
-                                        <li><a href="javascript:void(0);">Low To High</a></li>
-                                        <li><a href="javascript:void(0);">High To Low</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <!--HTML Sorting-->
-                            <span class="d-md-none mg-filter-nav-btn"><i class="fa fa-filter" aria-hidden="true"></i> Filters</span>
                         </div>
 
                         @await Html.PartialAsync("_ProductsPartial")
@@ -192,23 +184,42 @@
                         @if (Model.Products.TotalPages > 1)
                         {
                             <div class="mg-pagination-outer mt-3">
-                                <nav id="#nav-pagination">
+                                <nav>
                                     <ul class="pagination justify-content-center align-items-center">
-                                        <li class="page-item pagination-nextprev">
-                                            <a class="page-link" data-page="previouse" aria-label="Previous">
+                                        <li class="page-item pagination-nextprev @(Model.Products.HasPreviousPage ? "" : "disabled")">
+                                            <a class="page-link" aria-label="Previous"
+                                                asp-route-page="@(Model.Products.PageNumber - 1)"
+                                                asp-route-sorting="@ViewData["CurrentSort"]"
+                                                asp-route-selectedProducts="@ViewData["CurredSelectedProduct"]">
                                                 <img src="~/images/mg-arrow-left.png" alt="" />
                                             </a>
                                         </li>
 
-                                        @for (int i = 1; i <= Model.Products.TotalPages; i++)
+                                        @{
+                                            int startPage = Math.Max(1, Model.Products.PageNumber - 4);
+                                            int endPage = Math.Min(Model.Products.TotalPages, startPage + 9);
+
+                                            if (Model.Products.TotalPages >= 10 && endPage - startPage < 9)
+                                            {
+                                                startPage = Math.Max(1, endPage - 9);
+                                            }
+                                        }
+
+                                        @for (int i = startPage; i <= endPage; i++)
                                         {
                                             <li class="page-item">
-                                                <a class="page-link @(Model.Products.PageNumber == i ? "active" : "")" data-page="@i" href="#">@i</a>
+                                                <a class="page-link @(Model.Products.PageNumber == i ? "active" : "")" 
+                                                asp-route-page="@i"
+                                                asp-route-sorting="@ViewData["CurrentSort"]"
+                                                asp-route-selectedProducts="@ViewData["CurredSelectedProduct"]">@i</a>
                                             </li>
                                         }
 
-                                        <li class="page-item pagination-nextprev">
-                                            <a class="page-link" data-page="next" aria-label="Next">
+                                        <li class="page-item pagination-nextprev @(Model.Products.HasNextPage ? "" : "disabled")">
+                                            <a class="page-link" aria-label="Next" 
+                                                asp-route-page="@(Model.Products.PageNumber + 1)"
+                                                asp-route-sorting="@ViewData["CurrentSort"]"
+                                                asp-route-selectedProducts="@ViewData["CurredSelectedProduct"]">
                                                 <img src="~/images/mg-arrow-right.png" alt="" />
                                             </a>
                                         </li>

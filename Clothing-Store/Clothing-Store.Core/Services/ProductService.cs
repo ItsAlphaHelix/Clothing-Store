@@ -1,8 +1,6 @@
 ﻿namespace Clothing_Store.Core.Services
 {
-    using Azure;
     using Clothing_Store.Core.Contracts;
-    using Clothing_Store.Core.ViewModels;
     using Clothing_Store.Core.ViewModels.Products;
     using Clothing_Store.Data.Data.Models;
     using Clothing_Store.Data.Repositories;
@@ -10,29 +8,24 @@
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Linq.Expressions;
     using System.Threading.Tasks;
     public class ProductService : IProductService
     {
         private readonly IRepository<Product> productsRepository;
         private readonly IRepository<ProductReviews> productReviewsRepository;
         private readonly UserManager<ApplicationUser> usersManager;
-        private readonly IRepository<ApplicationUser> usersRepository;
-        private readonly IRepository<Cart> cartsRepository;
         public ProductService(
             IRepository<Product> productsRepository,
             IRepository<ProductReviews> productReviewsRepository,
-            UserManager<ApplicationUser> usersManager,
-            IRepository<ApplicationUser> usersRepository,
-            IRepository<Cart> cartsRepository)
+            UserManager<ApplicationUser> usersManager)
         {
             this.productsRepository = productsRepository;
             this.productReviewsRepository = productReviewsRepository;
             this.usersManager = usersManager;
-            this.usersRepository = usersRepository;
-            this.cartsRepository = cartsRepository;
         }
 
-        public IQueryable<ProductViewModel> GetlAllProductsByGenderAsQueryable(bool isMen)
+        public IQueryable<ProductViewModel> GetAllProductsByGenderAsQueryable(bool isMen)
         {
             var products = this.productsRepository
                 .AllAsNoTracking()
@@ -49,7 +42,7 @@
             return products;
         }
 
-        public IQueryable<ProductViewModel> GetAllProductsAsQueryable()
+        public IQueryable<ProductViewModel> GetAllProductsAsQueryable(ProductPaginatedViewModel model)
         {
             var products = this.productsRepository
                 .AllAsNoTracking()
@@ -61,6 +54,18 @@
                     Images = x.Images.Select(x => x.Url).Take(2).ToList()
                 })
                 .AsQueryable();
+
+            if (string.IsNullOrWhiteSpace(model.SelectedProducts))
+            {
+                products = products.Where(x => model.SelectedProducts.Contains(x.Category));
+            }
+
+            switch (model.Sorting)
+            {
+                case SortEnum.Default: products = products.AsQueryable(); break;
+                case SortEnum.PriceAsc: products= products.OrderBy(x => x.Price); break;
+                case SortEnum.PriceDesc: products = products.OrderByDescending(x => x.Price); break;
+            }
 
             return products;
         }

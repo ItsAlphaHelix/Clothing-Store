@@ -9,6 +9,8 @@
 
 @await Html.PartialAsync("_AppPartial")
 
+}
+
 @section Scripts {
     <script>
         function loadProductDetails(productId) {
@@ -30,208 +32,56 @@
     </script>
 
     <script>
-        $(document).ready(function () {
-            $('.page-link').click(function (e) {
-                e.preventDefault();
-                var page = $(this).data('page');
-                var currentPage = parseInt($('.pagination .page-item .page-link.active').data('page'));
-                if (page === "previouse") {
-                    page = Math.max(1, currentPage - 1);
-                } else if (page === "next") {
-                    var totalPages = @Model.Products.TotalPages;
-                    page = Math.min(totalPages, currentPage + 1);
-                } else {
-                    page = parseInt(page, 10);
+
+        function callChangeOrder(sorting) {
+            var selectedProducts = getSelectedProducts();
+            console.log(selectedProducts);
+            window.location.href = `/Products/All?page=1&sorting=${sorting}&selectedProducts=${selectedProducts.join(',')}`;
+        }
+        function getSelectedProducts() {
+            var storedProducts = localStorage.getItem('selectedProducts');
+            return storedProducts ? storedProducts.split(',') : [];
+        }
+
+        function setSelectedProducts(selectedProducts) {
+            localStorage.setItem('selectedProducts', selectedProducts.join(','));
+        }
+
+        function callChangeProducts(element) {
+            console.log(element)
+            var checkboxValue = element.getAttribute('value');
+            var selectedProducts = getSelectedProducts();
+
+            if (selectedProducts.includes(checkboxValue)) {
+                
+                selectedProducts = selectedProducts.filter(course => course !== checkboxValue);
+            } else {
+
+                selectedProducts.push(checkboxValue);
+            }
+
+            setSelectedProducts(selectedProducts);
+
+            var sorting = '@Model.Sorting';
+            var url = `/Products/All?page=1&sorting=${sorting}&selectedProducts=${selectedProducts.join(',')}`;
+
+
+           window.location.href = url;
+
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var selectedProducts = getSelectedProducts();
+            selectedProducts.forEach(function (course) {
+                var anchor = document.querySelector('a[value="' + course + '"]');
+                if (anchor) {
+                    anchor.parentNode.classList.add('active'); 
                 }
-
-                $.ajax({
-                    url: '@Url.Action("All", "Products")',
-                    type: 'GET',
-                    data: { page: page },
-                    success: function (result) {
-                        $('#products-container').html(result);
-                        $('.pagination .page-item .page-link').removeClass('active');
-
-                        $('.pagination .page-item a[data-page="' + page + '"]').addClass('active');
-                        var url = "/Products/All?page=" + page;
-                        history.pushState(null, null, url)
-                    }
-                });
             });
+
         });
 
-        $('.filter-link').on('click', function (e) {
-            e.preventDefault(); // Prevent the default anchor click behavior
-
-            // Toggle an 'active' class to indicate selection
-            $(this).toggleClass('active');
-
-            // Get all active queries
-            var selectedQueries = $('.filter-link.active').map(function () {
-                return $(this).data('query');
-            }).get();
-
-            $.ajax({
-                url: '@Url.Action("FilterProducts", "Search")',
-                type: 'POST',
-                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                data: {
-                    queries: selectedQueries
-                },
-                success: function (result) {
-                    if (result.products.length === 0) {
-                        location.reload();
-                    }
-                    
-                    var productsHtml = '<div class="mg-collection-product-list-outer"><div class="row">';
-
-                    result.products.forEach(function (product) {
-                        productsHtml += `
-                                                <div class="col-md-4 col-sm-6">
-                                                    <div class="mg-product-main mg-img-hdark">
-                                                        <div class="position-relative">
-                                                            <div class="mg-product-image">
-                                                                <a href="/Products/ProductDetails/${product.id}">
-                                                                    <img class="img-fluid" src="${product.images[0]}" alt="" />
-                                                                </a>
-                                                                <a href="/Products/ProductDetails/${product.id}">
-                                                                    <img class="img-fluid mg-hover-img" src="${product.images[1]}" alt="" />
-                                                                </a>
-                                                            </div>
-                                                            <div class="mg-product-icons-outer">
-                                                                <div class="mg-product-icon">
-                                                                    <a href="#"><img class="mg-product-icon-img" src="/images/svgs/heart-icon.svg" alt="" /></a>
-                                                                </div>
-                                                                <div class="mg-product-icon">
-                                                                    <a href="javascript:void(0)" onclick="loadProductDetails(${product.id})">
-                                                                        <img class="mg-product-icon-img" src="/images/svgs/view-icon.svg" alt="" />
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                            <div class="mg-product-add-to-cart-btn-outer">
-                                                                <a class="mg-product-add-to-cart-btn" href="cart.html">Add To Bag</a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="mg-product-tittles text-center">
-                                                            <a class="mg-product-name" href="/Products/ProductDetails/${product.id}">${product.category}</a>
-                                                            <div class="mg-regular-price">
-                                                                <span class="mg-discount-price"></span>${product.price} BGN
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>`;
-                    });
-
-                    $("#products-container").html(productsHtml);
-
-                    if (result.totalPages == 1) {
-                        $('.mg-pagination-outer').hide();
-                        return;
-                    }
-                    $('.mg-pagination-outer').show();
-                    let paginationHtml = '<li class="page-item pagination-nextprev">' +
-                        '<a class="page-link" data-page="previous" aria-label="Previous">' +
-                        '<img src="/images/mg-arrow-left.png" alt="" />' +
-                        '</a></li>';
-
-                    for (let i = 1; i <= result.totalPages; i++) {
-                        let activeClass = (i === result.page) ? 'active' : '';
-                        paginationHtml += `<li class="page-item">` +
-                            `<a class="page-link ${activeClass}" data-page="${i}" href="#">${i}</a>` +
-                            `</li>`;
-                    }
-
-                    paginationHtml += '<li class="page-item pagination-nextprev">' +
-                        '<a class="page-link" data-page="next" aria-label="Next">' +
-                        '<img src="/images/mg-arrow-right.png" alt="" />' +
-                        '</a></li>';
-                    console.log($('.mg-pagination-outer'))
-                    $('.pagination').html(paginationHtml)
-                    let = result = `<nav id="nav-pagination"><ul class="pagination justify-content-center align-items-center">${paginationHtml}</ul></nav>`
-
-                    $('.mg-pagination-outer').html(result);
-
-                    $(document).ready(function () {
-                        $('.page-link').click(function (e) {
-                            e.preventDefault();
-                            console.log(e.target)
-                            var page = $(this).data('page');
-                            var currentPage = parseInt($('.pagination .page-item.active a').data('page'), 10);
-
-                            if (page === "prev") {
-                                page = Math.max(1, currentPage - 1);
-                            } else if (page === "next") {
-                                var totalPages = @Model.Products.TotalPages;
-                                page = Math.min(totalPages, currentPage + 1);
-                            } else {
-                                page = parseInt(page, 10);
-                            }
-
-
-                            $.ajax({
-                                url: '@Url.Action("FilterProducts", "Search")',
-                                type: 'POST',
-                                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                                data: {
-                                    queries: selectedQueries,
-                                    page: page
-                                },
-                                success: function (result) {
-                                    var url = "/Products/All?page=" + page;
-                                    history.pushState(null, null, url)
-                                    var productsHtml = '<div class="mg-collection-product-list-outer"><div class="row">';
-
-                                    result.products.forEach(function (product) {
-                                        productsHtml += `
-                                                                                <div class="col-md-4 col-sm-6">
-                                                                                    <div class="mg-product-main mg-img-hdark">
-                                                                                        <div class="position-relative">
-                                                                                            <div class="mg-product-image">
-                                                                                                <a href="/Products/ProductDetails/${product.id}">
-                                                                                                    <img class="img-fluid" src="${product.images[0]}" alt="" />
-                                                                                                </a>
-                                                                                                <a href="/Products/ProductDetails/${product.id}">
-                                                                                                    <img class="img-fluid mg-hover-img" src="${product.images[1]}" alt="" />
-                                                                                                </a>
-                                                                                            </div>
-                                                                                            <div class="mg-product-icons-outer">
-                                                                                                <div class="mg-product-icon">
-                                                                                                    <a href="#"><img class="mg-product-icon-img" src="/images/svgs/heart-icon.svg" alt="" /></a>
-                                                                                                </div>
-                                                                                                <div class="mg-product-icon">
-                                                                                                    <a href="javascript:void(0)" onclick="loadProductDetails(${product.id})">
-                                                                                                        <img class="mg-product-icon-img" src="/images/svgs/view-icon.svg" alt="" />
-                                                                                                    </a>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="mg-product-add-to-cart-btn-outer">
-                                                                                                <a class="mg-product-add-to-cart-btn" href="cart.html">Add To Bag</a>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="mg-product-tittles text-center">
-                                                                                            <a class="mg-product-name" href="/Products/ProductDetails/${product.id}">${product.category}</a>
-                                                                                            <div class="mg-regular-price">
-                                                                                                <span class="mg-discount-price"></span>${product.price} BGN
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>`;
-                                    });
-
-                                    $("#products-container").html(productsHtml);
-                                    $('.pagination .page-item .page-link').removeClass('active');
-                                    $('.pagination .page-item a[data-page="' + page + '"]').addClass('active');
-                                }
-                            });
-                        });
-                    });
-                },
-                error: function () {
-                    console.log('An error occurred while retrieving filtered product data.');
-                }
-
-            });
-        });
     </script>
 
 }

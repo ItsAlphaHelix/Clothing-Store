@@ -36,28 +36,5 @@ namespace Clothing_Store.Controllers
 
             return View(viewModel);
         }
-
-        [HttpPost]
-        public async Task<IActionResult> FilterProducts(string[] queries, int page = 1)
-        {
-            ViewData["IsHomePage"] = false;
-            //this.ViewData["CurrentSearchWord"] = query;
-
-            var products = this.searchService.FilterProductsAsQueryable(queries);
-
-            if (products == null && !products.Any())
-            {
-                return NotFound();
-            }
-
-            var paginatedProducts = await PaginatedList<ProductViewModel>.CreateAsync(products, page, 12);
-
-            return Json(new
-            {
-                Products = paginatedProducts,
-                paginatedProducts.TotalPages,
-                Page = paginatedProducts.PageNumber
-            });
-        }
     }
 }

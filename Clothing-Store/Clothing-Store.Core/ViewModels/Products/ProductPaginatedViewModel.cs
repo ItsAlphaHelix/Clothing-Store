@@ -10,6 +10,10 @@ namespace Clothing_Store.Core.ViewModels.Products
     {
         public PaginatedList<ProductViewModel> Products { get; set; }
 
+        public SortEnum Sorting { get; set; }
+
+        public string SelectedProducts { get; set; }
+
         public int TotalCount { get; set; }
     }
 }

@@ -8,7 +8,7 @@
         /// Getting all products.
         /// </summary>
         /// <returns></returns>
-        public IQueryable<ProductViewModel> GetAllProductsAsQueryable();
+        public IQueryable<ProductViewModel> GetAllProductsAsQueryable(ProductPaginatedViewModel model);
 
         /// <summary>
         /// Getting current product by his id.
@@ -28,7 +28,7 @@
         /// Getting all products by gender.
         /// </summary>
         /// <returns></returns>
-        public IQueryable<ProductViewModel> GetlAllProductsByGenderAsQueryable(bool isMen);
+        public IQueryable<ProductViewModel> GetAllProductsByGenderAsQueryable(bool isMen);
 
         public Task PostProductReviewAsync(PostProductReviewViewModel productReview, string userId);
 
