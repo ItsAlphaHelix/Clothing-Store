@@ -41,6 +41,7 @@
             var products = this.productsService.GetAllProductsAsQueryable(model);
             ViewData["CurrentSort"] = model.Sorting;
             ViewData["CurrentSelectedProduct"] = model.SelectedProducts;
+            ViewData["CurrentSelectedPrice"] = model.SelectedPrices;
             var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, page, 12);
 
             //if (paginated.Count == 0)

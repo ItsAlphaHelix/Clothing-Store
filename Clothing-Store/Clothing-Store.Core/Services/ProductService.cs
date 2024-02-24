@@ -51,6 +51,8 @@
                     Id = x.Id,
                     Category = x.Category,
                     Price = x.Price,
+                    AverageRating = x.AverageRating,
+                    
                     Images = x.Images.Select(x => x.Url).Take(2).ToList()
                 })
                 .AsQueryable();
@@ -74,6 +76,7 @@
             switch (model.Sorting)
             {
                 case SortEnum.Default: products = products.AsQueryable(); break;
+              //  case SortEnum.AverageRating: products = products.Average(x => x.ca); break;
                 case SortEnum.PriceAsc: products= products.OrderBy(x => x.Price); break;
                 case SortEnum.PriceDesc: products = products.OrderByDescending(x => x.Price); break;
             }

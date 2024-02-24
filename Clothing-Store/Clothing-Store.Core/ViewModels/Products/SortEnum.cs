@@ -3,6 +3,7 @@
     public enum SortEnum
     {
         Default,
+        AverageRating,
         PriceAsc,
         PriceDesc,
         Newest,

@@ -37,26 +37,33 @@
             var selectedProducts = getSelectedProducts();
             var selectedPrice = localStorage.getItem("selectedPrice");
             var resultSelectedProducts = selectedProducts.length != 0 ? `&selectedProducts=${selectedProducts.join(',')}` : " ";
-            var resultSelectedPrice = selectedPrice != null ? `&selectedPrices=@Model.SelectedPrices` : " ";
+            var resultSelectedPrice = selectedPrice != " " ? `&selectedPrices=${selectedPrice}` : " ";
             window.location.href = `/Products/All?page=1&sorting=${sorting}${resultSelectedProducts}${resultSelectedPrice}`;
         }
 
         function callOnChangePrices(element) {
 
-            var checkboxValue = element.getAttribute('value');
-            localStorage.setItem("selectedPrice", checkboxValue)
-            var selectedPrice = localStorage.getItem("selectedPrice");
-            var selectedProducts = getSelectedProducts();
-            var anchorPrice = document.querySelector('a[value="' + selectedPrice + '"]');
-            var isActive = anchorPrice.parentNode.classList.contains("active");
-            if (isActive) {
-                anchorPrice.parentNode.classList.remove('remove');
-                localStorage.removeItem("selectedPrice");
-                var resultSelectedProducts = selectedProducts.length != 0 ? `&selectedProducts=${selectedProducts.join(',')}` : " ";
-                return window.location.href = `/Products/All?page=1&sorting=@Model.Sorting${resultSelectedProducts}`;
+            //var checkboxValue = element.getAttribute('value');
+            //localStorage.setItem("selectedPrice", checkboxValue)
+           // var selectedProducts = getSelectedProducts();
+
+            if (localStorage.getItem("selectedPrice") != " ") {
+                localStorage.setItem('selectedPrice', " ");
+            }
+            else {
+
+             var checkboxValue = element.getAttribute('value');
+             localStorage.setItem("selectedPrice", checkboxValue)
             }
 
-            window.location.href = `/Products/All?page=1&sorting=@Model.Sorting&selectedProducts=${selectedProducts.join(',')}&selectedPrices=${selectedPrice}`;
+            var selectedPrice = localStorage.getItem("selectedPrice");
+            var selectedProducts = getSelectedProducts();
+
+
+            var resultSelectedProducts = selectedProducts.length != 0  ? `&selectedProducts=${selectedProducts.join(',')}` : " ";
+            var resultSelectedPrice = selectedPrice != " " ? `&selectedPrices=${selectedPrice}` : " ";
+
+            window.location.href = `/Products/All?page=1&sorting=@Model.Sorting${resultSelectedProducts}${resultSelectedPrice}`;
         }
 
 
@@ -88,7 +95,7 @@
             var sorting = '@Model.Sorting';
             var selectedPrice = localStorage.getItem("selectedPrice");
             var resultSelectedProducts = selectedProducts.length != 0 ? `&selectedProducts=${selectedProducts.join(',')}` : " ";
-            var resultSelectedPrice = selectedPrice != null ? `&selectedPrices=@Model.SelectedPrices` : " ";
+            var resultSelectedPrice = selectedPrice != " " ? `&selectedPrices=${selectedPrice}` : " ";
             window.location.href = `/Products/All?page=1&sorting=${sorting}${resultSelectedProducts}${resultSelectedPrice}`;
 
         }

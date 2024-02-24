@@ -84,8 +84,6 @@
                                             </div>
                                         </div>
                                         <br />
-                                        <input placeholder="Цена..." style="width: 100px;">
-                                        @*  <span asp-validation-for="@Model.Email" class="text-danger"></span> *@
                                     </div>
                                 </div>
                             </div>
@@ -169,6 +167,7 @@
                                         @* <option value="2">Average Rating</option> *@
                                         @* <option value="3">Latest</option> *@
                                         <option value="Default">Default</option>
+                                        <option value="AverageRating">Average Rating</option>
                                         <option value="PriceAsc">Low To High</option>
                                         <option value="PriceDesc">High To Low</option>
                                         <option value="Newest">Newest</option>
@@ -193,7 +192,8 @@
                                             <a class="page-link" aria-label="Previous"
                                                 asp-route-page="@(Model.Products.PageNumber - 1)"
                                                 asp-route-sorting="@ViewData["CurrentSort"]"
-                                               asp-route-selectedProducts="@ViewData["CurrentSelectedProduct"]">
+                                                asp-route-selectedProducts="@ViewData["CurrentSelectedProduct"]"
+                                                asp-route-selectedPrice="@ViewData["CurrentSelectedPrice"]">
                                                 <img src="~/images/mg-arrow-left.png" alt="" />
                                             </a>
                                         </li>
@@ -214,7 +214,8 @@
                                                 <a class="page-link @(Model.Products.PageNumber == i ? "active" : "")" 
                                                 asp-route-page="@i"
                                                 asp-route-sorting="@ViewData["CurrentSort"]"
-                                                   asp-route-selectedProducts="@ViewData["CurrentSelectedProduct"]">@i</a>
+                                                asp-route-selectedProducts="@ViewData["CurrentSelectedProduct"]"
+                                                asp-route-selectedPrice="@ViewData["CurrentSelectedPrice"]">@i</a>
                                             </li>
                                         }
 
@@ -222,7 +223,8 @@
                                             <a class="page-link" aria-label="Next" 
                                                 asp-route-page="@(Model.Products.PageNumber + 1)"
                                                 asp-route-sorting="@ViewData["CurrentSort"]"
-                                               asp-route-selectedProducts="@ViewData["CurrentSelectedProduct"]">
+                                                asp-route-selectedProducts="@ViewData["CurrentSelectedProduct"]"
+                                                asp-route-selectedPrice="@ViewData["CurrentSelectedPrice"]">
                                                 <img src="~/images/mg-arrow-right.png" alt="" />
                                             </a>
                                         </li>
