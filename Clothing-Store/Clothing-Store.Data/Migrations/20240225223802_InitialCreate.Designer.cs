@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clothing_Store.Data.Migrations
 {
     [DbContext(typeof(ClothingStoreContext))]
-    [Migration("20240205141937_AddedColumnFullNameToTableApplicationUser")]
-    partial class AddedColumnFullNameToTableApplicationUser
+    [Migration("20240225223802_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -124,9 +124,6 @@ namespace Clothing_Store.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AverageRating")
-                        .HasColumnType("int");
-
                     b.Property<string>("Category")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -160,20 +157,10 @@ namespace Clothing_Store.Data.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<string>("Message")
                         .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -181,11 +168,51 @@ namespace Clothing_Store.Data.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
+                    b.Property<string>("UserFullName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductsReviews");
+                });
+
+            modelBuilder.Entity("Clothing_Store.Data.Data.Models.ProductSize", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SizeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductId", "SizeId");
+
+                    b.HasIndex("SizeId");
+
+                    b.ToTable("ProductSizes");
+                });
+
+            modelBuilder.Entity("Clothing_Store.Data.Data.Models.Size", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Sizes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -347,6 +374,25 @@ namespace Clothing_Store.Data.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Clothing_Store.Data.Data.Models.ProductSize", b =>
+                {
+                    b.HasOne("Clothing_Store.Data.Data.Models.Product", "Product")
+                        .WithMany("ProductSizes")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Clothing_Store.Data.Data.Models.Size", "Size")
+                        .WithMany("ProductSizes")
+                        .HasForeignKey("SizeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Size");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -401,6 +447,13 @@ namespace Clothing_Store.Data.Migrations
             modelBuilder.Entity("Clothing_Store.Data.Data.Models.Product", b =>
                 {
                     b.Navigation("Images");
+
+                    b.Navigation("ProductSizes");
+                });
+
+            modelBuilder.Entity("Clothing_Store.Data.Data.Models.Size", b =>
+                {
+                    b.Navigation("ProductSizes");
                 });
 #pragma warning restore 612, 618
         }

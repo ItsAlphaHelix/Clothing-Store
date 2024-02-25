@@ -91,30 +91,6 @@ namespace Clothing_Store.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Clothing_Store.Data.Data.Models.Cart", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Carts");
-                });
-
             modelBuilder.Entity("Clothing_Store.Data.Data.Models.Image", b =>
                 {
                     b.Property<int>("Id")
@@ -144,9 +120,6 @@ namespace Clothing_Store.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AverageRating")
-                        .HasColumnType("int");
 
                     b.Property<string>("Category")
                         .IsRequired()
@@ -202,6 +175,41 @@ namespace Clothing_Store.Data.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductsReviews");
+                });
+
+            modelBuilder.Entity("Clothing_Store.Data.Data.Models.ProductSize", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SizeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductId", "SizeId");
+
+                    b.HasIndex("SizeId");
+
+                    b.ToTable("ProductSizes");
+                });
+
+            modelBuilder.Entity("Clothing_Store.Data.Data.Models.Size", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Sizes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -341,25 +349,6 @@ namespace Clothing_Store.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Clothing_Store.Data.Data.Models.Cart", b =>
-                {
-                    b.HasOne("Clothing_Store.Data.Data.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Clothing_Store.Data.Data.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Clothing_Store.Data.Data.Models.Image", b =>
                 {
                     b.HasOne("Clothing_Store.Data.Data.Models.Product", "Product")
@@ -380,6 +369,25 @@ namespace Clothing_Store.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Clothing_Store.Data.Data.Models.ProductSize", b =>
+                {
+                    b.HasOne("Clothing_Store.Data.Data.Models.Product", "Product")
+                        .WithMany("ProductSizes")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Clothing_Store.Data.Data.Models.Size", "Size")
+                        .WithMany("ProductSizes")
+                        .HasForeignKey("SizeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Size");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -436,6 +444,13 @@ namespace Clothing_Store.Data.Migrations
             modelBuilder.Entity("Clothing_Store.Data.Data.Models.Product", b =>
                 {
                     b.Navigation("Images");
+
+                    b.Navigation("ProductSizes");
+                });
+
+            modelBuilder.Entity("Clothing_Store.Data.Data.Models.Size", b =>
+                {
+                    b.Navigation("ProductSizes");
                 });
 #pragma warning restore 612, 618
         }

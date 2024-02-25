@@ -51,8 +51,6 @@
                     Id = x.Id,
                     Category = x.Category,
                     Price = x.Price,
-                    AverageRating = x.AverageRating,
-                    
                     Images = x.Images.Select(x => x.Url).Take(2).ToList()
                 })
                 .AsQueryable();

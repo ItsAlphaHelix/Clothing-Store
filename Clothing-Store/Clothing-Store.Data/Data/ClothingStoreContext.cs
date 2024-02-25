@@ -16,10 +16,15 @@
 
         public DbSet<ProductReviews> ProductsReviews { get; set; }
 
-        public DbSet<Cart> Carts { get; set; }
+        public DbSet<Size> Sizes { get; set; }
+
+        public DbSet<ProductSize> ProductSizes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<ProductSize>()
+                .HasKey(x => new { x.ProductId, x.SizeId });
+
             base.OnModelCreating(builder);
         }
     }

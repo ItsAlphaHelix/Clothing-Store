@@ -12,10 +12,10 @@
 
         public string? ClearInfo { get; set; }
 
-        public int AverageRating { get; set; }
-
         public bool IsMale { get; set; }
 
         public List<Image> Images { get; set; } = new List<Image>();
+
+        public virtual ICollection<ProductSize> ProductSizes { get; set; } = new HashSet<ProductSize>();
     }
 }
