@@ -1,4 +1,6 @@
-﻿namespace Clothing_Store.Core.ViewModels.Products
+﻿using System.Net.Http.Headers;
+
+namespace Clothing_Store.Core.ViewModels.Products
 {
     public class ProductDetailsViewModel
     {
@@ -13,8 +15,30 @@
 
         public bool IsMale { get; set; }
 
-        public List<GetProductReviewViewModel> Reviews { get; set; } = new List<GetProductReviewViewModel>();
+        public int CountOfReviews { get; set; }
 
-        public List<string> Images { get; set; } = new List<string>();
+        public double FiveStarts { get; set; }
+
+        public double FourStarts { get; set; }
+
+        public double ThreeStars { get; set; }
+
+        public double TwoStars { get; set; }
+
+        public double OneStar { get; set; }
+
+        public double AverageRating { get; set; }
+
+        public double PercentageOfAverageStars { get; set; }
+
+        public bool IsProductInStock { get; set; }
+
+        public IEnumerable<GetProductReviewViewModel> Reviews { get; set; } = new List<GetProductReviewViewModel>();
+
+        public IEnumerable<SizeViewModel> Sizes { get; set; } = new List<SizeViewModel>();
+
+        public IEnumerable<SizeViewModel> ProductSizes { get; set; } = new List<SizeViewModel>();
+
+        public IEnumerable<string> Images { get; set; } = new List<string>();
     }
 }

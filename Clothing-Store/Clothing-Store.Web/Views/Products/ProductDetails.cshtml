@@ -9,20 +9,20 @@
     var productReview = new PostProductReviewViewModel();
     productReview.ProductId = Model.Id;
 
-    var reviews = await this.productsService.GetProductReviewsAsync(Model.Id);
-    var averageRatingOfProduct = reviews.Any() ? (reviews.Sum(x => x.Rating) / reviews.Count()) : 0;
+    // var reviews = await this.productsService.GetProductReviewsAsync(Model.Id);
+    // var averageRatingOfProduct = reviews.Any() ? (reviews.Sum(x => x.Rating) / reviews.Count()) : 0;
 
     var gender = Model.IsMale ? "Мъжки" : "Женски";
     var navigation = Model.IsMale ? "AllMenProducts" : "AllWomenProducts";
 
-    var exellentRatings = reviews.Where(x => x.Rating == 5.0).Count() != 100 ? reviews.Where(x => x.Rating == 5.0).Count() : 100;
-    var goodRatings = reviews.Where(x => x.Rating == 4.0).Count() != 100 ? reviews.Where(x => x.Rating == 4.0).Count() : 100;
-    var averageRatings = reviews.Where(x => x.Rating == 3.0).Count() != 100 ? reviews.Where(x => x.Rating == 3.0).Count() : 100;
-    var belowAverageRatings = reviews.Where(x => x.Rating == 2.0).Count() != 100 ? reviews.Where(x => x.Rating == 2.0).Count() : 100;
-    var poorRatings = reviews.Where(x => x.Rating == 1.0).Count() != 100 ? reviews.Where(x => x.Rating == 1.0).Count() : 100;
+    // var exellentRatings = reviews.Where(x => x.Rating == 5.0).Count() != 100 ? reviews.Where(x => x.Rating == 5.0).Count() : 100;
+    // var goodRatings = reviews.Where(x => x.Rating == 4.0).Count() != 100 ? reviews.Where(x => x.Rating == 4.0).Count() : 100;
+    // var averageRatings = reviews.Where(x => x.Rating == 3.0).Count() != 100 ? reviews.Where(x => x.Rating == 3.0).Count() : 100;
+    // var belowAverageRatings = reviews.Where(x => x.Rating == 2.0).Count() != 100 ? reviews.Where(x => x.Rating == 2.0).Count() : 100;
+    // var poorRatings = reviews.Where(x => x.Rating == 1.0).Count() != 100 ? reviews.Where(x => x.Rating == 1.0).Count() : 100;
 
 
-    double percentageOfAverageStars = double.Parse(averageRatingOfProduct.ToString("F1")) * 20;
+   /// double percentageOfAverageStars = double.Parse(averageRatingOfProduct.ToString("F1")) * 20;
 }
 
 <partial name="_SearchPartial"/>
@@ -74,7 +74,14 @@
                             <h2 class="mg-product-page-product-tittle">@Model.Category</h2>
                         </div>
                         <div class="col-2 text-end">
-                            <div class="mg-stock-text">В наличност</div>
+                            @if(Model.IsProductInStock)
+                            {
+                                <div class="mg-stock-text">В наличност</div>
+                            }
+                            else
+                            {
+                                <div class="mg-stock-text out-stock">Няма в наличност</div>                                
+                            }
                         </div>
                     </div>
                     <div class="mg-rating-pannel">
@@ -85,7 +92,7 @@
                                 <i class="fa fa-star" aria-hidden="true"></i>
                                 <i class="fa fa-star" aria-hidden="true"></i>
                                 <i class="fa fa-star" aria-hidden="true"></i>
-                                <span class="mg-ratings" style="width: @percentageOfAverageStars%;">
+                                <span class="mg-ratings" style="width: @Model.PercentageOfAverageStars%;">
                                     <i class="fa fa-star" aria-hidden="true"></i>
                                     <i class="fa fa-star" aria-hidden="true"></i>
                                     <i class="fa fa-star" aria-hidden="true"></i>
@@ -95,7 +102,7 @@
                             </div>
                         </div>
                         <div class="mg-rating-count">
-                            ( <span>@reviews.Count()</span> Ревюта )
+                            ( <span>@Model.CountOfReviews</span> Ревюта )
                         </div>
                     </div>
                     <div class="mg-product-page-product-price mt-4">
@@ -119,11 +126,11 @@
                                 <div class="mg-product-page-small-heading">Размер</div>
                                 <div class="mg-size-variant-outer">
                                     <ul>
-                                        <li class="active"><a href="#">XS</a></li>
-                                        <li><a href="#">S</a></li>
-                                        <li><a href="#">M</a></li>
-                                        <li><a href="#">L</a></li>
-                                        <li><a href="#">XL</a></li>
+                                        @foreach (var size in Model.Sizes)
+                                        {
+                                        //TODO: set class="active"
+                                         <li ><a href="#">@size.SizeName</a></li>
+                                        } 
                                     </ul>
                                 </div>
                             </div>
@@ -303,7 +310,7 @@
                                     <div class="accordion-body">
                                         <div class="mg-reviews-outer mt-4">
                                             <div class="mg-ratings-details text-center">
-                                                <div class="mg-rating-score">@averageRatingOfProduct.ToString("F1")</div>
+                                                <div class="mg-rating-score">@Model.AverageRating.ToString("F1")</div>
                                                 <div class="mg-rating-outer">
                                                     <div class="mg-ratings-full">
                                                         <i class="fa fa-star" aria-hidden="true"></i>
@@ -311,7 +318,7 @@
                                                         <i class="fa fa-star" aria-hidden="true"></i>
                                                         <i class="fa fa-star" aria-hidden="true"></i>
                                                         <i class="fa fa-star" aria-hidden="true"></i>
-                                                        <span class="mg-ratings" style="width: @percentageOfAverageStars%;">
+                                                        <span class="mg-ratings" style="width: @Model.PercentageOfAverageStars%;">
                                                             <i class="fa fa-star" aria-hidden="true"></i>
                                                             <i class="fa fa-star" aria-hidden="true"></i>
                                                             <i class="fa fa-star" aria-hidden="true"></i>
@@ -321,67 +328,67 @@
                                                     </div>
                                                 </div>
                                                 <div class="mg-rating-count mg-rating-count-review-tab">
-                                                    ( Има <span>@reviews.Count()</span> ревюта )
+                                                    ( Има <span>@Model.CountOfReviews</span> ревюта )
                                                 </div>
 
                                                 <div class="mg-rating-progress-bar-outer mt-4">
                                                     <div class="mg-rating-progress-bar-inner mb-1">
                                                         <div class="mg-rating-label-outer">
                                                             <div class="mg-rating-label">
-                                                                5 звезди (@exellentRatings)
+                                                                5 звезди (@Model.FiveStarts)
                                                             </div>
                                                         </div>
                                                         <div class="mg-rating-progress-outer">
                                                             <div class="mg-rating-progress">
-                                                                <span style="width: @exellentRatings%;"></span>
+                                                                <span style="width: @Model.FiveStarts%;"></span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="mg-rating-progress-bar-inner mb-1">
                                                         <div class="mg-rating-label-outer">
                                                             <div class="mg-rating-label">
-                                                                4 звезди (@goodRatings)
+                                                                4 звезди (@Model.FourStarts)
                                                             </div>
                                                         </div>
                                                         <div class="mg-rating-progress-outer">
                                                             <div class="mg-rating-progress">
-                                                                <span style="width:  @goodRatings%;"></span>
+                                                                <span style="width:  @Model.FourStarts%;"></span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="mg-rating-progress-bar-inner mb-1">
                                                         <div class="mg-rating-label-outer">
                                                             <div class="mg-rating-label">
-                                                                3 звезди (@averageRatings)
+                                                                3 звезди (@Model.ThreeStars)
                                                             </div>
                                                         </div>
                                                         <div class="mg-rating-progress-outer">
                                                             <div class="mg-rating-progress">
-                                                                <span style="width: @averageRatings%;"></span>
+                                                                <span style="width: @Model.ThreeStars%;"></span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="mg-rating-progress-bar-inner mb-1">
                                                         <div class="mg-rating-label-outer">
                                                             <div class="mg-rating-label">
-                                                                2 звезди (@belowAverageRatings)
+                                                                2 звезди (@Model.TwoStars)
                                                             </div>
                                                         </div>
                                                         <div class="mg-rating-progress-outer">
                                                             <div class="mg-rating-progress">
-                                                                <span style="width: @belowAverageRatings%;"></span>
+                                                                <span style="width: @Model.TwoStars%;"></span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="mg-rating-progress-bar-inner mb-1">
                                                         <div class="mg-rating-label-outer">
                                                             <div class="mg-rating-label">
-                                                                1 звезда (@poorRatings)
+                                                                1 звезда (@Model.OneStar)
                                                             </div>
                                                         </div>
                                                         <div class="mg-rating-progress-outer">
                                                             <div class="mg-rating-progress">
-                                                                <span style="width: @poorRatings%;"></span>
+                                                                <span style="width: @Model.OneStar%;"></span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -391,7 +398,7 @@
                                                 @await Html.PartialAsync("_ProductReviewsPartial")
                                             </div>
 
-                                            @if (Model.Reviews.Count >= 3)
+                                            @if (Model.Reviews.Count() >= 3)
                                             {
                                                 <div class="mg-see-more-reviews-btn mt-4 text-center" data-page-number="2">
                                                     <a href="#">Вижте повече ревюта</a>

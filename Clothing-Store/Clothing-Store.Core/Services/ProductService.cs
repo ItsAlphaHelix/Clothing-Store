@@ -14,14 +14,20 @@
     {
         private readonly IRepository<Product> productsRepository;
         private readonly IRepository<ProductReviews> productReviewsRepository;
+        private readonly IRepository<ProductSize> productSizesRepository;
+        private readonly IRepository<Size> sizesRepository;
         private readonly UserManager<ApplicationUser> usersManager;
         public ProductService(
             IRepository<Product> productsRepository,
             IRepository<ProductReviews> productReviewsRepository,
+            IRepository<ProductSize> productSizes,
+            IRepository<Size> sizesRepository,
             UserManager<ApplicationUser> usersManager)
         {
             this.productsRepository = productsRepository;
             this.productReviewsRepository = productReviewsRepository;
+            this.productSizesRepository = productSizes;
+            this.sizesRepository = sizesRepository;
             this.usersManager = usersManager;
         }
 
@@ -51,6 +57,8 @@
                     Id = x.Id,
                     Category = x.Category,
                     Price = x.Price,
+                    AverageRating = x.ProductReviews.Any() ? (x.ProductReviews.Sum(x => x.Rating) / x.ProductReviews.Count) : 0,
+                    ProductSizes = x.ProductSizes.Select(x => x.Size.Name).ToList(),
                     Images = x.Images.Select(x => x.Url).Take(2).ToList()
                 })
                 .AsQueryable();
@@ -58,6 +66,12 @@
             if (!string.IsNullOrWhiteSpace(model.SelectedProducts))
             {
                 products = products.Where(x => model.SelectedProducts.Contains(x.Category));
+            }
+
+
+            if (!string.IsNullOrWhiteSpace(model.SelectedSizes))
+            {
+                products = products.Where(p => p.ProductSizes.Any(x => x == "S"));
             }
 
             if (!string.IsNullOrEmpty(model.SelectedPrices))
@@ -74,8 +88,8 @@
             switch (model.Sorting)
             {
                 case SortEnum.Default: products = products.AsQueryable(); break;
-              //  case SortEnum.AverageRating: products = products.Average(x => x.ca); break;
-                case SortEnum.PriceAsc: products= products.OrderBy(x => x.Price); break;
+                case SortEnum.AverageRating: products = products.OrderByDescending(x => x.AverageRating); break;
+                case SortEnum.PriceAsc: products = products.OrderBy(x => x.Price); break;
                 case SortEnum.PriceDesc: products = products.OrderByDescending(x => x.Price); break;
             }
 
@@ -102,20 +116,8 @@
 
         public async Task<ProductDetailsViewModel> GetProductDetailsByIdAsync(int productId, int pageNumber, int pageSize)
         {
-            var reviews = await this.productReviewsRepository.AllAsNoTracking()
-               .Where(x => x.ProductId == productId)
-               .OrderByDescending(x => x.Date)
-               .Skip((pageNumber - 1) * pageSize)
-               .Take(pageSize)
-               .Select(x => new GetProductReviewViewModel()
-               {
-                   ProductId = x.ProductId,
-                   UserFullName = x.UserFullName,
-                   Rating = x.Rating,
-                   Message = x.Message,
-                   Date = x.Date
-               })
-               .ToListAsync();
+            int countOfReviews = await this.GetProductReviewsCountAsync(productId);
+            double averageRatingOfProduct = await this.CalculateAverageOfCurrentProduct(productId);
 
             var product = await this.productsRepository
                 .AllAsNoTracking()
@@ -128,7 +130,30 @@
                     Description = x.Description,
                     ClearInfo = x.ClearInfo,
                     IsMale = x.IsMale,
-                    Reviews = reviews,
+                    CountOfReviews = countOfReviews,
+                    FiveStarts = x.ProductReviews.Where(x => x.Rating == 5.0).Count() != 100 ? x.ProductReviews.Where(x => x.Rating == 5.0).Count() : 100,
+                    FourStarts = x.ProductReviews.Where(x => x.Rating == 4.0).Count() != 100 ? x.ProductReviews.Where(x => x.Rating == 4.0).Count() : 100,
+                    ThreeStars = x.ProductReviews.Where(x => x.Rating == 3.0).Count() != 100 ? x.ProductReviews.Where(x => x.Rating == 3.0).Count() : 100,
+                    TwoStars = x.ProductReviews.Where(x => x.Rating == 2.0).Count() != 100 ? x.ProductReviews.Where(x => x.Rating == 2.0).Count() : 100,
+                    OneStar = x.ProductReviews.Where(x => x.Rating == 1.0).Count() != 100 ? x.ProductReviews.Where(x => x.Rating == 1.0).Count() : 100,
+                    AverageRating = averageRatingOfProduct,
+                    PercentageOfAverageStars = double.Parse(averageRatingOfProduct.ToString("F1")) *  20,
+                    IsProductInStock = x.ProductSizes.All(x => x.Count != 0),
+                    Reviews = x.ProductReviews
+                    .OrderByDescending(x => x.Date)
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .Select(x => new GetProductReviewViewModel() {
+                        ProductId = x.ProductId,
+                        UserFullName = x.UserFullName,
+                        Rating = x.Rating,
+                        Message = x.Message,
+                        Date = x.Date
+                    }),
+                    Sizes = x.ProductSizes.Select(x => new SizeViewModel()
+                    {
+                        SizeName = x.Size.Name
+                    }),
                     Images = x.Images.Select(x => x.Url)
                     .ToList()
                 })
@@ -141,7 +166,7 @@
         {
             var user = await this.usersManager.FindByIdAsync(userId);
 
-            var postProductReview = new ProductReviews()
+            var review = new ProductReviews()
             {
                 ProductId = productReview.ProductId,
                 UserFullName = user.FullName,
@@ -150,25 +175,47 @@
                 Date = DateTime.Now
             };
 
-            await this.productReviewsRepository.AddAsync(postProductReview);
+            var product = await this.productsRepository
+                .All()
+                .Include(x => x.ProductReviews)
+                .FirstOrDefaultAsync(x => x.Id == productReview.ProductId);
+            product.ProductReviews.Add(review);
             await this.productReviewsRepository.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<GetProductReviewViewModel>> GetProductReviewsAsync(int productId)
+
+        public async Task<IEnumerable<SizeViewModel>> GetAllSizesAsync()
         {
-            var reviews = await this.productReviewsRepository.AllAsNoTracking()
-                .Where(x => x.ProductId == productId)
-                .Select(x => new GetProductReviewViewModel()
+            var sizes = await this.sizesRepository
+                .AllAsNoTracking()
+                .Select(x => new SizeViewModel()
                 {
-                    ProductId = x.ProductId,
-                    UserFullName = x.UserFullName,
-                    Rating = x.Rating,
-                    Message = x.Message,
-                    Date = x.Date
+                    SizeName = x.Name
                 })
                 .ToListAsync();
 
-            return reviews;
+            return sizes;
         }
+
+        private async Task<double> CalculateAverageOfCurrentProduct(int productId)
+        {
+            var productReviews = await this.productReviewsRepository
+                .AllAsNoTracking()
+                .Where(x => x.ProductId == productId)
+                .ToListAsync();
+
+            double averageRatingOfProduct = productReviews.Any() ? (productReviews.Sum(x => x.Rating) / productReviews.Count()) : 0;
+
+            return averageRatingOfProduct;
+        }
+        private async Task<int> GetProductReviewsCountAsync(int productId)
+        {
+            var countOfReviews = await this.productReviewsRepository.AllAsNoTracking()
+                .Where(x => x.ProductId == productId)
+                .CountAsync();
+
+            return countOfReviews;
+        }
+
     }
 }

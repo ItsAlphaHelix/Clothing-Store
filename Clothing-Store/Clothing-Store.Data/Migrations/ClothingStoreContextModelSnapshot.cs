@@ -363,7 +363,7 @@ namespace Clothing_Store.Data.Migrations
             modelBuilder.Entity("Clothing_Store.Data.Data.Models.ProductReviews", b =>
                 {
                     b.HasOne("Clothing_Store.Data.Data.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("ProductReviews")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -444,6 +444,8 @@ namespace Clothing_Store.Data.Migrations
             modelBuilder.Entity("Clothing_Store.Data.Data.Models.Product", b =>
                 {
                     b.Navigation("Images");
+
+                    b.Navigation("ProductReviews");
 
                     b.Navigation("ProductSizes");
                 });

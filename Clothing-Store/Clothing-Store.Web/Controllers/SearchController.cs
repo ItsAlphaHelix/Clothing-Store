@@ -30,8 +30,7 @@ namespace Clothing_Store.Controllers
 
             var viewModel = new ProductPaginatedViewModel
             {
-                Products = paginated,
-                TotalCount = products.Count(),
+                Products = paginated
             };
 
             return View(viewModel);

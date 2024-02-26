@@ -2559,6 +2559,10 @@ img.img-fluid.mg-hover-img {
     color: #00DA5D;
 }
 
+.out-stock {
+    color: rgba(218, 0, 7, 0.8);
+}
+
 .mg-color-variant-outer ul {
     margin: 0;
     padding: 0;

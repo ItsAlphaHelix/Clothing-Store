@@ -1,4 +1,6 @@
-﻿namespace Clothing_Store.Core.ViewModels.Products
+﻿using Clothing_Store.Data.Data.Models;
+
+namespace Clothing_Store.Core.ViewModels.Products
 {
     public class ProductViewModel
     {
@@ -8,7 +10,9 @@
 
         public decimal Price { get; set; }
 
-        public int AverageRating { get; set; }
+        public double AverageRating { get; set; }
         public List<string> Images { get; set; } = new List<string>();
+
+        public List<string> ProductSizes { get; set; } = new List<string>();
     }
 }

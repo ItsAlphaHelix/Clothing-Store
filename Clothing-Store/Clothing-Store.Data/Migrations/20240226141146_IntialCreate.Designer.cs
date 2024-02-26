@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clothing_Store.Data.Migrations
 {
     [DbContext(typeof(ClothingStoreContext))]
-    [Migration("20240225223802_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240226141146_IntialCreate")]
+    partial class IntialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -366,7 +366,7 @@ namespace Clothing_Store.Data.Migrations
             modelBuilder.Entity("Clothing_Store.Data.Data.Models.ProductReviews", b =>
                 {
                     b.HasOne("Clothing_Store.Data.Data.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("ProductReviews")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -447,6 +447,8 @@ namespace Clothing_Store.Data.Migrations
             modelBuilder.Entity("Clothing_Store.Data.Data.Models.Product", b =>
                 {
                     b.Navigation("Images");
+
+                    b.Navigation("ProductReviews");
 
                     b.Navigation("ProductSizes");
                 });

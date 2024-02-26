@@ -1,5 +1,12 @@
-﻿@using Clothing_Store.Core.ViewModels.Products;
+﻿@using Clothing_Store.Core.Contracts;
+@using Clothing_Store.Core.ViewModels.Products;
 @model ProductPaginatedViewModel
+
+@inject IProductService productsService
+
+@{
+    var sizes = await this.productsService.GetAllSizesAsync();
+}
 
 <partial name="_SearchPartial" />
 
@@ -128,11 +135,16 @@
                                         <div class="mg-filter-panel">
                                             <div class="mg-filter-checkbox">
                                                 <ul>
-                                                    <li><a href="javascript:void(0);">XS</a></li>
-                                                    <li><a href="javascript:void(0);">S</a></li>
-                                                    <li><a href="javascript:void(0);">M</a></li>
-                                                    <li><a href="javascript:void(0);">L</a></li>
-                                                    <li><a href="javascript:void(0);">XL</a></li>
+                                                    @foreach (var size in sizes)
+                                                    {
+                                                        <li>
+                                                            <a href="#"
+                                                               name="selectedSizes"
+                                                               value="@size.SizeName"
+                                                               onclick="callOnChangeSizes(this)">
+                                                               @size.SizeName</a>
+                                                            </li>
+                                                    }
                                                 </ul>
                                             </div>
                                         </div>
@@ -162,21 +174,12 @@
                                 <div class="mg-sorting">
                                     <label>Shorted By:</label>
                                     <select asp-for="@Model.Sorting" class="form-control" onchange="callChangeOrder(this.value)">
-                                        @* <option value="0" selected="selected">Featured</option> *@
-                                        @* <option value="1">Popularity</option> *@
-                                        @* <option value="2">Average Rating</option> *@
-                                        @* <option value="3">Latest</option> *@
                                         <option value="Default">Default</option>
                                         <option value="AverageRating">Average Rating</option>
                                         <option value="PriceAsc">Low To High</option>
                                         <option value="PriceDesc">High To Low</option>
                                         <option value="Newest">Newest</option>
                                         <option value="Oldest">Oldest</option>
-                                        @* Default = 0,
-                                        PriceAsc = 1,
-                                        PriceDesc = 2,
-                                        Newest = 3,
-                                        Oldest = 4 *@
                                     </select>
                                 </div>
                         </div>

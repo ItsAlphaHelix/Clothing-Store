@@ -30,8 +30,8 @@
         /// <returns></returns>
         public IQueryable<ProductViewModel> GetAllProductsByGenderAsQueryable(bool isMen);
 
-        public Task PostProductReviewAsync(PostProductReviewViewModel productReview, string userId);
+        public Task<IEnumerable<SizeViewModel>> GetAllSizesAsync();
 
-        public Task<IEnumerable<GetProductReviewViewModel>> GetProductReviewsAsync(int productId);
+        public Task PostProductReviewAsync(PostProductReviewViewModel productReview, string userId);
     }
 }

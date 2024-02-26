@@ -14,7 +14,9 @@
 
         public bool IsMale { get; set; }
 
-        public List<Image> Images { get; set; } = new List<Image>();
+        public virtual ICollection<Image> Images { get; set; } = new HashSet<Image>();
+
+        public virtual ICollection<ProductReviews> ProductReviews { get; set; } = new HashSet<ProductReviews>();
 
         public virtual ICollection<ProductSize> ProductSizes { get; set; } = new HashSet<ProductSize>();
     }

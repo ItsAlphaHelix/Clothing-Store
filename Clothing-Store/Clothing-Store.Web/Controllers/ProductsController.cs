@@ -51,8 +51,7 @@
 
             var viewModel = new ProductPaginatedViewModel()
             {
-                Products = paginated,
-                TotalCount = products.Count()
+                Products = paginated
             };
 
 
@@ -69,8 +68,7 @@
 
             var viewModel = new ProductPaginatedViewModel()
             {
-                Products = paginated,
-                TotalCount = products.Count()
+                Products = paginated
             };
 
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
@@ -91,8 +89,7 @@
 
             var viewModel = new ProductPaginatedViewModel()
             {
-                Products = paginated,
-                TotalCount = products.Count()
+                Products = paginated
             };
 
             return View(viewModel);
