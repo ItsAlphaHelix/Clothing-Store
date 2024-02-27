@@ -1,8 +1,8 @@
-﻿namespace Clothing_Store.Core.ViewModels.Products
+﻿namespace Clothing_Store.Core.ViewModels.Reviews
 {
     using System.ComponentModel.DataAnnotations;
     public class PostProductReviewViewModel
-    { 
+    {
         public int ProductId { get; set; }
 
         public string UserFullName { get; set; } = null!;

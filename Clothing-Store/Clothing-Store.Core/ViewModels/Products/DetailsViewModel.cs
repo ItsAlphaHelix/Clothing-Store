@@ -1,8 +1,9 @@
 ﻿using System.Net.Http.Headers;
+using Clothing_Store.Core.ViewModels.Reviews;
 
 namespace Clothing_Store.Core.ViewModels.Products
 {
-    public class ProductDetailsViewModel
+    public class DetailsViewModel
     {
         public int Id { get; set; }
         public string Category { get; set; }

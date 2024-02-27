@@ -28,7 +28,7 @@ namespace Clothing_Store.Controllers
 
             var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, pageNumber, 12);
 
-            var viewModel = new ProductPaginatedViewModel
+            var viewModel = new PaginatedViewModel
             {
                 Products = paginated
             };

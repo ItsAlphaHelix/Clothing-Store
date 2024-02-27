@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Clothing_Store.Core.ViewModels.Products
 {
-    public class ProductPaginatedViewModel
+    public class PaginatedViewModel
     {
         public PaginatedList<ProductViewModel> Products { get; set; }
 

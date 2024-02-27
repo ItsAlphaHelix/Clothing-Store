@@ -2,6 +2,7 @@
 {
     using Clothing_Store.Core.Contracts;
     using Clothing_Store.Core.ViewModels.Products;
+    using Clothing_Store.Core.ViewModels.Reviews;
     using Clothing_Store.Data.Data.Models;
     using Clothing_Store.Data.Repositories;
     using Microsoft.AspNetCore.Identity;
@@ -48,7 +49,7 @@
             return products;
         }
 
-        public IQueryable<ProductViewModel> GetAllProductsAsQueryable(ProductPaginatedViewModel model)
+        public IQueryable<ProductViewModel> GetAllProductsAsQueryable(PaginatedViewModel model)
         {
             var products = this.productsRepository
                 .AllAsNoTracking()
@@ -114,7 +115,7 @@
             return product;
         }
 
-        public async Task<ProductDetailsViewModel> GetProductDetailsByIdAsync(int productId, int pageNumber, int pageSize)
+        public async Task<DetailsViewModel> GetProductDetailsByIdAsync(int productId, int pageNumber, int pageSize)
         {
             int countOfReviews = await this.GetProductReviewsCountAsync(productId);
             double averageRatingOfProduct = await this.CalculateAverageOfCurrentProduct(productId);
@@ -122,7 +123,7 @@
             var product = await this.productsRepository
                 .AllAsNoTracking()
                 .Where(x => x.Id == productId)
-                .Select(x => new ProductDetailsViewModel()
+                .Select(x => new DetailsViewModel()
                 {
                     Id = x.Id,
                     Category = x.Category,
@@ -138,7 +139,7 @@
                     OneStar = x.ProductReviews.Where(x => x.Rating == 1.0).Count() != 100 ? x.ProductReviews.Where(x => x.Rating == 1.0).Count() : 100,
                     AverageRating = averageRatingOfProduct,
                     PercentageOfAverageStars = double.Parse(averageRatingOfProduct.ToString("F1")) *  20,
-                    IsProductInStock = x.ProductSizes.All(x => x.Count != 0),
+                    IsProductInStock = x.ProductSizes.Any(x => x.Count != 0),
                     Reviews = x.ProductReviews
                     .OrderByDescending(x => x.Date)
                     .Skip((pageNumber - 1) * pageSize)
@@ -150,7 +151,9 @@
                         Message = x.Message,
                         Date = x.Date
                     }),
-                    Sizes = x.ProductSizes.Select(x => new SizeViewModel()
+                    Sizes = x.ProductSizes
+                    .Where(x => x.Count != 0)
+                    .Select(x => new SizeViewModel()
                     {
                         SizeName = x.Size.Name
                     }),

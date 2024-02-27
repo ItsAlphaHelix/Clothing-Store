@@ -3,6 +3,7 @@
     using Clothing_Store.Core.Contracts;
     using Clothing_Store.Core.ViewModels;
     using Clothing_Store.Core.ViewModels.Products;
+    using Clothing_Store.Core.ViewModels.Reviews;
     using Clothing_Store.Data.Data.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -34,7 +35,7 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> All([FromQuery] ProductPaginatedViewModel model, int page = 1)
+        public async Task<IActionResult> All([FromQuery] PaginatedViewModel model, int page = 1)
         {
             ViewData["IsHomePage"] = false;
             
@@ -49,7 +50,7 @@
             //    return NotFound();
             //}
 
-            var viewModel = new ProductPaginatedViewModel()
+            var viewModel = new PaginatedViewModel()
             {
                 Products = paginated
             };
@@ -66,7 +67,7 @@
 
             var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, page, 12);
 
-            var viewModel = new ProductPaginatedViewModel()
+            var viewModel = new PaginatedViewModel()
             {
                 Products = paginated
             };
@@ -87,7 +88,7 @@
 
             var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, pageNumber, 12);
 
-            var viewModel = new ProductPaginatedViewModel()
+            var viewModel = new PaginatedViewModel()
             {
                 Products = paginated
             };

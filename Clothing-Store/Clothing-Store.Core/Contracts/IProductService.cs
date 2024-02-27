@@ -1,6 +1,7 @@
 ﻿namespace Clothing_Store.Core.Contracts
 {
     using Clothing_Store.Core.ViewModels.Products;
+    using Clothing_Store.Core.ViewModels.Reviews;
 
     public interface IProductService
     {
@@ -8,7 +9,7 @@
         /// Getting all products.
         /// </summary>
         /// <returns></returns>
-        public IQueryable<ProductViewModel> GetAllProductsAsQueryable(ProductPaginatedViewModel model);
+        public IQueryable<ProductViewModel> GetAllProductsAsQueryable(PaginatedViewModel model);
 
         /// <summary>
         /// Getting current product by his id.
@@ -22,7 +23,7 @@
         /// </summary>
         /// <param name="productId"></param>
         /// <returns></returns>
-        public Task<ProductDetailsViewModel> GetProductDetailsByIdAsync(int productId, int pageNumber, int pageSize);
+        public Task<DetailsViewModel> GetProductDetailsByIdAsync(int productId, int pageNumber, int pageSize);
 
         /// <summary>
         /// Getting all products by gender.

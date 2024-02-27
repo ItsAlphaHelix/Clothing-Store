@@ -1,9 +1,10 @@
 ﻿@using Clothing_Store.Core.Contracts;
 @using Clothing_Store.Core.ViewModels.Products;
+@using Clothing_Store.Core.ViewModels.Reviews;
 @using Clothing_Store.Data.Data.Models;
 @inject IProductService productsService;
 
-@model ProductDetailsViewModel
+@model DetailsViewModel
 @{
     ViewData["Title"] = "Информация за продукта";
     var productReview = new PostProductReviewViewModel();
@@ -80,7 +81,7 @@
                             }
                             else
                             {
-                                <div class="mg-stock-text out-stock">Няма в наличност</div>                                
+                                <div class="mg-stock-text out-stock">Изчерпан</div>                                
                             }
                         </div>
                     </div>
