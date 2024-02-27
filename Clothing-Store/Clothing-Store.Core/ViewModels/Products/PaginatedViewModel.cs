@@ -14,7 +14,7 @@ namespace Clothing_Store.Core.ViewModels.Products
 
         public string SelectedProducts { get; set; }
 
-        public string SelectedPrices { get; set; }
+        public string SelectedPrice { get; set; }
 
         public string SelectedSizes { get; set; }
 

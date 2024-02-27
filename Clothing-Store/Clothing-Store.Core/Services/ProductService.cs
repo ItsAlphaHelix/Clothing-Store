@@ -11,6 +11,8 @@
     using System.Linq;
     using System.Linq.Expressions;
     using System.Threading.Tasks;
+    using System.Web;
+
     public class ProductService : IProductService
     {
         private readonly IRepository<Product> productsRepository;
@@ -42,7 +44,8 @@
                     Id = x.Id,
                     Category = x.Category,
                     Price = x.Price,
-                    Images = x.Images.Select(x => x.Url).Take(2).ToList()
+                    Images = x.Images.Select(x => x.Url).Take(2).ToList(),
+                   
                 })
                 .AsQueryable();
 
@@ -59,8 +62,11 @@
                     Category = x.Category,
                     Price = x.Price,
                     AverageRating = x.ProductReviews.Any() ? (x.ProductReviews.Sum(x => x.Rating) / x.ProductReviews.Count) : 0,
-                    ProductSizes = x.ProductSizes.Select(x => x.Size.Name).ToList(),
-                    Images = x.Images.Select(x => x.Url).Take(2).ToList()
+                    Images = x.Images.Select(x => x.Url).Take(2).ToList(),
+                    ProductSizes = x.ProductSizes
+                    .Where(x => x.Count != 0)
+                    .Select(x => new SizeViewModel() { SizeName = x.Size.Name})
+                    .ToList()
                 })
                 .AsQueryable();
 
@@ -72,12 +78,13 @@
 
             if (!string.IsNullOrWhiteSpace(model.SelectedSizes))
             {
-                products = products.Where(p => p.ProductSizes.Any(x => x == "S"));
+               string[] splitSelectedSizes = model.SelectedSizes.Split(",");
+               products = products.Where(x => x.ProductSizes.Any(x => splitSelectedSizes.Contains(x.SizeName)));
             }
 
-            if (!string.IsNullOrEmpty(model.SelectedPrices))
+            if (!string.IsNullOrEmpty(model.SelectedPrice))
             {
-                switch (model.SelectedPrices)
+                switch (model.SelectedPrice)
                 {
                     case "5-15": products = products.Where(x => x.Price >= 5 && x.Price <= 15); break;
                     case "15-30": products = products.Where(x => x.Price >= 15 && x.Price <= 30); break;

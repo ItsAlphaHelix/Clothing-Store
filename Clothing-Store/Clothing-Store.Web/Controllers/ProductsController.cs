@@ -38,23 +38,35 @@
         public async Task<IActionResult> All([FromQuery] PaginatedViewModel model, int page = 1)
         {
             ViewData["IsHomePage"] = false;
-            
             var products = this.productsService.GetAllProductsAsQueryable(model);
+
+            ViewData["Title"] = "Всички продукти";
+
             ViewData["CurrentSort"] = model.Sorting;
             ViewData["CurrentSelectedProduct"] = model.SelectedProducts;
-            ViewData["CurrentSelectedPrice"] = model.SelectedPrices;
+            ViewData["CurrentSelectedSizes"] = model.SelectedSizes;
+            //ViewData["CurrentSelectedPrice"] = model.SelectedPrice;
             var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, page, 12);
 
-            //if (paginated.Count == 0)
-            //{
-            //    return NotFound();
-            //}
 
             var viewModel = new PaginatedViewModel()
             {
                 Products = paginated
             };
 
+            try
+            {
+                if (!paginated.Any())
+                {
+                    throw new InvalidOperationException("Няма намерени продукти");
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewData["Title"] = ex.Message;
+
+                return View(viewModel);
+            }
 
             return View(viewModel);
         }

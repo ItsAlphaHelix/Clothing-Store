@@ -83,10 +83,10 @@
                                         <div class="mg-filter-panel">
                                             <div class="mg-filter-checkbox">
                                                 <ul>
-                                                    <li><a href="#" name="selectedPrices" value="5-15" onclick="callOnChangePrices(this)">5 BGN - 15 BGN</a></li>
-                                                    <li><a href="#" name="selectedPrices" value="15-30" onclick="callOnChangePrices(this)">15 BGN - 30 BGN</a></li>
-                                                    <li><a href="#" name="selectedPrices" value="30-50" onclick="callOnChangePrices(this)">30 BGN - 50 BGN</a></li>
-                                                    <li><a href="#" name="selectedPrices" value="50-100" onclick="callOnChangePrices(this)">50 BGN - 100 BGN</a></li>
+                                                    <li><a href="#" name="selectedPrice" value="5-15" onclick="callOnChangePrices(this)">5 BGN - 15 BGN</a></li>
+                                                    <li><a href="#" name="selectedPrice" value="15-30" onclick="callOnChangePrices(this)">15 BGN - 30 BGN</a></li>
+                                                    <li><a href="#" name="selectedPrice" value="30-50" onclick="callOnChangePrices(this)">30 BGN - 50 BGN</a></li>
+                                                    <li><a href="#" name="selectedPrice" value="50-100" onclick="callOnChangePrices(this)">50 BGN - 100 BGN</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -167,7 +167,7 @@
                     </div> *@
                     <div class="mg-collection-grid-pannel mt-5">
                         <div class="mg-section-tittles text-center">
-                            <h2 class="mg-heading mg-heading-small">@this.ViewData["Title"]</h2>
+                            <h2 class="mg-heading mg-heading-small" style="@(Model.Products.Count == 0 ? "color: red;" : "")">@this.ViewData["Title"]</h2>
                         </div>
                         <div class="mg-sorting-outer mb-3">
                             <!--Select Input Sorting-->                     
@@ -196,7 +196,8 @@
                                                 asp-route-page="@(Model.Products.PageNumber - 1)"
                                                 asp-route-sorting="@ViewData["CurrentSort"]"
                                                 asp-route-selectedProducts="@ViewData["CurrentSelectedProduct"]"
-                                                asp-route-selectedPrice="@ViewData["CurrentSelectedPrice"]">
+                                                asp-route-selectedPrice="@ViewData["CurrentSelectedPrice"]"
+                                                asp-route-selectedSizes="@ViewData["CurrentSelectedSizes"]">
                                                 <img src="~/images/mg-arrow-left.png" alt="" />
                                             </a>
                                         </li>
@@ -218,7 +219,8 @@
                                                 asp-route-page="@i"
                                                 asp-route-sorting="@ViewData["CurrentSort"]"
                                                 asp-route-selectedProducts="@ViewData["CurrentSelectedProduct"]"
-                                                asp-route-selectedPrice="@ViewData["CurrentSelectedPrice"]">@i</a>
+                                                asp-route-selectedPrice="@ViewData["CurrentSelectedPrice"]"
+                                                   asp-route-selectedSizes="@ViewData["CurrentSelectedSizes"]">@i</a>
                                             </li>
                                         }
 
@@ -227,7 +229,8 @@
                                                 asp-route-page="@(Model.Products.PageNumber + 1)"
                                                 asp-route-sorting="@ViewData["CurrentSort"]"
                                                 asp-route-selectedProducts="@ViewData["CurrentSelectedProduct"]"
-                                                asp-route-selectedPrice="@ViewData["CurrentSelectedPrice"]">
+                                                asp-route-selectedPrice="@ViewData["CurrentSelectedPrice"]"
+                                                asp-route-selectedSizes="@ViewData["CurrentSelectedSizes"]">
                                                 <img src="~/images/mg-arrow-right.png" alt="" />
                                             </a>
                                         </li>

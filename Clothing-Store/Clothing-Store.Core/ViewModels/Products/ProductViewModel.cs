@@ -13,6 +13,6 @@ namespace Clothing_Store.Core.ViewModels.Products
         public double AverageRating { get; set; }
         public List<string> Images { get; set; } = new List<string>();
 
-        public List<string> ProductSizes { get; set; } = new List<string>();
+        public IEnumerable<SizeViewModel> ProductSizes { get; set; } = new List<SizeViewModel>();
     }
 }

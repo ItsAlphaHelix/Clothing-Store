@@ -4,7 +4,7 @@
 
 
 @{
-    ViewData["Title"] = "Всички продукти";
+    //ViewData["Title"];
 }
 
 @await Html.PartialAsync("_AppPartial")
@@ -34,15 +34,19 @@
     <script>
 
         function callChangeOrder(sorting) {
+
             var selectedProducts = getSelectedProducts();
+            var selectedSizes = getSelectedSizes();
             var selectedPrice = localStorage.getItem("selectedPrice");
+
             var resultSelectedProducts = selectedProducts.length != 0 ? `&selectedProducts=${selectedProducts.join(',')}` : " ";
             var resultSelectedPrice = selectedPrice != " " ? `&selectedPrices=${selectedPrice}` : " ";
-            window.location.href = `/Products/All?page=1&sorting=${sorting}${resultSelectedProducts}${resultSelectedPrice}`;
+            var resultSelectedSizes = selectedSizes.length != 0 ? `&selectedSizes=${selectedSizes.join(',')}` : " ";
+
+            window.location.href = `/Products/All?page=1&sorting=${sorting}${resultSelectedProducts}${resultSelectedPrice}${resultSelectedSizes}`
         }
 
         function callOnChangeSizes(element) {
-            console.log(element)
              var checkboxValue = element.getAttribute('value');
              var selectedSizes = getSelectedSizes();
 
@@ -56,7 +60,15 @@
 
             setSelectedSizes(selectedSizes);
 
-            window.location.href = `/Products/All?selectedSizes=${selectedSizes.join(',')}`
+            var selectedProducts = getSelectedProducts();
+            var selectedSizes = getSelectedSizes();                       
+            var selectedPrice = localStorage.getItem("selectedPrice");
+
+            var resultSelectedProducts = selectedProducts.length != 0 ? `&selectedProducts=${selectedProducts.join(',')}` : " ";
+            var resultSelectedPrice = selectedPrice != " " ? `&selectedPrices=${selectedPrice}` : " ";
+            var resultSelectedSizes = selectedSizes.length != 0 ? `&selectedSizes=${selectedSizes.join(',')}` : " ";
+
+            window.location.href = `/Products/All?page=1&sorting=@Model.Sorting${resultSelectedProducts}${resultSelectedPrice}${resultSelectedSizes}`
         }
 
         function getSelectedSizes() {
@@ -80,14 +92,15 @@
             }
 
 
-            var selectedPrice = localStorage.getItem("selectedPrice");
             var selectedProducts = getSelectedProducts();
-
+            var selectedSizes = getSelectedSizes();
+            var selectedPrice = localStorage.getItem("selectedPrice");
 
             var resultSelectedProducts = selectedProducts.length != 0 ? `&selectedProducts=${selectedProducts.join(',')}` : " ";
             var resultSelectedPrice = selectedPrice != " " ? `&selectedPrices=${selectedPrice}` : " ";
+            var resultSelectedSizes = selectedSizes.length != 0 ? `&selectedSizes=${selectedSizes.join(',')}` : " ";
 
-            window.location.href = `/Products/All?page=1&sorting=@Model.Sorting${resultSelectedProducts}${resultSelectedPrice}`;
+            window.location.href = `/Products/All?page=1&sorting=@Model.Sorting${resultSelectedProducts}${resultSelectedPrice}${resultSelectedSizes}`
         }
 
         function getSelectedProducts() {
@@ -114,11 +127,14 @@
 
             setSelectedProducts(selectedProducts);
 
-            var sorting = '@Model.Sorting';
+            var selectedSizes = getSelectedSizes();
             var selectedPrice = localStorage.getItem("selectedPrice");
+
             var resultSelectedProducts = selectedProducts.length != 0 ? `&selectedProducts=${selectedProducts.join(',')}` : " ";
             var resultSelectedPrice = selectedPrice != " " ? `&selectedPrices=${selectedPrice}` : " ";
-            window.location.href = `/Products/All?page=1&sorting=${sorting}${resultSelectedProducts}${resultSelectedPrice}`;
+            var resultSelectedSizes = selectedSizes.length != 0 ? `&selectedSizes=${selectedSizes.join(',')}` : " ";
+
+            window.location.href = `/Products/All?page=1&sorting=@Model.Sorting${resultSelectedProducts}${resultSelectedPrice}${resultSelectedSizes}`
 
         }
 
@@ -129,6 +145,15 @@
                 var anchorProduct = document.querySelector('a[value="' + product + '"]');
                 if (anchorProduct) {
                     anchorProduct.parentNode.classList.add('active');
+                }
+            });
+
+            var selectedSizes = getSelectedSizes();
+
+            selectedSizes.forEach(function (size) {
+                var anchorSize = document.querySelector('a[value="' + size + '"]');
+                if (anchorSize) {
+                    anchorSize.parentNode.classList.add('active');
                 }
             });
 
