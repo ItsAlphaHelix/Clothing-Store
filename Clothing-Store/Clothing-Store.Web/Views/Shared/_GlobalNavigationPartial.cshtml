@@ -1,6 +1,14 @@
-﻿@using Clothing_Store.Data.Data.Models;
+﻿@using Clothing_Store.Core.Contracts;
+@using Clothing_Store.Data.Data.Models;
 @using Microsoft.AspNetCore.Identity;
+@using System.Security.Claims;
 @inject SignInManager<ApplicationUser> SignInManager
+@inject IFavoriteService favoriteService
+
+@{
+    string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var countOfFavoriteProducts = await this.favoriteService.CountOfFavoriteProductsAsync(userId);
+}
 
 <div class="mg-header-outer">
     <div class="container-fluid gx-lg-5">
@@ -73,7 +81,7 @@
                 <div class="header-icons-outer">
                     <ul>
                         <li class="mg-search-icon"><a href="#" data-bs-toggle="modal" data-bs-target="#search-popup"><img src="~/images/svgs/search.svg" alt="" /></a></li>
-                        <li><a href="wishlist.html"><img src="~/images/svgs/wishlist.svg" alt="" /><span class="mg-header-icon-counter">1</span></a></li>
+                        <li><a asp-controller="Favorites" asp-action="All"><img src="~/images/svgs/wishlist.svg" alt="" /><span class="mg-header-icon-counter">@countOfFavoriteProducts</span></a></li>
                         @if (this.SignInManager.IsSignedIn(this.User))
                         {
                             <li><a href="#" id="logout"><img src="~/images/logout.png" alt="" /></a></li>

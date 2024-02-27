@@ -65,7 +65,7 @@
                     Images = x.Images.Select(x => x.Url).Take(2).ToList(),
                     ProductSizes = x.ProductSizes
                     .Where(x => x.Count != 0)
-                    .Select(x => new SizeViewModel() { SizeName = x.Size.Name})
+                    .Select(x => new SizeViewModel() { SizeName = x.Size.Name } )
                     .ToList()
                 })
                 .AsQueryable();

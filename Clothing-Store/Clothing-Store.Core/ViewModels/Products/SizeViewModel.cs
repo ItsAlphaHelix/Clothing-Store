@@ -9,5 +9,7 @@ namespace Clothing_Store.Core.ViewModels.Products
     public class SizeViewModel
     {
         public string SizeName { get; set; }
+
+        public int Count { get; set; }
     }
 }

@@ -1,40 +1,55 @@
-﻿@using Clothing_Store.Core.ViewModels.Products;
+﻿@using Clothing_Store.Core.Contracts;
+@using Clothing_Store.Core.ViewModels.Products;
+@using System.Security.Claims;
+@inject IFavoriteService favoriteService
 @model PaginatedViewModel
+
+@{
+    string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var userFavoriteProducts = await this.favoriteService.AllUserFavoriteProductsAsync(userId);
+}
 
 <!--Products Grid Start Here-->
 <div id="products-container">
-<div class="mg-collection-product-list-outer">
-    <div class="row">
-        @foreach (var product in Model.Products)
-        {
-            <div class="col-md-4 col-sm-6">
-                <div class="mg-product-main mg-img-hdark">
-                    <div class="position-relative">
-                        <div class="mg-product-image">
-                            <a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id"><img class="img-fluid" src="@product.Images[0]" alt="" /></a>
-                            <a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id"><img class="img-fluid mg-hover-img" src="@product.Images[1]" alt="" /></a>
-                        </div>
-                        <div class="mg-product-icons-outer">
-                            <div class="mg-product-icon">
-                                <a href="#"><img class="mg-product-icon-img" src="~/images/svgs/red-heart-icon.svg" alt="" /></a>
+    <div class="mg-collection-product-list-outer">
+        <div class="row">
+            @foreach (var product in Model.Products)
+            {
+                <div class="col-md-4 col-sm-6">
+                    <div class="mg-product-main mg-img-hdark">
+                        <div class="position-relative">
+                            <div class="mg-product-image">
+                                <a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id"><img class="img-fluid" src="@product.Images[0]" alt="" /></a>
+                                <a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id"><img class="img-fluid mg-hover-img" src="@product.Images[1]" alt="" /></a>
                             </div>
-                            <div class="mg-product-icon">
-                                <a href="javascript:void(0)" onclick="loadProductDetails(@product.Id)"><img class="mg-product-icon-img" src="~/images/svgs/view-icon.svg" alt="" /></a>
+                            <div class="mg-product-icons-outer">
+                                <div class="mg-product-icon">
+                                    @if (userFavoriteProducts.Any(x => x.Id == product.Id))
+                                    {
+                                        <a asp-controller="Favorites" asp-action="All" asp-route-id="@product.Id"><img class="mg-product-icon-img" src="~/images/svgs/red-heart-icon.svg" style="opacity: 1" alt="" /></a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-controller="Favorites" asp-action="Add" asp-route-id="@product.Id"><img class="mg-product-icon-img" src="~/images/svgs/red-heart-icon.svg" alt="" /></a>
+                                    }
+                                </div>
+                                <div class="mg-product-icon">
+                                    <a href="javascript:void(0)" onclick="loadProductDetails(@product.Id)"><img class="mg-product-icon-img" src="~/images/svgs/view-icon.svg" alt="" /></a>
+                                </div>
+                            </div>
+                            <div class="mg-product-add-to-cart-btn-outer">
+                                <a class="mg-product-add-to-cart-btn" href="cart.html">Add To Bag</a>
                             </div>
                         </div>
-                        <div class="mg-product-add-to-cart-btn-outer">
-                            <a class="mg-product-add-to-cart-btn" href="cart.html">Add To Bag</a>
+                        <div class="mg-product-tittles text-center">
+                            <a class="mg-product-name" href="product.html">@product.Category</a>
+                            <div class="mg-regular-price"><span class="mg-discount-price"></span>@product.Price BGN</div>
                         </div>
-                    </div>
-                    <div class="mg-product-tittles text-center">
-                        <a class="mg-product-name" href="product.html">@product.Category</a>
-                        <div class="mg-regular-price"><span class="mg-discount-price"></span>@product.Price BGN</div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
-</div>
 </div>
 <!--Products Grid End Here-->
 <!--MG Pagination Start Here-->

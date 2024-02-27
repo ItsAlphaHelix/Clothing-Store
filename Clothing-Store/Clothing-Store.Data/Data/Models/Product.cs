@@ -19,5 +19,8 @@
         public virtual ICollection<ProductReviews> ProductReviews { get; set; } = new HashSet<ProductReviews>();
 
         public virtual ICollection<ProductSize> ProductSizes { get; set; } = new HashSet<ProductSize>();
+
+        public virtual ICollection<ProductFavorites> ProductFavorites { get; set; } = new HashSet<ProductFavorites>();
+
     }
 }

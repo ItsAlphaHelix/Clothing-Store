@@ -25,6 +25,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ISearchService, SearchService>();
+builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 
 var app = builder.Build();
 
