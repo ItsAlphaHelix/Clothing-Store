@@ -20,10 +20,17 @@
 
         public DbSet<ProductSize> ProductSizes { get; set; }
 
+        public DbSet<Favorite> Favorites { get; set; }
+
+        public DbSet<ProductFavorites> ProductFavorites { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<ProductSize>()
                 .HasKey(x => new { x.ProductId, x.SizeId });
+
+            builder.Entity<ProductFavorites>()
+                .HasKey(x => new { x.ProductId, x.FavoriteId });
 
             base.OnModelCreating(builder);
         }
