@@ -24,6 +24,10 @@
 
         public DbSet<ProductFavorites> ProductFavorites { get; set; }
 
+        public DbSet<Bag> Bags { get; set; }
+
+        public DbSet<ProductBag> ProductBags { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<ProductSize>()
@@ -31,6 +35,9 @@
 
             builder.Entity<ProductFavorites>()
                 .HasKey(x => new { x.ProductId, x.FavoriteId });
+
+            builder.Entity<ProductBag>()
+                .HasKey(x => new { x.ProductId, x.BagId });
 
             base.OnModelCreating(builder);
         }

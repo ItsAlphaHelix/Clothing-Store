@@ -1,0 +1,140 @@
+﻿@using Clothing_Store.Core.Contracts;
+@using Clothing_Store.Core.ViewModels.Bags;
+@using System.Security.Claims;
+@model IEnumerable<BagViewModel>
+@inject IShoppingBagService shoppingBagService
+
+@{
+    ViewData["Title"] = "Вашата чанта";
+
+    string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+    string temporaryUserId = shoppingBagService.GetOrCreateTemporaryUserId();
+    userId ??= temporaryUserId;
+
+    decimal totalPrice = await this.shoppingBagService.CalculateTotalPrice(userId);
+    string priceWithShipping = totalPrice == 0 ? totalPrice.ToString("F2") : (totalPrice + 5).ToString("F2");
+}
+
+<div class="mg-page-outer">
+    <div class="container-fluid gx-lg-5 gx-md-4">
+        <div class="mg-section-tittles text-center">
+            <h2 class="mg-heading">@ViewData["Title"]</h2>
+        </div>
+    </div>
+    <div class="container-lg gx-lg-5 gx-md-4">
+        <div class="mg-cart-page-outer">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="mg-cart-product-list-outer">
+                        <div class="mg-cart-product-list-heading">
+                            Вашите продукти
+                        </div>
+                        <div class="mg-cart-product-list-main">
+                            
+                            
+                            @foreach (var bags in Model)
+                            {
+                                @foreach (var productInBag in bags.ProductBags)
+                                {
+                                    <div class="mg-cart-product-list-grid">
+                                        <div class="mg-cart-product-remove-btn"><a asp-action="Delete" asp-route-bagId="@bags.BagId"><i class="fa fa-times" aria-hidden="true"></i></a></div>
+                                        <div class="mg-cart-product-list-image">
+                                            <img src="@productInBag.ImageUrl" alt="" />
+                                        </div>
+                                        <div class="mg-cart-productr-list-details">
+                                            <div class="mg-cart-product-tittle"><a asp-controller="Products" asp-action="GetProductDetails" asp-route-id="@productInBag.Id">@productInBag.CategoryName</a></div>
+                                            <div class="mg-cart-product-price">@productInBag.Price BGN @* <span>tax incl.</span> *@</div>
+                                            @* <div class="mg-cart-small-text">Unit Price: <span>74.05 $ tax incl.</span></div> *@
+                                            <div class="mg-cart-quantity-size-btn-outer mt-3">
+                                                <div class="mg-cart-quantiy-outer">
+                                                    <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="mg-quantity-step-btn"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                                                    <input class="mg-cart-quantity" min="0" name="quantity" value="1" type="number">
+                                                    <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="mg-quantity-step-btn"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                                </div>
+                                                <div class="mg-cart-size-btn-outer">
+                                                    <div class="mg-cart-size">@productInBag.SizeName</div>
+                                                </div>
+                                            </div>
+                                            <div class="mg-cart-stock-text">Instock</div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mg-cart-promo-code-outer mt-4 mt-md-0 mb-4">
+                        <form class="cart-promo-code-form">
+                            <div class="input-group mg-cart-promo-input-main">
+                                <input type="text" class="form-control" placeholder="Enter Promo Code">
+                                <button class="mg-btn mg-light-bg-btn mg-promo-btn" type="button">Apply Code</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="mg-cart-details-pannel-outer">
+                        <div class="mg-cart-order-summery-heading text-center">
+                            Детайли за поръчката
+                        </div>
+                        <div class="mg-cart-order-summary-des text-center">Цена на продуктите, цена на доставката, и общата цена на всичко взето заедно</div>
+                        <div class="mg-cart-line-break"></div>
+                        <div class="mg-cart-detail-list-outer">
+                            <div class="mg-cart-detail-list-grid">
+                                <div class="row gx-2">
+                                    <div class="col-6">
+                                        <div class="mg-cart-list-text">Цена на продуктите:</div>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <div class="mg-cart-list-text">@totalPrice BGN</div>
+                                    </div>
+                                </div>
+                            </div>
+                           @*  <div class="mg-cart-detail-list-grid">
+                                <div class="row gx-2">
+                                    <div class="col-6">
+                                        <div class="mg-cart-list-text">Discount:</div>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <div class="mg-cart-list-text">13%</div>
+                                    </div>
+                                </div>
+                            </div> *@
+                            <div class="mg-cart-detail-list-grid">
+                                <div class="row gx-2">
+                                    <div class="col-6">
+                                        <div class="mg-cart-list-text">Доставка:</div>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <div class="mg-cart-list-text">5.00 BGN</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mg-cart-line-break"></div>
+                            <div class="mg-cart-detail-list-grid">
+                                <div class="row gx-2">
+                                    <div class="col-6">
+                                        <div class="mg-cart-list-text">Цената с доставката:</div>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <div class="mg-cart-list-text">@priceWithShipping BGN</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mg-cart-panel-btns mt-3">
+                            <a href="checkout.html" class="mg-btn mg-light-bg-btn mg-form-btn mb-3">Proceed To Checkout</a>
+                            <a href="collection.html" class="mg-btn mg-light-bg-btn mg-form-btn mg-black-btn">Continue Shipping</a>
+                        </div>
+                        <div class="mg-cart-secure-btn mt-4 text-center">
+                            <img src="assets/images/lock.svg" alt="" /> Secure Payment
+                        </div>
+                        <div class="cart-panel-detail-pay-icon text-center mt-4">
+                            <img class="img-fluid w-auto" src="assets/images/pay-icons.png" alt="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

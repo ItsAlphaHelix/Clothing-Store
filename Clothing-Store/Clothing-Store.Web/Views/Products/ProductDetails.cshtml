@@ -130,7 +130,7 @@
                                         @foreach (var size in Model.Sizes)
                                         {
                                         //TODO: set class="active"
-                                         <li ><a href="#">@size.SizeName</a></li>
+                                         <li ><a>@size.SizeName</a></li>
                                         } 
                                     </ul>
                                 </div>
@@ -241,7 +241,7 @@
                     <div class="mg-product-add-to-cart-outer mg-product-page-sec-spacing">
                         <div class="row gx-3">
                             <div class="col-8">
-                                <button class="btn mg-btn mg-black-btn mg-form-btn mg-light-bg-btn" ><span class="mg-btn-icon"><img src="assets/images/product-bag.svg" alt="" /></span>Добави в кошницата</button>
+                                <button class="btn mg-btn mg-black-btn mg-form-btn mg-light-bg-btn" onclick="addProductToBag(@Model.Id)"><span class="mg-btn-icon"><img src="assets/images/product-bag.svg" alt="" /></span>Добави в кошницата</button>
                             </div>
                             <div class="col-4">
                                 <a class="btn mg-btn mg-form-btn mg-light-bg-btn" href="#"><span class="mg-btn-icon"><img src="assets/images/product-heart.svg" alt="" /></span>Добави в любими</a>
@@ -572,5 +572,47 @@
             });
         });
     </script>
+    <script>
+        $(document).on('click', '.mg-size-variant-outer ul li', function (event) {
+            event.preventDefault();
+            $('.mg-size-variant-outer ul li').removeClass('active');
+            
+            $(this).addClass('active');
+        });
 
+        function addProductToBag(productId) {
+            
+            var activeSizeElement = $('.mg-size-variant-outer ul li.active')[0];
+            var sizeName = " ";
+            var quantity = $('.mg-cart-quantity')[0].value;
+
+            if (activeSizeElement) {
+                sizeName = activeSizeElement.innerText;
+            }
+
+            console.log(sizeName)
+            console.log(quantity)
+            console.log(productId)
+
+            $.ajax({
+                type: "POST",
+                url: '/ShoppingBags/AddProductToBag',
+                data:
+                {
+                    productId,
+                    sizeName,
+                    quantity
+                },
+                success: function (response) {
+
+                    console.log("Everything is okey.")
+                     window.location.href = "/ShoppingBags/All";
+
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error.")
+                }
+            });
+            }
+    </script>
 }

@@ -22,5 +22,6 @@
 
         public virtual ICollection<ProductFavorites> ProductFavorites { get; set; } = new HashSet<ProductFavorites>();
 
+        public virtual ICollection<ProductBag> ProductBags { get; set; } = new HashSet<ProductBag>();
     }
 }

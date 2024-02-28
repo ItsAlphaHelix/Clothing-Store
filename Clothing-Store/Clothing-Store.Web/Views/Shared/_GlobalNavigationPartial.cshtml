@@ -4,10 +4,17 @@
 @using System.Security.Claims;
 @inject SignInManager<ApplicationUser> SignInManager
 @inject IFavoriteService favoriteService
+@inject IShoppingBagService shoppingBagService
 
 @{
     string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-    var countOfFavoriteProducts = await this.favoriteService.CountOfFavoriteProductsAsync(userId);
+
+    string temporaryUserId = shoppingBagService.GetOrCreateTemporaryUserId();
+    userId ??= temporaryUserId;
+
+
+    int countOfFavoriteProducts = await this.favoriteService.CountOfFavoriteProductsAsync(userId);
+    int countOfProductsInBag = await this.shoppingBagService.CountOfProductsInBagAsync(userId);
 }
 
 <div class="mg-header-outer">
@@ -90,7 +97,7 @@
                         {
                             <li><a href="#" id="account" onclick="getAuthPartialView(event)" data-bs-toggle="modal" data-bs-target="#account-modal"><img src="~/images/svgs/profile.svg" alt="" /></a></li>
                         }
-                        <li><a asp-controller="Products" asp-action="Cart"><img src="~/images/svgs/cart.svg" alt="" /><span class="mg-header-icon-counter cart-counter">1</span></a></li>
+                        <li><a asp-controller="ShoppingBags" asp-action="All"><img src="~/images/svgs/cart.svg" alt="" /><span class="mg-header-icon-counter cart-counter">@countOfProductsInBag</span></a></li>
                     </ul>
                 </div>
             </div>
