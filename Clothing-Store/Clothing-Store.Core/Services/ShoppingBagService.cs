@@ -3,6 +3,7 @@
     using Clothing_Store.Core.Contracts;
     using Clothing_Store.Core.ViewModels.Bags;
     using Clothing_Store.Core.ViewModels.Products;
+    using Clothing_Store.CustomExceptions;
     using Clothing_Store.Data.Data.Models;
     using Clothing_Store.Data.Repositories;
     using Microsoft.AspNetCore.Http;
@@ -13,43 +14,74 @@
     {
         private readonly IRepository<Bag> bagsRepository;
         private readonly IRepository<ProductBag> productsBagRepository;
+        private readonly IRepository<ProductSize> productsSizeRepository;
+        private readonly IRepository<Product> productsRepository;
         private readonly IHttpContextAccessor httpContextAccessor;
 
         public ShoppingBagService(
             IRepository<Bag> bagsRepository,
             IRepository<ProductBag> productsBagRepository,
+            IRepository<ProductSize> productsSizeRepository,
+            IRepository<Product> productsRepository,
             IHttpContextAccessor httpContextAccessor)
         {
             this.bagsRepository = bagsRepository;
             this.productsBagRepository = productsBagRepository;
+            this.productsSizeRepository = productsSizeRepository;
+            this.productsRepository = productsRepository;
             this.httpContextAccessor = httpContextAccessor;
 
         }
         public async Task AddProductToBag(int productId, string sizeName, int quantity, string userId)
         {
-            var userBag = await this.bagsRepository
-                .All()
-                .Include(b => b.ProductBags)
-                .FirstOrDefaultAsync(b => b.UserId == userId);
+            int quantityOfCurrentSize = await this.productsSizeRepository
+                .AllAsNoTracking()
+                .Where(x => x.ProductId == productId && x.Size.Name == sizeName)
+                .CountAsync();
 
-            if (userBag == null)
+            if (string.IsNullOrWhiteSpace(sizeName))
             {
-                userBag = new Bag()
+                throw new InvalidSizeException("Моля изберете размер.");
+            }
+
+            if (quantityOfCurrentSize < quantity)
+            {
+                throw new QuantityException("Няма достатъчно бройки от този размер.");
+            }
+
+            var currentProduct = await this.productsBagRepository.All()
+                .Where(x => x.Bag.UserId == userId && x.ProductId == productId && x.SizeName == sizeName)
+                .FirstOrDefaultAsync();
+
+            if (currentProduct != null)
+            {
+                currentProduct.Quantity += quantity;
+            }
+            else
+            {
+                var bag = new Bag()
                 {
                     UserId = userId
                 };
 
-                await bagsRepository.AddAsync(userBag);
+                var product = await this.productsRepository
+                        .All()
+                        .Where(x => x.Id == productId)
+                        .FirstOrDefaultAsync();
+
+                var productBag = new ProductBag
+                {
+                    Product = product,
+                    ProductId = productId,
+                    SizeName = sizeName,
+                    Bag = bag,
+                    BagId = bag.Id,
+                    Quantity = quantity,
+                };
+
+                await bagsRepository.AddAsync(bag);
+                bag.ProductBags.Add(productBag);
             }
-
-            var productBag = new ProductBag
-            {
-                ProductId = productId,
-                SizeName = sizeName,
-                Quantity = quantity,
-            };
-
-            userBag.ProductBags.Add(productBag);
 
             await bagsRepository.SaveChangesAsync();
         }
@@ -64,19 +96,19 @@
                     BagId = x.Id,
                     ProductBags = x.ProductBags.Select(x => new ProductBagViewModel()
                     {
-                        Id = x.ProductId,  
+                        Id = x.ProductId,
                         CategoryName = x.Product.Category,
                         Price = x.Product.Price,
                         SizeName = x.SizeName,
                         Quantity = x.Quantity,
                         ImageUrl = x.Product.Images.Select(x => x.Url).FirstOrDefault(),
+                        
                     })
                 })
                 .ToListAsync();
 
             return productsInBag;
         }
-
         public async Task<decimal> CalculateTotalPrice(string userId)
         {
             decimal totalPrice = await this.productsBagRepository

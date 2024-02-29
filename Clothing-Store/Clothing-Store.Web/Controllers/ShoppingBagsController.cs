@@ -1,10 +1,13 @@
 ﻿namespace Clothing_Store.Controllers
 {
     using Clothing_Store.Core.Contracts;
+    using Clothing_Store.CustomExceptions;
     using Clothing_Store.Data.Data.Models;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using System.Security.Claims;
+    using static System.Runtime.InteropServices.JavaScript.JSType;
+
     public class ShoppingBagsController : Controller
     {
         private readonly UserManager<ApplicationUser> usersManager;
@@ -33,8 +36,22 @@
         [HttpPost]
         public async Task<IActionResult> AddProductToBag(int productId, string sizeName, int quantity)
         {
+
             string userId = await GetUserId();
-            await this.shoppingBagService.AddProductToBag(productId, sizeName, quantity, userId);
+            try
+            {
+                await this.shoppingBagService.AddProductToBag(productId, sizeName, quantity, userId);
+            }
+            catch (InvalidSizeException ex)
+            {
+                ModelState.AddModelError("sizeError", ex.Message);
+                return BadRequest(ModelState);
+            }
+            catch(QuantityException ex)
+            {
+                ModelState.AddModelError("quantityError", ex.Message);
+                return BadRequest(ModelState);
+            }
 
             return RedirectToAction(nameof(All));
         }

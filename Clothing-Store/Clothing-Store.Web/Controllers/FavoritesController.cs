@@ -67,7 +67,9 @@
                 page--;
             }
 
-            return RedirectToAction(nameof(All), new { page });
+            var redirection = page == 0 ? RedirectToAction(nameof(All)) : RedirectToAction(nameof(All), new { page });
+
+            return redirection;
         }
         private async Task<ApplicationUser> GetUserAsync()
            => await this.usersManager.FindByIdAsync(this.User.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
