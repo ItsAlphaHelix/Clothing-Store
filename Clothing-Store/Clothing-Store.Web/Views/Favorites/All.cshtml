@@ -36,8 +36,8 @@
                                 </div>
                                 <div class="mg-cart-productr-list-details">
                                     <div class="mg-cart-product-tittle"><a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id">@product.Category</a></div>
-                                    <div class="mg-cart-product-price">@product.Price BGN @* <span>tax incl.</span> *@</div>
-                                    @if (product.ProductSizes.Any(x => x.Count != 0))
+                                    <div class="mg-cart-product-price">@product.Price ЛВ @* <span>tax incl.</span> *@</div>
+                                    @if (product.IsProductInStock)
                                     {
                                         <div class="mg-cart-stock-text">В наличност</div>
                                     }

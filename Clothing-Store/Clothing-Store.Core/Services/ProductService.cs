@@ -45,7 +45,6 @@
                     Category = x.Category,
                     Price = x.Price,
                     Images = x.Images.Select(x => x.Url).Take(2).ToList(),
-                   
                 })
                 .AsQueryable();
 
@@ -114,8 +113,14 @@
                     Id = x.Id,
                     Category = x.Category,
                     Price = x.Price,
+                    IsProductInStock = x.ProductSizes.Any(x => x.Count != 0),
+                    ProductSizes = x.ProductSizes.Select(x => new SizeViewModel()
+                    {
+                        SizeName = x.Size.Name
+                    }),
                     Images = x.Images.Select(x => x.Url)
-                    .ToList()
+                    .ToList(),
+                    
                 })
                 .FirstOrDefaultAsync();
 

@@ -34,17 +34,19 @@
         }
         public async Task AddProductToBag(int productId, string sizeName, int quantity, string userId)
         {
-            int quantityOfCurrentSize = await this.productsSizeRepository
+            int quantityOfCurrentSize = await this.GetTotalQuantityOfSizeOfProduct(sizeName, productId);
+            int quantityOfCurrentSizeProductInBag = await this.productsBagRepository
                 .AllAsNoTracking()
-                .Where(x => x.ProductId == productId && x.Size.Name == sizeName)
-                .CountAsync();
+                .Where(x => x.ProductId == productId && x.SizeName == sizeName && x.Bag.UserId == userId)
+                .Select(x => x.Quantity)
+                .FirstOrDefaultAsync();
 
             if (string.IsNullOrWhiteSpace(sizeName))
             {
                 throw new InvalidSizeException("Моля изберете размер.");
             }
 
-            if (quantityOfCurrentSize < quantity)
+            if (quantityOfCurrentSize < quantity || quantityOfCurrentSizeProductInBag >= quantityOfCurrentSize)
             {
                 throw new QuantityException("Няма достатъчно бройки от този размер.");
             }
@@ -88,6 +90,7 @@
 
         public async Task<IEnumerable<BagViewModel>> GetAllProductsInBagAsync(string userId)
         {
+
             var productsInBag = await this.bagsRepository
                 .AllAsNoTracking()
                 .Where(x => x.UserId == userId)
@@ -102,7 +105,7 @@
                         SizeName = x.SizeName,
                         Quantity = x.Quantity,
                         ImageUrl = x.Product.Images.Select(x => x.Url).FirstOrDefault(),
-                        
+                        IsProductInStock = x.Product.ProductSizes.Any(x => x.Count != 0)
                     })
                 })
                 .ToListAsync();
@@ -129,6 +132,55 @@
             return count;
         }
 
+        public async Task DeleteProductFromBagAsync(int bagId)
+        {
+            var bag = await this.bagsRepository
+                .All()
+                .FirstOrDefaultAsync(x => x.Id == bagId);
+
+            this.bagsRepository.Delete(bag);
+            await this.bagsRepository.SaveChangesAsync();
+        }
+
+        public async Task<int> GetTotalQuantityOfSizeOfProduct(string sizeName, int productId)
+        {
+            int quantityOfCurrentSize = await this.productsSizeRepository
+                .AllAsNoTracking()
+                .Where(x => x.ProductId == productId && x.Size.Name == sizeName)
+                .Select(x => x.Count)
+                .FirstOrDefaultAsync();
+
+            return quantityOfCurrentSize;
+        }
+
+        public async Task DecrementQuantityOfProductAsync(string sizeName, int productId, string userId)
+        {
+            var currentProduct = await this.productsBagRepository.All()
+                .Where(x => x.Bag.UserId == userId && x.ProductId == productId && x.SizeName == sizeName)
+                .FirstOrDefaultAsync();
+
+            currentProduct.Quantity--;
+
+            await this.productsBagRepository.SaveChangesAsync();
+        }
+
+        public async Task IncrementQuantityOfProductAsync(string sizeName, int productId, string userId, int currentQuantity)
+        {
+            var currentProduct = await this.productsBagRepository.All()
+                .Where(x => x.Bag.UserId == userId && x.ProductId == productId && x.SizeName == sizeName)
+                .FirstOrDefaultAsync();
+
+            int quantityOfCurrentSize = await this.GetTotalQuantityOfSizeOfProduct(sizeName, productId);
+            currentProduct.Quantity++;
+
+            if (quantityOfCurrentSize <= currentQuantity)
+            {
+                throw new InvalidOperationException("Няма достатъчно бройки от този размер.");
+            }
+
+
+            await this.productsBagRepository.SaveChangesAsync();
+        }
         public string GetOrCreateTemporaryUserId()
         {
             var httpContext = this.httpContextAccessor.HttpContext;
@@ -151,16 +203,6 @@
 
                 return temporaryUserId;
             }
-        }
-
-        public async Task DeleteProductFromBagAsync(int bagId)
-        {
-            var bag = await this.bagsRepository
-                .All()
-                .FirstOrDefaultAsync(x => x.Id == bagId);
-
-            this.bagsRepository.Delete(bag);
-            await this.bagsRepository.SaveChangesAsync();
         }
     }
 }

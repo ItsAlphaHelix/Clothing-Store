@@ -43,20 +43,31 @@
                                             <img src="@productInBag.ImageUrl" alt="" />
                                         </div>
                                         <div class="mg-cart-productr-list-details">
-                                            <div class="mg-cart-product-tittle"><a asp-controller="Products" asp-action="GetProductDetails" asp-route-id="@productInBag.Id">@productInBag.CategoryName</a></div>
-                                            <div class="mg-cart-product-price">@productInBag.Price BGN @* <span>tax incl.</span> *@</div>
+                                            <div class="mg-cart-product-tittle"><a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@productInBag.Id">@productInBag.CategoryName</a></div>
+                                            <div class="mg-cart-product-price">@productInBag.Price ЛВ @* <span>tax incl.</span> *@</div>
                                             @* <div class="mg-cart-small-text">Unit Price: <span>74.05 $ tax incl.</span></div> *@
                                             <div class="mg-cart-quantity-size-btn-outer mt-3">
                                                 <div class="mg-cart-quantiy-outer">
-                                                    <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="mg-quantity-step-btn"><i class="fa fa-minus" aria-hidden="true"></i></button>
-                                                    <input class="mg-cart-quantity" min="0" name="quantity" value="@productInBag.Quantity" type="number">
-                                                    <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="mg-quantity-step-btn"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                                    <button onclick="decrementQuantity(@productInBag.Id, '@productInBag.SizeName')" class="mg-quantity-step-btn"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                                                    @{
+                                                        int totalQuantity = await shoppingBagService.GetTotalQuantityOfSizeOfProduct(productInBag.SizeName, productInBag.Id);
+                                                    }
+                                                    <input class="mg-cart-quantity" min="1" name="quantity" max="@totalQuantity" value="@productInBag.Quantity" type="number">
+                                                    <button onclick="incrementQuantity(@productInBag.Id, '@productInBag.SizeName')" class="mg-quantity-step-btn"><i class="fa fa-plus" aria-hidden="true"></i></button>
                                                 </div>
                                                 
                                                 <div class="mg-cart-size-btn-outer">
                                                     <div class="mg-cart-size">@productInBag.SizeName</div>
                                                 </div>
                                             </div>
+                                            @if(productInBag.IsProductInStock)
+                                            {
+                                                <div class="mg-cart-stock-text">В наличност</div>
+                                            }
+                                            else
+                                            {
+                                                <div class="mg-cart-stock-text color-red">Изчерпан</div>
+                                            }
                                         </div>
                                     </div>
                                 }
@@ -138,3 +149,64 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        function decrementQuantity(productId, sizeName) {
+            var quantityInput = $('.mg-cart-quantity')[0];
+            if (quantityInput.value > 1) {
+                quantityInput.stepDown
+
+                $.ajax({
+                    type: "POST",
+                    url: '/ShoppingBags/DecrementQuantityOfProductInBag',
+                    data:
+                    {
+                        productId,
+                        sizeName,
+                    },
+                    success: function (response) {
+
+                        console.log("Everything is okey.")
+                        window.location.href = "/ShoppingBags/All";
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('Error.')
+                    }
+                });
+
+                console.log(productId)
+                console.log(sizeName)
+                console.log(quantity)
+            }
+        }
+
+        function incrementQuantity(productId, sizeName) {
+
+            var quantityInput = $('.mg-cart-quantity')[0];
+            var quantity = $('.mg-cart-quantity')[0].value;
+
+            quantityInput.stepUp();
+            $.ajax({
+                type: "POST",
+                url: '/ShoppingBags/IncrementQuantityOfProductInBag',
+                data:
+                {
+                    productId,
+                    sizeName,
+                    currentQuantity: quantity
+                },
+                success: function (response) {
+
+                    console.log("Everything is okey.")
+                    window.location.href = "/ShoppingBags/All";
+
+                },
+                error: function (xhr, status, error) {
+                    
+                }
+            });
+        }
+    </script>
+}

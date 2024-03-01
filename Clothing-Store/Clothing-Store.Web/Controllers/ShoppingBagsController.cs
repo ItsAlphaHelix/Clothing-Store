@@ -63,6 +63,36 @@
 
             return RedirectToAction(nameof(All));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DecrementQuantityOfProductInBag(string sizeName, int productId)
+        {
+
+            string userId = await GetUserId();
+
+            await this.shoppingBagService.DecrementQuantityOfProductAsync(sizeName, productId, userId);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> IncrementQuantityOfProductInBag(string sizeName, int productId, int currentQuantity)
+        {
+
+            string userId = await GetUserId();
+
+            try
+            {
+                await this.shoppingBagService.IncrementQuantityOfProductAsync(sizeName, productId, userId, currentQuantity);
+            }
+            catch (InvalidOperationException)
+            {
+
+                return BadRequest();
+            }
+
+            return Ok();
+        }
         private async Task<string> GetUserId()
         {
             string temporaryUserId = shoppingBagService.GetOrCreateTemporaryUserId();
@@ -80,6 +110,7 @@
 
             return userId;
         }
+
 
         private async Task<ApplicationUser> GetUserAsync()
            => await this.usersManager.FindByIdAsync(this.User.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);

@@ -23,7 +23,7 @@
             });
         }
     </script>
-
+    <script src="/js/productDetails.js"></script>
     <script>
 
         function callChangeOrder(sorting) {
@@ -33,7 +33,7 @@
             var selectedPrice = localStorage.getItem("selectedPrice");
 
             var resultSelectedProducts = selectedProducts.length != 0 ? `&selectedProducts=${selectedProducts.join(',')}` : " ";
-            var resultSelectedPrice = selectedPrice != " " ? `&selectedPrices=${selectedPrice}` : " ";
+            var resultSelectedPrice = selectedPrice != " " ? `&selectedPrice=${selectedPrice}` : " ";
             var resultSelectedSizes = selectedSizes.length != 0 ? `&selectedSizes=${selectedSizes.join(',')}` : " ";
 
             window.location.href = `/Products/All?page=1&sorting=${sorting}${resultSelectedProducts}${resultSelectedPrice}${resultSelectedSizes}`
@@ -58,7 +58,7 @@
             var selectedPrice = localStorage.getItem("selectedPrice");
 
             var resultSelectedProducts = selectedProducts.length != 0 ? `&selectedProducts=${selectedProducts.join(',')}` : " ";
-            var resultSelectedPrice = selectedPrice != " " ? `&selectedPrices=${selectedPrice}` : " ";
+            var resultSelectedPrice = selectedPrice != " " ? `&selectedPrice=${selectedPrice}` : " ";
             var resultSelectedSizes = selectedSizes.length != 0 ? `&selectedSizes=${selectedSizes.join(',')}` : " ";
 
             window.location.href = `/Products/All?page=1&sorting=@Model.Sorting${resultSelectedProducts}${resultSelectedPrice}${resultSelectedSizes}`
@@ -90,7 +90,7 @@
             var selectedPrice = localStorage.getItem("selectedPrice");
 
             var resultSelectedProducts = selectedProducts.length != 0 ? `&selectedProducts=${selectedProducts.join(',')}` : " ";
-            var resultSelectedPrice = selectedPrice != " " ? `&selectedPrices=${selectedPrice}` : " ";
+            var resultSelectedPrice = selectedPrice != " " ? `&selectedPrice=${selectedPrice}` : " ";
             var resultSelectedSizes = selectedSizes.length != 0 ? `&selectedSizes=${selectedSizes.join(',')}` : " ";
 
             window.location.href = `/Products/All?page=1&sorting=@Model.Sorting${resultSelectedProducts}${resultSelectedPrice}${resultSelectedSizes}`
@@ -124,7 +124,7 @@
             var selectedPrice = localStorage.getItem("selectedPrice");
 
             var resultSelectedProducts = selectedProducts.length != 0 ? `&selectedProducts=${selectedProducts.join(',')}` : " ";
-            var resultSelectedPrice = selectedPrice != " " ? `&selectedPrices=${selectedPrice}` : " ";
+            var resultSelectedPrice = selectedPrice != " " ? `&selectedPrice=${selectedPrice}` : " ";
             var resultSelectedSizes = selectedSizes.length != 0 ? `&selectedSizes=${selectedSizes.join(',')}` : " ";
 
             window.location.href = `/Products/All?page=1&sorting=@Model.Sorting${resultSelectedProducts}${resultSelectedPrice}${resultSelectedSizes}`

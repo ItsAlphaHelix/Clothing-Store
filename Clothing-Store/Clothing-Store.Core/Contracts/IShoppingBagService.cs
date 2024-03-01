@@ -16,5 +16,12 @@
         string GetOrCreateTemporaryUserId();
 
         public Task DeleteProductFromBagAsync(int bagId);
+
+        public Task<int> GetTotalQuantityOfSizeOfProduct(string sizeName, int productId);
+
+        public Task DecrementQuantityOfProductAsync(string sizeName, int productId, string userId);
+
+        public Task IncrementQuantityOfProductAsync(string sizeName, int productId, string userId, int currentQuantity);
+ 
     }
 }

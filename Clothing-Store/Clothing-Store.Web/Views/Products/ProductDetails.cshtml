@@ -2,7 +2,7 @@
 @using Clothing_Store.Core.ViewModels.Products;
 @using Clothing_Store.Core.ViewModels.Reviews;
 @using Clothing_Store.Data.Data.Models;
-@inject IProductService productsService;
+@inject IProductService productsService
 
 @model DetailsViewModel
 @{
@@ -243,10 +243,10 @@
                     <div class="mg-product-add-to-cart-outer mg-product-page-sec-spacing">
                         <div class="row gx-3">
                             <div class="col-8">
-                                <button class="btn mg-btn mg-black-btn mg-form-btn mg-light-bg-btn" onclick="addProductToBag(@Model.Id)"><span class="mg-btn-icon"><img src="assets/images/product-bag.svg" alt="" /></span>Добави в кошницата</button>
+                                <button class="btn mg-btn mg-black-btn mg-form-btn mg-light-bg-btn" onclick="addProductToBag(@Model.Id)"><span class="mg-btn-icon"><img src="assets/images/product-bag.svg" alt="" /></span>Добави в чантата</button>
                             </div>
                             <div class="col-4">
-                                <a class="btn mg-btn mg-form-btn mg-light-bg-btn" href="#"><span class="mg-btn-icon"><img src="assets/images/product-heart.svg" alt="" /></span>Добави в любими</a>
+                                <a class="btn mg-btn mg-form-btn mg-light-bg-btn" asp-controller="Favorites" asp-action="Add" asp-route-id="@Model.Id"><span class="mg-btn-icon"><img src="assets/images/product-heart.svg" alt="" /></span>Добави в любими</a>
                             </div>
                         </div>
                     </div>
@@ -451,7 +451,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
     <script>
-
         function submitReview(event) {
 
             event.preventDefault();
@@ -467,49 +466,49 @@
                 data: data,
                 success: function (result) {
                     var newReviewHtml = `
-                                                    <div class="mg-customer-review-panel pt-5">
-                                                        <div class="row align-items-center">
-                                                            <div class="col-9">
-                                                                <div class="mg-customer-review-user-details-outer">
-                                                                    <div class="mg-customer-review-user-detail-image">
-                                                                        <img src="assets/images/product8.jpg" alt="" /> <!-- Consider dynamically setting this based on user data -->
-                                                                    </div>
-                                                                    <div class="mg-customer-review-user-details">
-                                                                                                <div class="mg-customer-username">${DOMPurify.sanitize(result.userFullName)}</div>
-                                                                        <div class="mg-rating-outer">
-                                                                        <div class="mg-ratings-full">
-                                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                                            <div class="mg-customer-review-panel pt-5">
+                                                                <div class="row align-items-center">
+                                                                    <div class="col-9">
+                                                                        <div class="mg-customer-review-user-details-outer">
+                                                                            <div class="mg-customer-review-user-detail-image">
+                                                                                <img src="assets/images/product8.jpg" alt="" /> <!-- Consider dynamically setting this based on user data -->
+                                                                            </div>
+                                                                            <div class="mg-customer-review-user-details">
+                                                                                                        <div class="mg-customer-username">${DOMPurify.sanitize(result.userFullName)}</div>
+                                                                                <div class="mg-rating-outer">
+                                                                                <div class="mg-ratings-full">
+                                                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                    <i class="fa fa-star" aria-hidden="true"></i>
 
-                                                                            <span class="mg-ratings" style="width: ${result.rating * 20}%;">
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                                <i class="fa fa-star" aria-hidden="true"></i>
-                                                                            </span>
-                                                                        </div>
+                                                                                    <span class="mg-ratings" style="width: ${result.rating * 20}%;">
+                                                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                                                    </span>
+                                                                                </div>
 
-                                                                            <div class="mg-ratings-full">
-                                                                                <!-- Dynamically generate rating stars based on the review rating -->
+                                                                                    <div class="mg-ratings-full">
+                                                                                        <!-- Dynamically generate rating stars based on the review rating -->
+                                                                                    </div>
+                                                                                </div>
+                                                                                                        <div class="mg-rating-count">( ${DOMPurify.sanitize(result.rating.toFixed(1))} )</div>
                                                                             </div>
                                                                         </div>
-                                                                                                <div class="mg-rating-count">( ${DOMPurify.sanitize(result.rating.toFixed(1))} )</div>
+                                                                    </div>
+                                                                     <div class="col-3 text-end">
+                                                                        <div class="mg-user-review-date">преди 0 секунди</div>
                                                                     </div>
                                                                 </div>
+                                                                <div class="mg-customer-review-text mt-3">
+                                                                                    <p>${DOMPurify.sanitize(result.message)}</p>
+                                                                </div>
                                                             </div>
-                                                             <div class="col-3 text-end">
-                                                                <div class="mg-user-review-date">преди 0 секунди</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="mg-customer-review-text mt-3">
-                                                                            <p>${DOMPurify.sanitize(result.message)}</p>
-                                                        </div>
-                                                    </div>
-                                                `;
+                                                        `;
 
                     $('.mg-customers-reviews-outer').append(newReviewHtml);
                     $("#message").val('');
@@ -528,7 +527,6 @@
                 }
             })
         }
-
         $(document).on('click', '#write-review', function (event) {
             $.ajax({
                 type: "GET",
@@ -555,100 +553,6 @@
             });
         });
 
-        $(document).on('click', '.mg-see-more-reviews-btn', function (event) {
-            event.preventDefault();
-            var nextPageNumber = $(this).data('pageNumber');
-            var productId = '@Model.Id';
-
-            $.ajax({
-                type: "GET",
-                url: '/Products/ProductDetails',
-                data: { id: productId, pageNumber: nextPageNumber },
-                success: function (response) {
-                    $('.mg-customers-reviews-outer').append(response);
-                    $('.mg-see-more-reviews-btn').data('pageNumber', nextPageNumber + 1)
-                },
-                error: function (xhr, status, error) {
-                    console.log('An error occurred while loading the next page of movies: ' + error);
-                }
-            });
-        });
     </script>
-    <script>
-        $(document).on('click', '.mg-size-variant-outer ul li', function (event) {
-            event.preventDefault();
-            $('.mg-size-variant-outer ul li').removeClass('active');
-            
-            $(this).addClass('active');
-            clearErrorMessage('size-error-message')
-        });
-
-        function decrementQuantity() {
-            var quantityInput = $('.mg-cart-quantity')[0];
-            if (quantityInput.value > 1) {
-                quantityInput.stepDown();
-                clearErrorMessage('quantity-error-message');
-            } else {
-                displayErrorMessage("quantity-error-message");
-            }
-        }
-
-        function incrementQuantity() {
-            var quantityInput = $('.mg-cart-quantity')[0];
-            quantityInput.stepUp();
-            clearErrorMessage('quantity-error-message');
-        }
-
-        function addProductToBag(productId) {
-            
-            var activeSizeElement = $('.mg-size-variant-outer ul li.active')[0];
-            var sizeName = " ";
-            var quantity = $('.mg-cart-quantity')[0].value;
-
-            if (activeSizeElement) {
-                sizeName = activeSizeElement.innerText;
-            }
-
-            console.log(sizeName)
-            console.log(quantity)
-            console.log(productId)
-
-            $.ajax({
-                type: "POST",
-                url: '/ShoppingBags/AddProductToBag',
-                data:
-                {
-                    productId,
-                    sizeName,
-                    quantity
-                },
-                success: function (response) {
-
-                    console.log("Everything is okey.")
-                     window.location.href = "/ShoppingBags/All";
-
-                },
-                error: function (xhr, status, error) {
-                    var jsonResponse = JSON.parse(xhr.responseText);
-                    var errorMessage = jsonResponse;
-
-                    if (errorMessage.sizeError) {
-                        displayErrorMessage(errorMessage.sizeError, 'size-error-message');
-                    }  if (errorMessage.quantityError) {
-                        displayErrorMessage(errorMessage.quantityError, 'quantity-error-message');
-                        clearErrorMessage('size-error-message')
-                    }
-                }
-            });
-            }
-            function displayErrorMessage(message, elementId) {
-                var errorMessageElement = $('#' + elementId);
-                errorMessageElement.text(message);
-            }
-
-            function clearErrorMessage(elementId) {
-                var errorMessageElement = $('#' + elementId);
-                errorMessageElement.text('');
-            }
-    </script>
+    <script src="~/js/productDetails.js"></script>
 }

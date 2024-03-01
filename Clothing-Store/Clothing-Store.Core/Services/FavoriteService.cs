@@ -70,12 +70,7 @@ namespace Clothing_Store.Core.Services
                         Images = x.Product.Images.Select(x => x.Url).ToList(),
                         Category = x.Product.Category,
                         Price = x.Product.Price,
-                        ProductSizes = x.Product.ProductSizes
-                        .Select(x => new SizeViewModel()
-                        {
-                            SizeName = x.Size.Name,
-                            Count = x.Count
-                        })
+                        IsProductInStock = x.Product.ProductSizes.Any(x => x.Count != 0)
                     }).ToList()
                 }).AsQueryable();
 
