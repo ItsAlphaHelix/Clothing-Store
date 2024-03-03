@@ -29,6 +29,11 @@
 
             var productsInBag = await this.shoppingBagService.GetAllProductsInBagAsync(userId);
 
+            if (!productsInBag.Any())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View(productsInBag);
         }
 
@@ -53,15 +58,19 @@
                 return BadRequest(ModelState);
             }
 
-            return RedirectToAction(nameof(All));
+            return Ok();
         }
 
         [HttpGet]
         public async Task<IActionResult> Delete(int bagId)
         {
             await this.shoppingBagService.DeleteProductFromBagAsync(bagId);
+            string userId = await GetUserId();
+            int countOfProductsInBag = await this.shoppingBagService.CountOfProductsInBagAsync(userId);
 
-            return RedirectToAction(nameof(All));
+            var redirection = countOfProductsInBag == 0 ? RedirectToAction("Index", "Home") : RedirectToAction(nameof(All));
+
+            return redirection;
         }
 
         [HttpPost]

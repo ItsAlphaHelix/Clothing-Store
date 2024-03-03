@@ -22,15 +22,12 @@
     {
         private readonly IProductService productsService;
         private readonly UserManager<ApplicationUser> usersManager;
-        private readonly SignInManager<ApplicationUser> signInManager;
         public ProductsController(
             IProductService productsService,
-            UserManager<ApplicationUser> usersManager,
-            SignInManager<ApplicationUser> signInManager)
+            UserManager<ApplicationUser> usersManager)
         {
             this.productsService = productsService;
             this.usersManager = usersManager;
-            this.signInManager = signInManager;
 
         }
 
@@ -42,10 +39,11 @@
 
             ViewData["Title"] = "Всички продукти";
 
+            ViewData["CurrentPage"] = page;
             ViewData["CurrentSort"] = model.Sorting;
-            ViewData["CurrentSelectedProduct"] = model.SelectedProducts;
+            ViewData["CurrentSelectedProducts"] = model.SelectedProducts;
             ViewData["CurrentSelectedSizes"] = model.SelectedSizes;
-            //ViewData["CurrentSelectedPrice"] = model.SelectedPrice;
+            ViewData["CurrentSelectedPrice"] = model.SelectedPrice;
             var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, page, 12);
 
 
@@ -121,7 +119,7 @@
         {
             ViewData["IsHomePage"] = false;
 
-            if (this.signInManager.IsSignedIn(this.User))
+            if (this.User.Identity.IsAuthenticated)
             {
                 var user = await GetUserAsync();
 

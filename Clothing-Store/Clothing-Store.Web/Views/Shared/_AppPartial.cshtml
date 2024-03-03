@@ -195,7 +195,7 @@
                                             <a class="page-link" aria-label="Previous"
                                                 asp-route-page="@(Model.Products.PageNumber - 1)"
                                                 asp-route-sorting="@ViewData["CurrentSort"]"
-                                                asp-route-selectedProducts="@ViewData["CurrentSelectedProduct"]"
+                                                asp-route-selectedProducts="@ViewData["CurrentSelectedProducts"]"
                                                 asp-route-selectedPrice="@ViewData["CurrentSelectedPrice"]"
                                                 asp-route-selectedSizes="@ViewData["CurrentSelectedSizes"]">
                                                 <img src="~/images/mg-arrow-left.png" alt="" />
@@ -218,9 +218,9 @@
                                                 <a class="page-link @(Model.Products.PageNumber == i ? "active" : "")" 
                                                 asp-route-page="@i"
                                                 asp-route-sorting="@ViewData["CurrentSort"]"
-                                                asp-route-selectedProducts="@ViewData["CurrentSelectedProduct"]"
+                                                asp-route-selectedProducts="@ViewData["CurrentSelectedProducts"]"
                                                 asp-route-selectedPrice="@ViewData["CurrentSelectedPrice"]"
-                                                   asp-route-selectedSizes="@ViewData["CurrentSelectedSizes"]">@i</a>
+                                                asp-route-selectedSizes="@ViewData["CurrentSelectedSizes"]">@i</a>
                                             </li>
                                         }
 
@@ -228,7 +228,7 @@
                                             <a class="page-link" aria-label="Next" 
                                                 asp-route-page="@(Model.Products.PageNumber + 1)"
                                                 asp-route-sorting="@ViewData["CurrentSort"]"
-                                                asp-route-selectedProducts="@ViewData["CurrentSelectedProduct"]"
+                                                asp-route-selectedProducts="@ViewData["CurrentSelectedProducts"]"
                                                 asp-route-selectedPrice="@ViewData["CurrentSelectedPrice"]"
                                                 asp-route-selectedSizes="@ViewData["CurrentSelectedSizes"]">
                                                 <img src="~/images/mg-arrow-right.png" alt="" />

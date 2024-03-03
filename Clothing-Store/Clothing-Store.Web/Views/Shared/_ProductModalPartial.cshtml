@@ -63,35 +63,42 @@
                             </ul>
                         </div>
                     </div> *@
-                    <div class="mg-product-page-sec-spacing">
-                        <div class="mg-variant-pannel">
-                            <div class="mg-product-page-small-heading">Size</div>
-                            <div class="mg-size-variant-outer">
-                                <ul>
-                                    @foreach (var size in Model.ProductSizes)
-                                    {
-                                        <li><a href="#">@size.SizeName</a></li>
-                                    }
-                                </ul>
+                    @if(Model.IsProductInStock)
+                    {
+                        <div class="mg-product-page-sec-spacing">
+                            <div class="mg-variant-pannel">
+                                <div class="mg-product-page-small-heading">Size</div>
+                                <div class="mg-size-variant-outer">
+                                    <ul>
+                                        @foreach (var size in Model.ProductSizes)
+                                        {
+                                            <li><a href="#">@size.SizeName</a></li>
+                                        }
+                                    </ul>
+                                </div>
+                                <span id="size-error-message" style="color: red;"></span>
                             </div>
-                            <span id="size-error-message" style="color: red;"></span>
                         </div>
-                    </div>
+                    }
                     <div class="clearfix"></div>
-                    <div class="mg-variant-pannel mg-product-page-sec-spacing">
-                        <div class="mg-product-page-small-heading">Quantity</div>
-                        <div class="mg-quantity-variant-outer">
-                            <div class="mg-cart-quantiy-outer">
-                                <button onclick="decrementQuantity()" class="mg-quantity-step-btn"><i class="fa fa-minus" aria-hidden="true"></i></button>
-                                <input class="mg-cart-quantity" min="1" name="quantity" value="1" type="number">
-                                <button onclick="incrementQuantity()" class="mg-quantity-step-btn"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                    @if (Model.IsProductInStock)
+                    {
+                        <div class="mg-variant-pannel mg-product-page-sec-spacing">
+                            <div class="mg-product-page-small-heading">Quantity</div>
+                            <div class="mg-quantity-variant-outer">
+                                <div class="mg-cart-quantiy-outer">
+                                    <button onclick="decrementQuantity()" class="mg-quantity-step-btn"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                                    <input class="mg-cart-quantity" min="1" name="quantity" value="1" type="number">
+                                    <button onclick="incrementQuantity()" class="mg-quantity-step-btn"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                </div>
                             </div>
+                            <span id="quantity-error-message" style="color: red;"></span>
                         </div>
-                        <span id="quantity-error-message" style="color: red;"></span>
-                    </div>
-                    <div class="mg-product-add-to-cart-outer mg-product-page-sec-spacing">
-                        <button class="btn mg-btn mg-black-btn mg-form-btn mg-light-bg-btn" onclick="addProductToBag(@Model.Id)"><span class="mg-btn-icon"><img src="assets/images/product-bag.svg" alt="" /></span>Добави в количката</button>
-                    </div>
+                        <br>
+                        <div class="col-8">
+                            <button class="btn mg-btn mg-black-btn mg-form-btn mg-light-bg-btn" onclick="addProductToBag(@Model.Id)"><span class="mg-btn-icon"><img src="assets/images/product-bag.svg" alt="" /></span>Добави в чантата</button>
+                        </div>
+                    }                 
                     <div class="mg-quick-popup-more-info-btn text-center">
                         <a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@Model.Id">Вижте пълната информация за продукта</a>
                     </div>

@@ -27,6 +27,14 @@ button.btn.mg-btn {
     box-shadow: none;
 }
 
+body:not(.modal-open) .modal-dialog {
+    pointer-events: none;
+}
+
+body:not(.modal-open) .modal-dialog .mg-account-form-outer {
+    pointer-events: auto;
+}
+
 .mg-btn {
     background-color: #8F6B6C;
     padding: 10px 30px;

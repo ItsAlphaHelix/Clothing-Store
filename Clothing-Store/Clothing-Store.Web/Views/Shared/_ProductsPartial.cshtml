@@ -30,7 +30,15 @@
                                     }
                                     else
                                     {
-                                        <a asp-controller="Favorites" asp-action="Add" asp-route-id="@product.Id"><img class="mg-product-icon-img" src="~/images/svgs/red-heart-icon.svg" alt="" /></a>
+                                        <a asp-controller="Favorites"
+                                           asp-action="Add"
+                                           asp-route-id="@product.Id"
+                                           asp-route-page="@ViewData["CurrentPage"]"
+                                           asp-route-sorting="@ViewData["CurrentSort"]"
+                                           asp-route-selectedProducts="@ViewData["CurrentSelectedProducts"]"
+                                           asp-route-selectedPrice="@ViewData["CurrentSelectedPrice"]"
+                                           asp-route-selectedSizes="@ViewData["CurrentSelectedSizes"]">
+                                           <img class="mg-product-icon-img" src="~/images/svgs/red-heart-icon.svg" alt="" /></a>
                                     }
                                 </div>
                                 <div class="mg-product-icon">

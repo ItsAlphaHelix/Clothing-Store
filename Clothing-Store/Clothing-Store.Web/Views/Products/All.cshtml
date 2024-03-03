@@ -23,7 +23,6 @@
             });
         }
     </script>
-    <script src="/js/productDetails.js"></script>
     <script>
 
         function callChangeOrder(sorting) {
@@ -159,5 +158,89 @@
         });
 
     </script>
+    <script>
 
+        $(document).on('click', '.mg-size-variant-outer ul li', function (event) {
+            event.preventDefault();
+            $('.mg-size-variant-outer ul li').removeClass('active');
+
+            $(this).addClass('active');
+            clearErrorMessage('size-error-message')
+        });
+
+        function decrementQuantity() {
+            var quantityInput = $('.mg-cart-quantity')[0];
+            if (quantityInput.value > 1) {
+                quantityInput.stepDown();
+                clearErrorMessage('quantity-error-message');
+            } else {
+                displayErrorMessage("quantity-error-message");
+            }
+        }
+
+        function incrementQuantity() {
+            var quantityInput = $('.mg-cart-quantity')[0];
+            quantityInput.stepUp();
+            clearErrorMessage('quantity-error-message');
+        }
+
+        function addProductToBag(productId) {
+
+            var activeSizeElement = $('.mg-size-variant-outer ul li.active')[0];
+            var sizeName = " ";
+            var quantity = $('.mg-cart-quantity')[0].value;
+
+            if (activeSizeElement) {
+                sizeName = activeSizeElement.innerText;
+            }
+
+            var page = '@ViewData["CurrentPage"]';
+            var sorting = '@ViewData["CurrentSort"]';
+            var selectedProducts = '@Html.Raw(ViewData["CurrentSelectedProducts"])'
+            var selectedPrice = '@ViewData["CurrentSelectedPrice"]';
+            var selectedSizes = '@ViewData["CurrentSelectedSizes"]';
+
+            $.ajax({
+                type: "POST",
+                url: '/ShoppingBags/AddProductToBag',
+                data:
+                {
+                    productId,
+                    sizeName,
+                    quantity,
+                },
+                success: function (response) {
+
+                    console.log("Everything is okey.")
+
+                    var resultSelectedProducts = selectedProducts != '' ? `&selectedProducts=${selectedProducts}` : " ";
+                    var resultSelectedPrice = selectedPrice != '' ? `&selectedPrice=${selectedPrice}` : " ";
+                    var resultSelectedSizes = selectedSizes != '' ? `&selectedSizes=${splittedSelectedSizes.join(',')}` : " ";
+
+                    return window.location.href = `/Products/All?page=${page}&sorting=${sorting}${resultSelectedProducts}${resultSelectedPrice}${selectedSizes}`;
+
+                },
+                error: function (xhr, status, error) {
+                    var jsonResponse = JSON.parse(xhr.responseText);
+                    var errorMessage = jsonResponse;
+
+                    if (errorMessage.sizeError) {
+                        displayErrorMessage(errorMessage.sizeError, 'size-error-message');
+                    } if (errorMessage.quantityError) {
+                        displayErrorMessage(errorMessage.quantityError, 'quantity-error-message');
+                        clearErrorMessage('size-error-message')
+                    }
+                }
+            });
+        }
+        function displayErrorMessage(message, elementId) {
+            var errorMessageElement = $('#' + elementId);
+            errorMessageElement.text(message);
+        }
+
+        function clearErrorMessage(elementId) {
+            var errorMessageElement = $('#' + elementId);
+            errorMessageElement.text('');
+        }
+    </script>
 }

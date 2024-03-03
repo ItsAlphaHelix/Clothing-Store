@@ -1,0 +1,63 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Регистрация";
+}
+
+
+<div class="modal-dialog">
+    <div class="tab-pane" id="mg-signup" role="tabpanel" aria-labelledby="mg-signup-tab">
+        <div class="mg-account-form-outer">
+            <form class="mg-form" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="mb-3">
+                    <label class="form-label">Име и фамилия</label>
+                    <input type="text" asp-for="Input.FullName" class="form-control mg-input" id="fullName" placeholder="Въведете име и фамилия">
+                    <span asp-validation-for="Input.FullName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Имейл адрес</label>
+                    <input type="text" asp-for="Input.Email" class="form-control mg-input" id="email" placeholder="Въведете имейл">
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Телефонен номер</label>
+                    <input type="text" asp-for="Input.PhoneNumber" class="form-control mg-input" id="phone" placeholder="Въведете телефонен номер">
+                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Парола</label>
+                    <input asp-for="Input.Password" class="form-control mg-input" type="password" id="password" placeholder="Въдете парола">
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Потвърдете паролата</label>
+                    <input asp-for="Input.ConfirmPassword" class="form-control mg-input" id="confirmPass" type="password" placeholder="Потвърдете паролата">
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="text-center mt-5">
+                    <button type="submit" class="btn mg-btn mg-light-bg-btn mg-form-btn">Регистрация</button>
+                </div>
+            </form>
+            <div class="mt-4 text-center">
+                <div class="mg-form-text">Имате акаунт ?<a class="mg-signup-trigger" asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl"> Вписване.</a></div>
+            </div>
+            @* <div class="mg-login-other-options mg-signup-other-options text-center">
+            <div class="mg-login-other-heading">
+            <div class="mg-form-text">Sign up with</div>
+            </div>
+            <ul>
+            <li><a href="#"><img src="assets/images/FB.svg" alt="" /></a></li>
+            <li><a href="#"><img src="assets/images/Twitter.svg" alt="" /></a></li>
+            <li><a href="#"><img src="assets/images/Insta.svg" alt="" /></a></li>
+            </ul>
+            </div> *@
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

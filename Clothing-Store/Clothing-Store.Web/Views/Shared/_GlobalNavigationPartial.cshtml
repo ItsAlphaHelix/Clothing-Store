@@ -2,7 +2,6 @@
 @using Clothing_Store.Data.Data.Models;
 @using Microsoft.AspNetCore.Identity;
 @using System.Security.Claims;
-@inject SignInManager<ApplicationUser> SignInManager
 @inject IFavoriteService favoriteService
 @inject IShoppingBagService shoppingBagService
 
@@ -38,36 +37,13 @@
                                 <div class="mg-sub-menu-outer">
                                     <div class="menu-subs">
                                         <ul>
-                                            @* <li><a href="collection.html">New Arrivals</a></li>
-                                            <li><a href="collection.html">Top Trending</a></li> *@
                                             <li><a asp-controller="Products" asp-action="AllMenProducts">Мъжка Колекция</a></li>
                                             <li><a asp-controller="Products" asp-action="AllWomenProducts">Женска Колекция</a></li>
                                         </ul>
                                     </div>
                                 </div>
                             </li>
-                            <li class="menu-item-has-children">
-                                <a href="javascript:void(0);">Pages <i class="fa fa-caret-down" aria-hidden="true"></i></a>
-                                <div class="mg-sub-menu-outer">
-                                    <div class="menu-subs">
-                                        <ul>
-                                            <li><a href="collection.html">Collection</a></li>
-                                            <li><a href="product.html">Product</a></li>
-                                            <li><a href="cart.html">Cart</a></li>
-                                            <li><a href="checkout.html">Checkout</a></li>
-                                            <li><a href="thank-you.html">Thank you</a></li>
-                                            <li><a href="profile.html">Profile</a></li>
-                                            <li><a href="my-orders.html">My orders</a></li>
-                                            <li><a href="blog.html">Blog</a></li>
-                                            <li><a href="single-blog.html">Single blog</a></li>
-                                            <li><a href="about.html">About us</a></li>
-                                            <li><a href="privacy-policy.html">Privacy policy</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="menu-item"><a href="blog.html">Blog</a></li>
-                            <li class="menu-item"><a href="contact-us.html">Contact</a></li>
+                            <li class="menu-item"><a href="contact-us.html">Контакти</a></li>
                         </ul>
                     </nav>
                     <div>
@@ -88,16 +64,33 @@
                 <div class="header-icons-outer">
                     <ul>
                         <li class="mg-search-icon"><a href="#" data-bs-toggle="modal" data-bs-target="#search-popup"><img src="~/images/svgs/search.svg" alt="" /></a></li>
-                        <li><a asp-controller="Favorites" asp-action="All"><img src="~/images/svgs/wishlist.svg" alt="" /><span class="mg-header-icon-counter">@countOfFavoriteProducts</span></a></li>
-                        @if (this.SignInManager.IsSignedIn(this.User))
+                        @if (this.User?.Identity?.IsAuthenticated ?? false)
                         {
-                            <li><a href="#" id="logout"><img src="~/images/logout.png" alt="" /></a></li>
+                            @if (countOfFavoriteProducts != 0)
+                            {
+                                <li><a asp-controller="Favorites" asp-action="All"><img src="~/images/svgs/wishlist.svg" alt="" /><span class="mg-header-icon-counter">@countOfFavoriteProducts</span></a></li>
+                            }
+                            else
+                            {
+                                <li><a asp-controller="Home" asp-action="Index"><img src="~/images/svgs/wishlist.svg" alt="" /><span class="mg-header-icon-counter">@countOfFavoriteProducts</span></a></li>
+                            }
+                        }
+                        @if (this.User?.Identity?.IsAuthenticated ?? false)
+                        {
+                            <li><a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = string.Empty })"><img src="~/images/logout.png" alt="" /></a></li>
                         }
                         else
                         {
-                            <li><a href="#" id="account" onclick="getAuthPartialView(event)" data-bs-toggle="modal" data-bs-target="#account-modal"><img src="~/images/svgs/profile.svg" alt="" /></a></li>
+                            <li><a asp-area="Identity" asp-page="/Account/Login" id="account"><img src="~/images/svgs/profile.svg" alt="" /></a></li>
                         }
-                        <li><a asp-controller="ShoppingBags" asp-action="All"><img src="~/images/svgs/cart.svg" alt="" /><span class="mg-header-icon-counter cart-counter">@countOfProductsInBag</span></a></li>
+                        @if(countOfProductsInBag != 0)
+                        {
+                            <li><a asp-controller="ShoppingBags" asp-action="All"><img src="~/images/svgs/cart.svg" alt="" /><span class="mg-header-icon-counter cart-counter">@countOfProductsInBag</span></a></li>
+                        }
+                        else
+                        {
+                            <li><a asp-controller="Home" asp-action="Index"><img src="~/images/svgs/cart.svg" alt="" /><span class="mg-header-icon-counter cart-counter">@countOfProductsInBag</span></a></li>
+                        }
                     </ul>
                 </div>
             </div>

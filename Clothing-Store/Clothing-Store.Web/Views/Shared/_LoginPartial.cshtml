@@ -1,38 +1,27 @@
-﻿@using Clothing_Store.Core.ViewModels.Account;
-@model LoginViewModel
+﻿@using Microsoft.AspNetCore.Identity
 
-<div class="tab-pane fade show active" id="mg-signin" role="tabpanel" aria-labelledby="mg-signin-tab">
-    <div class="mg-account-form-outer">
-        <form class="mg-form" id="login">
-            <div class="mb-3">
-                <label class="form-label">User Name</label>
-                <input asp-for="@Model.Email" type="text" class="form-control mg-input" placeholder="Enter Email">
-                <span asp-validation-for="@Model.Email" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Password</label>
-                <input asp-for="@Model.Password" type="text" class="form-control mg-input" type="password" placeholder="Enter Password">
-                <span asp-validation-for="@Model.Password" class="text-danger"></span>
-            </div>
-            <div class="mb-3 text-end">
-                <div class="mg-form-text"><a href="#">Forgot Password?</a></div>
-            </div>
-            <div class="text-center">
-                <button type="submit" class="btn mg-btn mg-light-bg-btn mg-form-btn">Log In</button>
-            </div>
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<ul class="navbar-nav">
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class="nav-item">
+        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+    </li>
+    <li class="nav-item">
+        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
         </form>
-        <div class="mt-4 text-center">
-            <div class="mg-form-text">If you don't have an account ?<a class="mg-signup-trigger" href="javascript:void(0);"> Sign Up</a></div>
-        </div>
-        <div class="mg-login-other-options mt-4 text-center">
-            <div class="mg-login-other-heading">
-                <div class="mg-form-text">Log in with</div>
-            </div>
-            <ul>
-                <li><a href="#"><img src="assets/images/FB.svg" alt="" /></a></li>
-                <li><a href="#"><img src="assets/images/Twitter.svg" alt="" /></a></li>
-                <li><a href="#"><img src="assets/images/Insta.svg" alt="" /></a></li>
-            </ul>
-        </div>
-    </div>
-</div>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+    </li>
+}
+</ul>

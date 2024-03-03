@@ -121,130 +121,136 @@
                     </ul>
                     </div>
                     </div> *@
-                    <div class="row mg-product-page-sec-spacing align-items-end">
-                        <div class="col-8">
-                            <div class="mg-variant-pannel">
-                                <div class="mg-product-page-small-heading">Размер</div>
-                                <div class="mg-size-variant-outer">
-                                    <ul>
-                                        @foreach (var size in Model.Sizes)
-                                        {
-                                        //TODO: set class="active"
-                                         <li ><a href="#">@size.SizeName</a></li>
-                                        } 
-                                    </ul>
-                                </div>
-                                <span id="size-error-message" style="color: red;"></span>
-                            </div>
-                        </div>
-                        <div class="col-4 text-end">
-                            <div class="mg-size-chart-outer">
-                                <div class="mg-product-page-small-text mg-size-chart">
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#mg-size-guide-modal">
-                                        <span><img src="~/images/svgs/size-chart.svg" alt="" /></span>Таблица с размери
-                                    </a>
+                    @if(Model.IsProductInStock)
+                    {
+                        <div class="row mg-product-page-sec-spacing align-items-end">
+                            <div class="col-8">
+                                <div class="mg-variant-pannel">
+                                    <div class="mg-product-page-small-heading">Размер</div>
+                                    <div class="mg-size-variant-outer">
+                                        <ul>
+                                            @foreach (var size in Model.Sizes)
+                                            {
+                                            //TODO: set class="active"
+                                                <li><a href="#">@size.SizeName</a></li>
+                                            }
+                                        </ul>
+                                    </div>
+                                    <span id="size-error-message" style="color: red;"></span>
                                 </div>
                             </div>
-                            <!-- MG Size Guide Modal -->
-                            <div class="modal fade mg-default-modal" id="mg-size-guide-modal" tabindex="-1" aria-labelledby="mg-size-guide-modal" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content mg-default-modal-content">
-                                        <div class="modal-header">
-                                            <div class="size-chart-heading">Таблица с размери <span>( В СМ )</span></div>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="table-responsive">
-                                                <table class="table mg-size-table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col"></th>
-                                                            <th scope="col">XXS</th>
-                                                            <th scope="col">XS</th>
-                                                            <th scope="col">S</th>
-                                                            <th scope="col">M</th>
-                                                            <th scope="col">L</th>
-                                                            <th scope="col">XL</th>
-                                                            <th scope="col">XXL</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>Chest</td>
-                                                            <td>80</td>
-                                                            <td>81-85</td>
-                                                            <td>81-85</td>
-                                                            <td>81-85</td>
-                                                            <td>81-85</td>
-                                                            <td>81-85</td>
-                                                            <td>81-85</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Waist</td>
-                                                            <td>65</td>
-                                                            <td>63-68</td>
-                                                            <td>63-68</td>
-                                                            <td>63-68</td>
-                                                            <td>63-68</td>
-                                                            <td>63-68</td>
-                                                            <td>63-68</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Hips</td>
-                                                            <td>83</td>
-                                                            <td>81-85</td>
-                                                            <td>81-85</td>
-                                                            <td>81-85</td>
-                                                            <td>81-85</td>
-                                                            <td>81-85</td>
-                                                            <td>81-85</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Inseam</td>
-                                                            <td>77</td>
-                                                            <td>75-80</td>
-                                                            <td>75-80</td>
-                                                            <td>75-80</td>
-                                                            <td>75-80</td>
-                                                            <td>75-80</td>
-                                                            <td>75-80</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Body Height</td>
-                                                            <td>160</td>
-                                                            <td>75-80</td>
-                                                            <td>75-80</td>
-                                                            <td>75-80</td>
-                                                            <td>75-80</td>
-                                                            <td>75-80</td>
-                                                            <td>75-80</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                            <div class="col-4 text-end">
+                                <div class="mg-size-chart-outer">
+                                    <div class="mg-product-page-small-text mg-size-chart">
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#mg-size-guide-modal">
+                                            <span><img src="~/images/svgs/size-chart.svg" alt="" /></span>Таблица с размери
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- MG Size Guide Modal -->
+                                <div class="modal fade mg-default-modal" id="mg-size-guide-modal" tabindex="-1" aria-labelledby="mg-size-guide-modal" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content mg-default-modal-content">
+                                            <div class="modal-header">
+                                                <div class="size-chart-heading">Таблица с размери <span>( В СМ )</span></div>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="table-responsive">
+                                                    <table class="table mg-size-table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col"></th>
+                                                                <th scope="col">XXS</th>
+                                                                <th scope="col">XS</th>
+                                                                <th scope="col">S</th>
+                                                                <th scope="col">M</th>
+                                                                <th scope="col">L</th>
+                                                                <th scope="col">XL</th>
+                                                                <th scope="col">XXL</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>Chest</td>
+                                                                <td>80</td>
+                                                                <td>81-85</td>
+                                                                <td>81-85</td>
+                                                                <td>81-85</td>
+                                                                <td>81-85</td>
+                                                                <td>81-85</td>
+                                                                <td>81-85</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Waist</td>
+                                                                <td>65</td>
+                                                                <td>63-68</td>
+                                                                <td>63-68</td>
+                                                                <td>63-68</td>
+                                                                <td>63-68</td>
+                                                                <td>63-68</td>
+                                                                <td>63-68</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Hips</td>
+                                                                <td>83</td>
+                                                                <td>81-85</td>
+                                                                <td>81-85</td>
+                                                                <td>81-85</td>
+                                                                <td>81-85</td>
+                                                                <td>81-85</td>
+                                                                <td>81-85</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Inseam</td>
+                                                                <td>77</td>
+                                                                <td>75-80</td>
+                                                                <td>75-80</td>
+                                                                <td>75-80</td>
+                                                                <td>75-80</td>
+                                                                <td>75-80</td>
+                                                                <td>75-80</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Body Height</td>
+                                                                <td>160</td>
+                                                                <td>75-80</td>
+                                                                <td>75-80</td>
+                                                                <td>75-80</td>
+                                                                <td>75-80</td>
+                                                                <td>75-80</td>
+                                                                <td>75-80</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="mg-variant-pannel mg-product-page-sec-spacing">
-                        <div class="mg-product-page-small-heading">Количество</div>
-                        <div class="mg-quantity-variant-outer">
-                            <div class="mg-cart-quantiy-outer">
-                                <button onclick="decrementQuantity()" class="mg-quantity-step-btn"><i class="fa fa-minus" aria-hidden="true"></i></button>
-                                <input class="mg-cart-quantity" min="1" name="quantity" value="1" type="number">
-                                <button onclick="incrementQuantity()" class="mg-quantity-step-btn"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                        <div class="clearfix"></div>
+                        <div class="mg-variant-pannel mg-product-page-sec-spacing">
+                            <div class="mg-product-page-small-heading">Количество</div>
+                            <div class="mg-quantity-variant-outer">
+                                <div class="mg-cart-quantiy-outer">
+                                    <button onclick="decrementQuantity()" class="mg-quantity-step-btn"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                                    <input class="mg-cart-quantity" min="1" name="quantity" value="1" type="number">
+                                    <button onclick="incrementQuantity()" class="mg-quantity-step-btn"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                </div>
                             </div>
-                        </div>
                             <span id="quantity-error-message" style="color: red;"></span>
-                    </div>
+                        </div>
+                    }
                     <div class="mg-product-add-to-cart-outer mg-product-page-sec-spacing">
                         <div class="row gx-3">
-                            <div class="col-8">
-                                <button class="btn mg-btn mg-black-btn mg-form-btn mg-light-bg-btn" onclick="addProductToBag(@Model.Id)"><span class="mg-btn-icon"><img src="assets/images/product-bag.svg" alt="" /></span>Добави в чантата</button>
-                            </div>
+                            @if(Model.IsProductInStock)
+                            {
+                                <div class="col-8">
+                                    <button class="btn mg-btn mg-black-btn mg-form-btn mg-light-bg-btn" onclick="addProductToBag(@Model.Id)"><span class="mg-btn-icon"><img src="assets/images/product-bag.svg" alt="" /></span>Добави в чантата</button>
+                                </div>
+                            }
                             <div class="col-4">
                                 <a class="btn mg-btn mg-form-btn mg-light-bg-btn" asp-controller="Favorites" asp-action="Add" asp-route-id="@Model.Id"><span class="mg-btn-icon"><img src="assets/images/product-heart.svg" alt="" /></span>Добави в любими</a>
                             </div>
@@ -553,6 +559,98 @@
             });
         });
 
+        $(document).on('click', '.mg-see-more-reviews-btn', function (event) {
+            event.preventDefault();
+            var nextPageNumber = $(this).data('pageNumber');
+            var productId = '@Model.Id';
+
+            $.ajax({
+                type: "GET",
+                url: '/Products/ProductDetails',
+                data: { id: productId, pageNumber: nextPageNumber },
+                success: function (response) {
+                    $('.mg-customers-reviews-outer').append(response);
+                    $('.mg-see-more-reviews-btn').data('pageNumber', nextPageNumber + 1)
+                },
+                error: function (xhr, status, error) {
+                    console.log('An error occurred while loading the next page of movies: ' + error);
+                }
+            });
+        });
     </script>
-    <script src="~/js/productDetails.js"></script>
+
+    <script>
+
+        $(document).on('click', '.mg-size-variant-outer ul li', function (event) {
+            event.preventDefault();
+            $('.mg-size-variant-outer ul li').removeClass('active');
+
+            $(this).addClass('active');
+            clearErrorMessage('size-error-message')
+        });
+
+        function decrementQuantity() {
+            var quantityInput = $('.mg-cart-quantity')[0];
+            if (quantityInput.value > 1) {
+                quantityInput.stepDown();
+                clearErrorMessage('quantity-error-message');
+            } else {
+                displayErrorMessage("quantity-error-message");
+            }
+        }
+
+        function incrementQuantity() {
+            var quantityInput = $('.mg-cart-quantity')[0];
+            quantityInput.stepUp();
+            clearErrorMessage('quantity-error-message');
+        }
+
+        function addProductToBag(productId) {
+
+            var activeSizeElement = $('.mg-size-variant-outer ul li.active')[0];
+            var sizeName = " ";
+            var quantity = $('.mg-cart-quantity')[0].value;
+
+            if (activeSizeElement) {
+                sizeName = activeSizeElement.innerText;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: '/ShoppingBags/AddProductToBag',
+                data:
+                {
+                    productId,
+                    sizeName,
+                    quantity,
+                },
+                success: function (response) {
+
+                    console.log("Everything is okey.")
+                    window.location.href = `/Products/ProductDetails/${productId}`;
+
+                },
+                error: function (xhr, status, error) {
+                    var jsonResponse = JSON.parse(xhr.responseText);
+                    var errorMessage = jsonResponse;
+
+                    if (errorMessage.sizeError) {
+                        displayErrorMessage(errorMessage.sizeError, 'size-error-message');
+                    } if (errorMessage.quantityError) {
+                        displayErrorMessage(errorMessage.quantityError, 'quantity-error-message');
+                        clearErrorMessage('size-error-message')
+                    }
+                }
+            });
+        }
+        function displayErrorMessage(message, elementId) {
+            var errorMessageElement = $('#' + elementId);
+            errorMessageElement.text(message);
+        }
+
+        function clearErrorMessage(elementId) {
+            var errorMessageElement = $('#' + elementId);
+            errorMessageElement.text('');
+        }
+    </script>
 }

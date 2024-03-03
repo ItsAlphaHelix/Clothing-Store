@@ -114,7 +114,9 @@
                     Category = x.Category,
                     Price = x.Price,
                     IsProductInStock = x.ProductSizes.Any(x => x.Count != 0),
-                    ProductSizes = x.ProductSizes.Select(x => new SizeViewModel()
+                    ProductSizes = x.ProductSizes
+                    .Where(x => x.Count != 0)
+                    .Select(x => new SizeViewModel()
                     {
                         SizeName = x.Size.Name
                     }),
