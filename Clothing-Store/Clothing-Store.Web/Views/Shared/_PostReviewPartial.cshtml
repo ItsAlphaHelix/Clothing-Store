@@ -6,13 +6,13 @@
     <h3>Рейтинг</h3>
     <p>Можете да дадете рейтинг на продукта</p>
 </div>
-<form class="mg-form mg-write-review-form" id="form-review">
+<form class="mg-form mg-write-review-form" id="form-review" method="post">
     <div class="row">
         <div class="mb-3 col-12 mg-review-star-rating-form">
             <div class="mg-review-star-rating-form-inner">
                 @for (int i = 5; i >= 1; i--)
                 {
-                    <input type="radio" id="@($"star{i}")" name="Rating" value="@i" asp-for="Rating" />
+                    <input type="radio" id="@($"star{i}")" value="@i" asp-for="Rating" />
                     <label for="@($"star{i}")"></label>
                 }
             </div>

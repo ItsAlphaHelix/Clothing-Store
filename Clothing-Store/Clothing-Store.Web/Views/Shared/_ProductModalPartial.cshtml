@@ -97,6 +97,7 @@
                         <br>
                         <div class="col-8">
                             <button class="btn mg-btn mg-black-btn mg-form-btn mg-light-bg-btn" onclick="addProductToBag(@Model.Id)"><span class="mg-btn-icon"><img src="assets/images/product-bag.svg" alt="" /></span>Добави в чантата</button>
+                            @Html.AntiForgeryToken()
                         </div>
                     }                 
                     <div class="mg-quick-popup-more-info-btn text-center">

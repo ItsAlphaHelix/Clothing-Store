@@ -8,15 +8,8 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Rendering;
-    using Microsoft.AspNetCore.Mvc.ViewEngines;
-    using Microsoft.AspNetCore.Mvc.ViewFeatures;
-    using Microsoft.Data.SqlClient;
-    using System.Drawing.Printing;
     using System.Linq;
-    using System.Net;
     using System.Security.Claims;
-    using System.Text;
 
     public class ProductsController : Controller
     {
@@ -145,15 +138,16 @@
         public async Task<IActionResult> PostProductReview(PostProductReviewViewModel productReview)
         {
             var user = await GetUserAsync();
-
-            if (ModelState.IsValid)
+            
+            if (!ModelState.IsValid)
             {
-                await this.productsService.PostProductReviewAsync(productReview, user.Id);
-                return Json(productReview);
+
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return BadRequest(errors);
             }
 
-            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-            return BadRequest(errors);
+            await this.productsService.PostProductReviewAsync(productReview, user.Id);
+            return Json(productReview);
         }
 
         public IActionResult IsUserLogin()

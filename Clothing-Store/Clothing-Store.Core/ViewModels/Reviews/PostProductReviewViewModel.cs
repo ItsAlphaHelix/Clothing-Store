@@ -10,7 +10,7 @@
         public int Rating { get; set; }
 
         [Required(ErrorMessage = "Вашето ревю не може да бъде празно.")]
-        [MinLength(10, ErrorMessage = "Вашето ревю трябва да има минимум 10 сумвола.")]
+        [MinLength(10, ErrorMessage = "Вашето ревю трябва да има минимум 10 символа.")]
         public string Message { get; set; } = null!;
     }
 }

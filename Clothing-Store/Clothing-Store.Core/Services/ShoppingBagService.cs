@@ -127,7 +127,7 @@
             int count = await this.productsBagRepository
                 .AllAsNoTracking()
                 .Where(x => x.Bag.UserId == userId)
-                .CountAsync();
+                .SumAsync(x => x.Quantity);
 
             return count;
         }

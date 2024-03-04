@@ -194,6 +194,8 @@
                 sizeName = activeSizeElement.innerText;
             }
 
+            var antiForgeryToken = $('input[name="__RequestVerificationToken"]').val();
+
             var page = '@ViewData["CurrentPage"]';
             var sorting = '@ViewData["CurrentSort"]';
             var selectedProducts = '@Html.Raw(ViewData["CurrentSelectedProducts"])'
@@ -203,6 +205,9 @@
             $.ajax({
                 type: "POST",
                 url: '/ShoppingBags/AddProductToBag',
+                headers: {
+                    'RequestVerificationToken': antiForgeryToken
+                },
                 data:
                 {
                     productId,
