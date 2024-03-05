@@ -12,6 +12,7 @@
             services.AddScoped<ISearchService, SearchService>();
             services.AddScoped<IFavoriteService, FavoriteService>();
             services.AddScoped<IShoppingBagService, ShoppingBagService>();
+            services.AddScoped<IOrderService, OrderService>();
 
             return services;
         }

@@ -1,0 +1,204 @@
+﻿@using Clothing_Store.Core.Contracts;
+@using Clothing_Store.Core.ViewModels.Orders;
+@using System.Security.Claims;
+@model CheckoutViewModel
+@inject IShoppingBagService shoppingBagService;
+
+@{
+    ViewData["Title"] = "Плащане";
+
+    string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+    string temporaryUserId = shoppingBagService.GetOrCreateTemporaryUserId();
+    userId ??= temporaryUserId;
+
+    decimal totalPrice = await this.shoppingBagService.CalculateTotalPrice(userId);
+    string priceWithShipping = totalPrice == 0 ? totalPrice.ToString("F2") : (totalPrice + 5).ToString("F2");
+}
+
+<div class="mg-page-outer">
+    <div class="container-lg gx-lg-5 gx-md-4">
+        <div class="mg-checkout-page-outer">
+            <div class="row gx-5">
+                <div class="col-md-7">
+                    <div class="mg-checkout-pannel-outer">
+                        <form class="mg-form mg-checkout-form" asp-controller="Orders" asp-action="Pay">
+                            <div class="mg-checkout-form-heading-panel mb-3">
+                                <div class="row gx-1">
+                                    <div class="col-6">
+                                        <div class="mg-checkout-form-heading">Contact Information:</div>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <div class="mg-checkout-login-text">Already have an account? <span><a href="#">Log in</a></span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control mg-input" placeholder="Email Address">
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="keep-update">
+                                    <label class="form-check-label" for="keep-update">Keep me up to date on news and offers</label>
+                                </div>
+                            </div>
+                            <div class="mt-5 mb-3">
+                                <div class="mg-checkout-form-heading">Billing Address:</div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="row gx-3">
+                                    <div class="col-6">
+                                        <input type="text" class="form-control mg-input" placeholder="First Name">
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" class="form-control mg-input" placeholder="Last Name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control mg-input" placeholder="Company (Optional)">
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control mg-input" placeholder="Address">
+                            </div>
+                            <div class="mb-3">
+                                <select class="form-select mg-input">
+                                    <option disabled>Choose Country</option>
+                                    <option>United States</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <div class="row gx-3">
+                                    <div class="col-4">
+                                        <input type="text" class="form-control mg-input" placeholder="City">
+                                    </div>
+                                    <div class="col-4">
+                                        <input type="text" class="form-control mg-input" placeholder="State">
+                                    </div>
+                                    <div class="col-4">
+                                        <input type="text" class="form-control mg-input" placeholder="Pincode">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control mg-input" placeholder="Phone Number">
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="keep-information">
+                                    <label class="form-check-label" for="keep-information">Keep this information to next time</label>
+                                </div>
+                            </div>
+                            <div class="text-center mg-checkout-btn mt-4">
+                                <button type="submit" class="btn mg-btn mg-light-bg-btn mg-form-btn">Платете</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="mt-4 mt-md-0 mb-4">
+                        <div class="mg-checkout-order-details-list-outer">
+                            <div class="mg-cart-product-list-heading">
+                                List Of Products
+                            </div>
+                            @foreach (var productInBag in Model.ProductsInBag)
+                            {
+                                foreach (var product in productInBag.ProductBags)
+                                {
+                                    <div class="mg-order-detail-list-grid">
+                                        <div class="row gx-2">
+                                            <div class="col-8">
+                                                <div class="mg-order-image position-relative">
+                                                    <img class="img-fluid" src="@product.ImageUrl" alt="">
+                                                    <div class="mg-order-product-counter">@product.Quantity</div>
+                                                </div>
+                                                <div class="mg-left-order-tittles mg-order-details">
+                                                    <div class="mg-order-tittle-heading"><a href="product.html">@product.CategoryName</a></div>
+                                                    <div class="mg-order-product-size">
+                                                        <ul>
+                                                            <li><span class="mg-order-product-size-text">@product.SizeName</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-4 text-end">
+                                                <div class="mg-right-order-tittles mg-order-details">
+                                                    <div>Цена: <span>@(product.Price * product.Quantity) ЛВ</span></div>
+                                                   @*  <div>Discount: <span>13%</span></div> *@
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                }
+                            }
+                        </div>
+                    </div>
+
+                    <div class="mg-cart-details-pannel-outer">
+                        <div class="mg-cart-order-summery-heading text-center">
+                            Детайли за поръчката
+                        </div>
+                        <div class="mg-cart-order-summary-des text-center">Цена на продуктите, цена на доставката, и общата цена на всичко взето заедно</div>
+                        <div class="mg-cart-line-break"></div>
+                        <div class="mg-cart-detail-list-outer">
+                            <div class="mg-cart-detail-list-grid">
+                                <div class="row gx-2">
+                                    <div class="col-6">
+                                        <div class="mg-cart-list-text">Цена на продуктите:</div>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <div class="mg-cart-list-text">@totalPrice.ToString("F2") ЛВ</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mg-cart-detail-list-grid">
+                                @* <div class="row gx-2">
+                                    <div class="col-6">
+                                        <div class="mg-cart-list-text">Discount:</div>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <div class="mg-cart-list-text">13%</div>
+                                    </div>
+                                </div> *@
+                            </div>
+                            <div class="mg-cart-detail-list-grid">
+                                <div class="row gx-2">
+                                    <div class="col-6">
+                                        <div class="mg-cart-list-text">Доставка:</div>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <div class="mg-cart-list-text">5,00 ЛВ</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mg-cart-line-break"></div>
+                            <div class="mg-cart-detail-list-grid">
+                                <div class="row gx-2">
+                                    <div class="col-6">
+                                        <div class="mg-cart-list-text">Цена с доставката:</div>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <div class="mg-cart-list-text">@priceWithShipping ЛВ</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mg-cart-panel-btns mt-3">
+                            
+                            @* <a href="checkout.html" class="mg-btn mg-light-bg-btn mg-form-btn mb-3">Proceed To Checkout</a> *@
+                            <br />
+                            <a href="index.html" class="mg-btn mg-light-bg-btn mg-form-btn mg-black-btn">Продължете с пазаруването</a>
+                        </div>
+                        <div class="mg-cart-secure-btn mt-4 text-center">
+                            <img src="assets/images/lock.svg" alt="" /> Защитено плащане
+                        </div>
+                        <div class="cart-panel-detail-pay-icon text-center mt-4">
+                            <img class="img-fluid w-auto" src="~/images/pngs/pay-icons.png" alt="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

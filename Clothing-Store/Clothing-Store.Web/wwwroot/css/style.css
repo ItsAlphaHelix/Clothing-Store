@@ -16,6 +16,10 @@ body {
     font-family: DidactGothic;
 }
 
+.submit-button {
+    margin-top: 10px;
+}
+
 p {
     font-size: 14px;
     color: #656565;

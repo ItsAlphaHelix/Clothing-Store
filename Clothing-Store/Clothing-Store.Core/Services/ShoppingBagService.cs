@@ -117,7 +117,7 @@
             decimal totalPrice = await this.productsBagRepository
                 .AllAsNoTracking()
                 .Where(x => x.Bag.UserId == userId)
-                .SumAsync(x => x.Product.Price);
+                .SumAsync(x => x.Product.Price * x.Quantity);
 
             return totalPrice;
         }

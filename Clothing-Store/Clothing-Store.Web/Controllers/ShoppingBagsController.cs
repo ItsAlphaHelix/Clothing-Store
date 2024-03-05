@@ -6,18 +6,16 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using System.Security.Claims;
-    using static System.Runtime.InteropServices.JavaScript.JSType;
 
-    public class ShoppingBagsController : Controller
+    public class ShoppingBagsController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> usersManager;
         private readonly IShoppingBagService shoppingBagService;
 
         public ShoppingBagsController(
             UserManager<ApplicationUser> usersManager,
             IShoppingBagService shoppingBagService)
+            :base(usersManager, shoppingBagService)
         {
-            this.usersManager = usersManager;
             this.shoppingBagService = shoppingBagService;   
         }
 
@@ -102,26 +100,5 @@
 
             return Ok();
         }
-        private async Task<string> GetUserId()
-        {
-            string temporaryUserId = shoppingBagService.GetOrCreateTemporaryUserId();
-            var user = await GetUserAsync();
-            string userId = string.Empty;
-
-            if (user == null)
-            {
-                userId = temporaryUserId;
-            }
-            else
-            {
-                userId = user.Id;
-            }
-
-            return userId;
-        }
-
-
-        private async Task<ApplicationUser> GetUserAsync()
-           => await this.usersManager.FindByIdAsync(this.User.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
     }
 }

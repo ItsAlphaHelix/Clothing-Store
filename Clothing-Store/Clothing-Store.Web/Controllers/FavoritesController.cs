@@ -7,18 +7,16 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using System.Security.Claims;
 
     [Authorize]
-    public class FavoritesController : Controller
+    public class FavoritesController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> usersManager;
         private readonly IFavoriteService favoriteService;
         public FavoritesController(
             UserManager<ApplicationUser> usersManager,
             IFavoriteService favoriteService)
+            : base(usersManager, null)
         {
-            this.usersManager = usersManager;
             this.favoriteService = favoriteService;
         }
        
@@ -26,9 +24,9 @@
         {
             ViewData["IsHomePage"] = false;
 
-            string userId = GetUserAsync().Result.Id;
+            var user = await GetUserAsync();
 
-            var favoritesProducts = this.favoriteService.AllFavoritesProductsAsync(userId);
+            var favoritesProducts = this.favoriteService.AllFavoritesProductsAsync(user.Id);
 
             if (!favoritesProducts.Any())
             {
@@ -50,9 +48,9 @@
         {
             ViewData["IsHomePage"] = false;
 
-            string userId = GetUserAsync().Result.Id;
+            var user = await GetUserAsync();
 
-            await this.favoriteService.AddFavoriteProduct(userId, id);
+            await this.favoriteService.AddFavoriteProduct(user.Id, id);
 
             var redirection = new
             {
@@ -84,7 +82,5 @@
 
             return redirection;
         }
-        private async Task<ApplicationUser> GetUserAsync()
-           => await this.usersManager.FindByIdAsync(this.User.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
     }
 }

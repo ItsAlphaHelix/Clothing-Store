@@ -11,16 +11,15 @@
     using System.Linq;
     using System.Security.Claims;
 
-    public class ProductsController : Controller
+    public class ProductsController : ControllerBase
     {
         private readonly IProductService productsService;
-        private readonly UserManager<ApplicationUser> usersManager;
         public ProductsController(
             IProductService productsService,
             UserManager<ApplicationUser> usersManager)
+            : base(usersManager, null)
         {
             this.productsService = productsService;
-            this.usersManager = usersManager;
 
         }
 
@@ -158,7 +157,5 @@
 
             return Ok(result);
         }
-        private async Task<ApplicationUser> GetUserAsync()
-           => await this.usersManager.FindByIdAsync(this.User.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
     }
 }

@@ -44,7 +44,7 @@
                                         </div>
                                         <div class="mg-cart-productr-list-details">
                                             <div class="mg-cart-product-tittle"><a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@productInBag.Id">@productInBag.CategoryName</a></div>
-                                            <div class="mg-cart-product-price">@productInBag.Price ЛВ @* <span>tax incl.</span> *@</div>
+                                            <div class="mg-cart-product-price">@(productInBag.Price * productInBag.Quantity) ЛВ @* <span>tax incl.</span> *@</div>
                                             @* <div class="mg-cart-small-text">Unit Price: <span>74.05 $ tax incl.</span></div> *@
                                             <div class="mg-cart-quantity-size-btn-outer mt-3">
                                                 <div class="mg-cart-quantiy-outer">
@@ -98,7 +98,7 @@
                                         <div class="mg-cart-list-text">Цена на продуктите:</div>
                                     </div>
                                     <div class="col-6 text-end">
-                                        <div class="mg-cart-list-text">@totalPrice BGN</div>
+                                        <div class="mg-cart-list-text">@totalPrice.ToString("F2") ЛВ</div>
                                     </div>
                                 </div>
                             </div>
@@ -118,7 +118,7 @@
                                         <div class="mg-cart-list-text">Доставка:</div>
                                     </div>
                                     <div class="col-6 text-end">
-                                        <div class="mg-cart-list-text">5.00 BGN</div>
+                                        <div class="mg-cart-list-text">5.00 ЛВ</div>
                                     </div>
                                 </div>
                             </div>
@@ -129,14 +129,14 @@
                                         <div class="mg-cart-list-text">Цената с доставката:</div>
                                     </div>
                                     <div class="col-6 text-end">
-                                        <div class="mg-cart-list-text">@priceWithShipping BGN</div>
+                                        <div class="mg-cart-list-text">@priceWithShipping Лв</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="mg-cart-panel-btns mt-3">
-                            <a href="checkout.html" class="mg-btn mg-light-bg-btn mg-form-btn mb-3">Proceed To Checkout</a>
-                            <a href="collection.html" class="mg-btn mg-light-bg-btn mg-form-btn mg-black-btn">Continue Shipping</a>
+                            <a asp-controller="Orders" asp-action="Checkout" class="mg-btn mg-light-bg-btn mg-form-btn mb-3">Поръчайте</a>
+                            <a href="#" onclick="window.history.back()" class="mg-btn mg-light-bg-btn mg-form-btn mg-black-btn">Продължете с пазаруването</a>
                         </div>
                         <div class="mg-cart-secure-btn mt-4 text-center">
                             <img src="~/images/svgs/lock.svg" alt="" /> Защитено плащане
@@ -181,13 +181,9 @@
 
                     },
                     error: function (xhr, status, error) {
-                        console.log('Error.')
+                        console.log('Error.');
                     }
                 });
-
-                console.log(productId)
-                console.log(sizeName)
-                console.log(quantity)
             }
         }
 
@@ -218,7 +214,7 @@
 
                 },
                 error: function (xhr, status, error) {
-                    
+                        console.log('Error.')
                 }
             });
         }
