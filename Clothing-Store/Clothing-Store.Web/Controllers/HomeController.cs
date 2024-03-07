@@ -1,5 +1,6 @@
 ﻿using Clothing_Store.Models;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Core.Types;
 using System.Diagnostics;
 
 namespace Clothing_Store.Controllers
@@ -12,7 +13,6 @@ namespace Clothing_Store.Controllers
         {
             _logger = logger;
         }
-
         public IActionResult Index()
         {
             ViewData["IsHomePage"] = true;

@@ -1,13 +1,18 @@
-﻿namespace Clothing_Store.Data.Data.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Clothing_Store.Data.Data.Models
 {
     public class Product
     {
+        [Key]
         public int Id { get; set; }
 
+        [Required]
         public string Category { get; set; } = null!;
 
-        public decimal Price { get; set; } 
+        public decimal Price { get; set; }
 
+        [Required]
         public string Description { get; set; } = null!;
 
         public string? ClearInfo { get; set; }

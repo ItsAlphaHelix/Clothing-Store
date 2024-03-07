@@ -1,4 +1,17 @@
-﻿
+﻿@using System.Security.Claims;
+@using Clothing_Store.Core.Contracts;
+@inject IShoppingBagService shoppingBagService
+
+@{
+    string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+    string temporaryUserId = shoppingBagService.GetOrCreateTemporaryUserId();
+    userId ??= temporaryUserId;
+
+    decimal totalPrice = await this.shoppingBagService.CalculateTotalPrice(userId);
+    string priceWithShipping = totalPrice == 0 ? totalPrice.ToString("F2") : (totalPrice + 5).ToString("F2");
+}
+
 <div class="container">
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 
@@ -36,7 +49,7 @@
                     <div class='col-md-12'>
                         <div class='form-control total btn btn-info'>
                             Total:
-                            <span class='amount'>$300</span>
+                            <span class='amount'>@priceWithShipping ЛВ</span>
                         </div>
                     </div>
                 </div>

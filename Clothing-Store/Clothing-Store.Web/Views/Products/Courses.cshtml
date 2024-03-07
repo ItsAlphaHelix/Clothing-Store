@@ -1,0 +1,23 @@
+﻿@using Clothing_Store.Controllers;
+@model IEnumerable<CheckboxViewModel>
+
+<div class="border border-primary">
+    <form method="post" class="m-5">
+        <h4>Select Multiple Courses</h4>
+        <div>
+            @foreach (var course in Model)
+            {
+                <input type="checkbox" asp-for="@course.IsChecked" class="form-check-input" />
+                <label class="form-check-label" asp-for="@course.IsChecked">
+                    @course.LabelName
+                </label>
+                <input type="hidden" asp-for="@course.Id" />
+                <input type="hidden" asp-for="@course.LabelName" />
+                <br />
+            }
+        </div>
+        <div>
+            <input class="btn btn-primary mt-3" type="submit" value="Submit" />
+        </div>
+    </form>
+</div>

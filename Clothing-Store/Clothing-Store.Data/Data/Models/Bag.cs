@@ -6,6 +6,7 @@
         [Key]
         public int Id { get; set; }
 
+        [Required]
         public string UserId { get; set; } = null!;
 
         public virtual ICollection<ProductBag> ProductBags { get; set; } = new HashSet<ProductBag>();

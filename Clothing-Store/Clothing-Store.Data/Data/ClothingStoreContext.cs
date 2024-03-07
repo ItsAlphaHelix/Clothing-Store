@@ -28,6 +28,13 @@
 
         public DbSet<ProductBag> ProductBags { get; set; }
 
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<Customer> Customers { get; set; }
+
+        public DbSet<OrderProduct> OrderProducts { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<ProductSize>()
@@ -38,6 +45,7 @@
 
             builder.Entity<ProductBag>()
                 .HasKey(x => new { x.ProductId, x.BagId });
+
 
             base.OnModelCreating(builder);
         }

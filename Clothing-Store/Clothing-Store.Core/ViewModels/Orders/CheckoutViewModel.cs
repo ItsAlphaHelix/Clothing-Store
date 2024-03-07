@@ -1,14 +1,11 @@
-﻿using Clothing_Store.Core.ViewModels.Bags;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Clothing_Store.Core.ViewModels.Orders
+﻿namespace Clothing_Store.Core.ViewModels.Orders
 {
+    using Clothing_Store.Core.ViewModels.Bags;
     public  class CheckoutViewModel
     {
+        public CustomerViewModel OrderModel { get; set; }
+
         public IEnumerable<BagViewModel> ProductsInBag { get; set; } = new List<BagViewModel>();
+
     }
 }

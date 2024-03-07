@@ -23,6 +23,44 @@
 
         }
 
+        private IEnumerable<CheckboxViewModel> GetCourses()
+        {
+            return new List<CheckboxViewModel>
+    {
+        new CheckboxViewModel
+        {
+            Id = 1,
+            LabelName = "Physics",
+            IsChecked = true
+        },
+        new CheckboxViewModel
+        {
+            Id = 2,
+            LabelName = "Chemistry",
+            IsChecked = false
+        },
+        new CheckboxViewModel
+        {
+            Id = 3,
+            LabelName = "Mathematics",
+            IsChecked = true
+        },
+        new CheckboxViewModel
+        {
+            Id = 4,
+            LabelName = "Biology",
+            IsChecked = false
+        },
+    };
+        }
+
+        public IActionResult Courses()
+        {
+            ViewData["IsHomePage"] = false;
+            var model = GetCourses();
+            return View(model);
+        }
+
         [HttpGet]
         public async Task<IActionResult> All([FromQuery] PaginatedViewModel model, int page = 1)
         {

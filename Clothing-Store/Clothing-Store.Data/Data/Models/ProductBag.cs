@@ -7,13 +7,13 @@
         [ForeignKey(nameof(Product))]
         public int ProductId { get; set; }
 
-        public Product Product { get; set; } = null!;
+        public virtual Product Product { get; set; } = null!;
 
 
         [ForeignKey(nameof(Bag))]
         public int BagId { get; set; }
 
-        public Bag Bag { get; set; } = null!;
+        public virtual Bag Bag { get; set; } = null!;
 
         [Required]
         public string SizeName { get; set; } = null!;

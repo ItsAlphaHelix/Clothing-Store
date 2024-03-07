@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Clothing_Store.Data.Data.Models
+﻿namespace Clothing_Store.Data.Data.Models
 {
+    using System.ComponentModel.DataAnnotations;
     public class Size
     {
         [Key]

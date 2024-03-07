@@ -4,6 +4,7 @@ using Clothing_Store.Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clothing_Store.Data.Migrations
 {
     [DbContext(typeof(ClothingStoreContext))]
-    partial class ClothingStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20240306160557_CreatedTablesOrdersAndCustomers")]
+    partial class CreatedTablesOrdersAndCustomers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -115,18 +118,15 @@ namespace Clothing_Store.Data.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CityPinCode")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -134,25 +134,19 @@ namespace Clothing_Store.Data.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<bool>("IsInformationSaved")
-                        .HasColumnType("bit");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Region")
+                    b.Property<string>("Тownship")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CustomerId");
 
@@ -224,48 +218,6 @@ namespace Clothing_Store.Data.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("Clothing_Store.Data.Data.Models.OrderProduct", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SizeName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("OrderProducts");
-                });
-
             modelBuilder.Entity("Clothing_Store.Data.Data.Models.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -304,6 +256,9 @@ namespace Clothing_Store.Data.Migrations
                     b.Property<int>("BagId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -314,6 +269,8 @@ namespace Clothing_Store.Data.Migrations
                     b.HasKey("ProductId", "BagId");
 
                     b.HasIndex("BagId");
+
+                    b.HasIndex("OrderId");
 
                     b.ToTable("ProductBags");
                 });
@@ -561,17 +518,6 @@ namespace Clothing_Store.Data.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("Clothing_Store.Data.Data.Models.OrderProduct", b =>
-                {
-                    b.HasOne("Clothing_Store.Data.Data.Models.Order", "Order")
-                        .WithMany("OrderProducts")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-                });
-
             modelBuilder.Entity("Clothing_Store.Data.Data.Models.ProductBag", b =>
                 {
                     b.HasOne("Clothing_Store.Data.Data.Models.Bag", "Bag")
@@ -579,6 +525,10 @@ namespace Clothing_Store.Data.Migrations
                         .HasForeignKey("BagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Clothing_Store.Data.Data.Models.Order", null)
+                        .WithMany("ProductsInBag")
+                        .HasForeignKey("OrderId");
 
                     b.HasOne("Clothing_Store.Data.Data.Models.Product", "Product")
                         .WithMany("ProductBags")
@@ -708,7 +658,7 @@ namespace Clothing_Store.Data.Migrations
 
             modelBuilder.Entity("Clothing_Store.Data.Data.Models.Order", b =>
                 {
-                    b.Navigation("OrderProducts");
+                    b.Navigation("ProductsInBag");
                 });
 
             modelBuilder.Entity("Clothing_Store.Data.Data.Models.Product", b =>

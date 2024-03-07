@@ -22,75 +22,84 @@
             <div class="row gx-5">
                 <div class="col-md-7">
                     <div class="mg-checkout-pannel-outer">
-                        <form class="mg-form mg-checkout-form" asp-controller="Orders" asp-action="Pay">
+                        <form class="mg-form mg-checkout-form" asp-controller="Orders" asp-action="Checkout" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="mg-checkout-form-heading-panel mb-3">
                                 <div class="row gx-1">
                                     <div class="col-6">
-                                        <div class="mg-checkout-form-heading">Contact Information:</div>
+                                        <div class="mg-checkout-form-heading">Информация за връзка:</div>
                                     </div>
-                                    <div class="col-6 text-end">
+                                   @*  <div class="col-6 text-end">
                                         <div class="mg-checkout-login-text">Already have an account? <span><a href="#">Log in</a></span></div>
-                                    </div>
+                                    </div> *@
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <input type="text" class="form-control mg-input" placeholder="Email Address">
+                                <input asp-for="@Model.OrderModel.Email" type="text" асп class="form-control mg-input" placeholder="Имейл адрес">
+                                <span asp-validation-for="@Model.OrderModel.Email" class="text-danger"></span>
                             </div>
-                            <div class="mb-3">
+                            @* <div class="mb-3">
                                 <div class="form-check">
                                     <input type="checkbox" class="form-check-input" id="keep-update">
                                     <label class="form-check-label" for="keep-update">Keep me up to date on news and offers</label>
                                 </div>
-                            </div>
+                            </div> *@
                             <div class="mt-5 mb-3">
-                                <div class="mg-checkout-form-heading">Billing Address:</div>
+                                <div class="mg-checkout-form-heading">Адрес на доставката:</div>
                             </div>
                             <div class="mb-3">
                                 <div class="row gx-3">
                                     <div class="col-6">
-                                        <input type="text" class="form-control mg-input" placeholder="First Name">
+                                        <input asp-for="@Model.OrderModel.FirstName" type="text" class="form-control mg-input" placeholder="Име">
+                                        <span asp-validation-for="@Model.OrderModel.FirstName" class="text-danger"></span>
                                     </div>
                                     <div class="col-6">
-                                        <input type="text" class="form-control mg-input" placeholder="Last Name">
+                                        <input asp-for="@Model.OrderModel.LastName" type="text" class="form-control mg-input" placeholder="Фамилия">
+                                        <span asp-validation-for="@Model.OrderModel.LastName" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="mb-3">
+                            @* <div class="mb-3">
                                 <input type="text" class="form-control mg-input" placeholder="Company (Optional)">
-                            </div>
+                            </div> *@
                             <div class="mb-3">
-                                <input type="text" class="form-control mg-input" placeholder="Address">
+                                <input asp-for="@Model.OrderModel.Address" type="text" class="form-control mg-input" placeholder="Адрес">
+                                <span asp-validation-for="@Model.OrderModel.Address" class="text-danger"></span>
                             </div>
-                            <div class="mb-3">
+                            @* <div class="mb-3">
                                 <select class="form-select mg-input">
                                     <option disabled>Choose Country</option>
                                     <option>United States</option>
                                 </select>
-                            </div>
+                            </div> *@
                             <div class="mb-3">
                                 <div class="row gx-3">
                                     <div class="col-4">
-                                        <input type="text" class="form-control mg-input" placeholder="City">
+                                        <input asp-for="@Model.OrderModel.City" type="text" class="form-control mg-input" placeholder="Град">
+                                        <span asp-validation-for="@Model.OrderModel.City" class="text-danger"></span>
                                     </div>
                                     <div class="col-4">
-                                        <input type="text" class="form-control mg-input" placeholder="State">
+                                        <input asp-for="@Model.OrderModel.Region" type="text" class="form-control mg-input" placeholder="Област">
+                                        <span asp-validation-for="@Model.OrderModel.Region" class="text-danger"></span>
                                     </div>
                                     <div class="col-4">
-                                        <input type="text" class="form-control mg-input" placeholder="Pincode">
+                                        <input asp-for="@Model.OrderModel.CityPinCode" type="text" class="form-control mg-input" placeholder="Пощенски код">
+                                        <span asp-validation-for="@Model.OrderModel.CityPinCode" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <input type="text" class="form-control mg-input" placeholder="Phone Number">
+                                <input asp-for="@Model.OrderModel.Phone type="text" class="form-control mg-input" placeholder="Телефонен номер">
+                                <span asp-validation-for="@Model.OrderModel.Phone" class="text-danger"></span>
                             </div>
                             <div class="mb-3">
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="keep-information">
-                                    <label class="form-check-label" for="keep-information">Keep this information to next time</label>
+                                    <input asp-for="@Model.OrderModel.IsInformationSaved" type="checkbox" class="form-check-input" id="keep-information">
+                                    <label class="form-check-label" for="keep-information">Запазване на информацията за следващия път</label>
                                 </div>
                             </div>
                             <div class="text-center mg-checkout-btn mt-4">
-                                <button type="submit" class="btn mg-btn mg-light-bg-btn mg-form-btn">Платете</button>
+                                <button type="submit" class="btn mg-btn mg-light-bg-btn mg-form-btn">Продължете с плащане</button>
                             </div>
                         </form>
                     </div>
@@ -99,7 +108,7 @@
                     <div class="mt-4 mt-md-0 mb-4">
                         <div class="mg-checkout-order-details-list-outer">
                             <div class="mg-cart-product-list-heading">
-                                List Of Products
+                                Вашите продукти, които искате да поръчате
                             </div>
                             @foreach (var productInBag in Model.ProductsInBag)
                             {
@@ -137,7 +146,7 @@
 
                     <div class="mg-cart-details-pannel-outer">
                         <div class="mg-cart-order-summery-heading text-center">
-                            Детайли за поръчката
+                            Детайли на поръчката
                         </div>
                         <div class="mg-cart-order-summary-des text-center">Цена на продуктите, цена на доставката, и общата цена на всичко взето заедно</div>
                         <div class="mg-cart-line-break"></div>
@@ -202,3 +211,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

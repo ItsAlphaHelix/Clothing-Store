@@ -43,7 +43,7 @@
             string userId = await GetUserId();
             try
             {
-                await this.shoppingBagService.AddProductToBag(productId, sizeName, quantity, userId);
+                await this.shoppingBagService.AddProductToBagAsync(productId, sizeName, quantity, userId);
             }
             catch (InvalidSizeException ex)
             {

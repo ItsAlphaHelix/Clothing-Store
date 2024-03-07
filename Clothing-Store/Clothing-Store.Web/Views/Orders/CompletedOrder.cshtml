@@ -1,0 +1,119 @@
+﻿@using Clothing_Store.Core.ViewModels.Orders;
+@model CompletedOrderViewModel
+
+@{
+    ViewData["Title"] = "Завършене поръчка";
+
+    decimal totalPriceOfOrder = Model.ProductOrderModel.Sum(x => x.TotalPrice) + 5;
+}
+
+<div class="mg-page-outer">
+    <div class="container-lg gx-lg-5 gx-md-4">
+        <div class="mg-thank-you-page-outer">
+            <div class="mg-thank-you-pannel-main text-center">
+                <div class="thank-you-icon">
+                    <img src="assets/images/thank-you-tick.svg" alt="" />
+                </div>
+                <div class="mg-thank-for-order-heading">
+                    <h2>Благодарим Ви за вашата поръчка!</h2>
+                   @*  <p class="mg-thank-you-des">Плучихме вашахата поръчка.</p> *@
+                    <p class="mg-thank-you-order-number">Номер на поръчката - @Model.OrderNumber</p>
+                </div>
+            </div>
+            <div class="mg-order-confirmation-bar text-center">
+                <p>Вашата поръчка беше направена на @Model.OrderDate. Ще Ви бъде изпратен имейл за потвърждение на имейл адреса, който сте посочили.</p>
+            </div>
+            <div class="mg-thank-you-order-detail-outer">
+                <div class="mg-delivery-details-outer">
+                    <div class="mg-order-detail-list-grid mg-order-heading-grid">
+                        <div class="mg-order-detail-grid-heading">Детайли на доставката</div>
+                        <div class="row gx-2">
+                            <div class="col-6">
+                                <div class="mg-order-details">
+                                    <div>Доставка за:</div>
+                                    <div>@(Model.FirstName + " " + Model.LastName)</div>
+                                    <div>Телефонен номер: <span>@Model.Phone</span></div>
+                                    <div class="mt-3">
+                                        <div>Адрес:</div>
+                                        <div>@Model.Address</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 text-end">
+                                <div class="mg-right-order-tittles mg-order-details">
+                                    <div>Метод на доставяне</div>
+                                    <div>Стандартен от 5 - 14 работни дни.</div>
+                                   @*  <div>when your item will be deliverd</div> *@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mg-thank-you-order-product-details-outer">
+                    <div class="mg-order-detail-grid-heading">Вашите продукти</div>
+
+                        @foreach (var product in Model.ProductOrderModel)
+                        {
+                            <div class="mg-order-detail-list-grid">
+                                <div class="row gx-2">
+                                    <div class="col-8">
+                                        <div class="mg-order-image position-relative">
+                                            <img class="img-fluid" src="@product.ImageUrl" alt="">
+                                            <div class="mg-order-product-counter">@product.Quantity</div>
+                                        </div>
+                                        <div class="mg-left-order-tittles mg-order-details">
+                                            <div class="mg-order-tittle-heading"><a href="product.html">@product.CategoryName</a></div>
+                                            @* <div class="mg-order-price">#199 <span>tax incl.</span></div> *@
+                                            <div class="mg-order-product-size">
+                                                <ul>
+                                                    <li><span class="mg-order-product-size-text">@product.SizeName</span></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 text-end">
+                                        <div class="mg-right-order-tittles mg-order-details">
+                                            <div>Цена на продукта: <span>@product.Price</span></div>
+                                            @* <div>Discount: <span>13%</span></div> *@
+                                            @* <div>Shipping Charge <span>5,00</span></div> *@
+                                            @if (product.Price != product.TotalPrice)
+                                            {
+                                                <div class="order-detil-grand-total">Обща цена: @product.TotalPrice</div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+        
+                </div>
+                <div class="mg-payment-information-outer">
+                    <div class="mg-order-detail-list-grid mg-order-heading-grid">
+                        <div class="mg-order-detail-grid-heading">Ифнормация за плащане</div>
+                        <div class="row gx-2">
+                            <div class="col-8">
+                                <div class="mg-order-details">
+                                    <div>Дебитна карта</div>
+                                    <div>Номер на картата<span>***********856</span></div>
+                                    <div>Дата на изтичане: <span>25/2035</span></div>
+                                    <div>Сума, която се платили: <span>@totalPriceOfOrder</span></div>
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="mg-right-order-tittles mg-order-details">
+                                    <div>Адрес на доставката</div>
+                                    <div>@Model.Address</div>
+                                    @* <div>Vee Savarkar Mg, Prabhadevi</div> *@
+                                    <div>Телефонен номер <span>@Model.Phone</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mg-btn-fullwidth-half mt-5 text-center">
+                    <a class="mg-btn mg-light-bg-btn mg-form-btn" href="#">Продължете с пазаруването</a>
+            </div>
+        </div>
+    </div>
+</div>

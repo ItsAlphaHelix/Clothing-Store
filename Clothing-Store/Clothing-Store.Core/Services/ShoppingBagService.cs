@@ -32,61 +32,67 @@
             this.httpContextAccessor = httpContextAccessor;
 
         }
-        public async Task AddProductToBag(int productId, string sizeName, int quantity, string userId)
+        public async Task AddProductToBagAsync(int productId, string sizeName, int quantity, string userId)
         {
+            if (string.IsNullOrWhiteSpace(sizeName))
+            {
+                throw new InvalidSizeException("Моля изберете размер.");
+            }
+
             int quantityOfCurrentSize = await this.GetTotalQuantityOfSizeOfProduct(sizeName, productId);
+
+            if (quantityOfCurrentSize < quantity)
+            {
+                throw new QuantityException("Няма достатъчно бройки от този размер.");
+            }
+
             int quantityOfCurrentSizeProductInBag = await this.productsBagRepository
                 .AllAsNoTracking()
                 .Where(x => x.ProductId == productId && x.SizeName == sizeName && x.Bag.UserId == userId)
                 .Select(x => x.Quantity)
                 .FirstOrDefaultAsync();
 
-            if (string.IsNullOrWhiteSpace(sizeName))
+            if (quantityOfCurrentSizeProductInBag >= quantityOfCurrentSize)
             {
-                throw new InvalidSizeException("Моля изберете размер.");
+                throw new QuantityException("Няма достатъчно бройки от този размер в чантата.");
             }
 
-            if (quantityOfCurrentSize < quantity || quantityOfCurrentSizeProductInBag >= quantityOfCurrentSize)
-            {
-                throw new QuantityException("Няма достатъчно бройки от този размер.");
-            }
+           
+                var currentProduct = await this.productsBagRepository
+                    .All()
+                    .Where(x => x.Bag.UserId == userId && x.ProductId == productId && x.SizeName == sizeName)
+                    .FirstOrDefaultAsync();
 
-            var currentProduct = await this.productsBagRepository.All()
-                .Where(x => x.Bag.UserId == userId && x.ProductId == productId && x.SizeName == sizeName)
-                .FirstOrDefaultAsync();
-
-            if (currentProduct != null)
-            {
-                currentProduct.Quantity += quantity;
-            }
-            else
-            {
-                var bag = new Bag()
+                if (currentProduct != null)
                 {
-                    UserId = userId
-                };
+                    currentProduct.Quantity += quantity;
+                }
+                else
+                {
+                    var bag = new Bag { UserId = userId };
 
-                var product = await this.productsRepository
+                    var product = await this.productsRepository
                         .All()
                         .Where(x => x.Id == productId)
                         .FirstOrDefaultAsync();
 
-                var productBag = new ProductBag
-                {
-                    Product = product,
-                    ProductId = productId,
-                    SizeName = sizeName,
-                    Bag = bag,
-                    BagId = bag.Id,
-                    Quantity = quantity,
-                };
+                    var productBag = new ProductBag
+                    {
+                        Product = product,
+                        ProductId = productId,
+                        SizeName = sizeName,
+                        Bag = bag,
+                        BagId = bag.Id,
+                        Quantity = quantity,
+                    };
 
-                await bagsRepository.AddAsync(bag);
-                bag.ProductBags.Add(productBag);
-            }
+                    await bagsRepository.AddAsync(bag);
+                    bag.ProductBags.Add(productBag);
+                }
 
-            await bagsRepository.SaveChangesAsync();
+                await bagsRepository.SaveChangesAsync();
         }
+
 
         public async Task<IEnumerable<BagViewModel>> GetAllProductsInBagAsync(string userId)
         {

@@ -1,14 +1,12 @@
-﻿using Clothing_Store.Core.ViewModels.Orders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Clothing_Store.Core.Contracts
+﻿namespace Clothing_Store.Core.Contracts
 {
+    using Clothing_Store.Core.ViewModels.Orders;
     public interface IOrderService
     {
-        public Task AddOrderAsync(OrderViewModel orderModel);
+        public Task CreateOrderAsync(CustomerViewModel orderModel, string userId);
+
+        public Task<CompletedOrderViewModel> CompletedOrderAsync(string userId);
+
+        public Task<CustomerViewModel> SaveInformationAboutCustomerForNextTime(CustomerViewModel customer, string userId);
     }
 }

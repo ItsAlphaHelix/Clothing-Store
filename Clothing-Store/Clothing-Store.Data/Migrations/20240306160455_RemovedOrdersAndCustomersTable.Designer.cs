@@ -4,6 +4,7 @@ using Clothing_Store.Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clothing_Store.Data.Migrations
 {
     [DbContext(typeof(ClothingStoreContext))]
-    partial class ClothingStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20240306160455_RemovedOrdersAndCustomersTable")]
+    partial class RemovedOrdersAndCustomersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -108,57 +111,6 @@ namespace Clothing_Store.Data.Migrations
                     b.ToTable("Bags");
                 });
 
-            modelBuilder.Entity("Clothing_Store.Data.Data.Models.Customer", b =>
-                {
-                    b.Property<string>("CustomerId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("CityPinCode")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<bool>("IsInformationSaved")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Region")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.HasKey("CustomerId");
-
-                    b.ToTable("Customers");
-                });
-
             modelBuilder.Entity("Clothing_Store.Data.Data.Models.Favorite", b =>
                 {
                     b.Property<int>("Id")
@@ -196,74 +148,6 @@ namespace Clothing_Store.Data.Migrations
                     b.HasIndex("ProductID");
 
                     b.ToTable("Images");
-                });
-
-            modelBuilder.Entity("Clothing_Store.Data.Data.Models.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("OrderNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("Clothing_Store.Data.Data.Models.OrderProduct", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SizeName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("OrderProducts");
                 });
 
             modelBuilder.Entity("Clothing_Store.Data.Data.Models.Product", b =>
@@ -550,28 +434,6 @@ namespace Clothing_Store.Data.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Clothing_Store.Data.Data.Models.Order", b =>
-                {
-                    b.HasOne("Clothing_Store.Data.Data.Models.Customer", "Customer")
-                        .WithMany("Orders")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("Clothing_Store.Data.Data.Models.OrderProduct", b =>
-                {
-                    b.HasOne("Clothing_Store.Data.Data.Models.Order", "Order")
-                        .WithMany("OrderProducts")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-                });
-
             modelBuilder.Entity("Clothing_Store.Data.Data.Models.ProductBag", b =>
                 {
                     b.HasOne("Clothing_Store.Data.Data.Models.Bag", "Bag")
@@ -696,19 +558,9 @@ namespace Clothing_Store.Data.Migrations
                     b.Navigation("ProductBags");
                 });
 
-            modelBuilder.Entity("Clothing_Store.Data.Data.Models.Customer", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
             modelBuilder.Entity("Clothing_Store.Data.Data.Models.Favorite", b =>
                 {
                     b.Navigation("ProductFavorites");
-                });
-
-            modelBuilder.Entity("Clothing_Store.Data.Data.Models.Order", b =>
-                {
-                    b.Navigation("OrderProducts");
                 });
 
             modelBuilder.Entity("Clothing_Store.Data.Data.Models.Product", b =>
