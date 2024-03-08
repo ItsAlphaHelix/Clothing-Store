@@ -1,8 +1,10 @@
 ﻿@using Clothing_Store.Core.Contracts;
 @using Clothing_Store.Core.ViewModels.Products;
+@using Clothing_Store.Core.ViewModels.Shared;
 @using System.Security.Claims;
+
+@model PaginatedViewModel<ProductViewModel>
 @inject IFavoriteService favoriteService
-@model PaginatedViewModel
 
 @{
     string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -13,7 +15,7 @@
 <div id="products-container">
     <div class="mg-collection-product-list-outer">
         <div class="row">
-            @foreach (var product in Model.Products)
+            @foreach (var product in Model.Models)
             {
                 <div class="col-md-4 col-sm-6">
                     <div class="mg-product-main mg-img-hdark">

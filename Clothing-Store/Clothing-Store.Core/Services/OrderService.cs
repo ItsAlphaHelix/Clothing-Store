@@ -6,6 +6,7 @@
     using Clothing_Store.Data.Data.Models;
     using Clothing_Store.Data.Repositories;
     using Microsoft.EntityFrameworkCore;
+    using System.Collections.Generic;
     using System.Globalization;
 
     public class OrderService : IOrderService
@@ -13,16 +14,18 @@
         private readonly IRepository<Customer> customersRepository;
         private readonly IRepository<ProductBag> productBagRepository;
         private readonly IRepository<Order> ordersRepository;
+        private readonly IRepository<OrderProduct> orderProductsRepository;
 
         public OrderService(
             IRepository<Customer> customersRepository,
             IRepository<ProductBag> productBagRepository,
-            IRepository<Order> ordersRepository)
+            IRepository<Order> ordersRepository,
+            IRepository<OrderProduct> orderProductsRepository)
         {
             this.customersRepository = customersRepository;
             this.productBagRepository = productBagRepository;
             this.ordersRepository = ordersRepository;
-
+            this.orderProductsRepository = orderProductsRepository;
         }
 
         public async Task<CompletedOrderViewModel> CompletedOrderAsync(string userId)
@@ -171,6 +174,60 @@
             customer.Phone = orderModel.Phone;
             customer.Region = orderModel.Region;
             customer.IsInformationSaved = orderModel.IsInformationSaved;
+        }
+
+        public async Task<MineOrdersViewModel> GetCustomerWithHisOrdersAsync(string userId)
+        {
+            var orders = this.ordersRepository
+                .AllAsNoTracking()
+                .Where(x => x.CustomerId == userId)
+                .Select(x => new OrderViewModel()
+                {
+                    NumberOfOrder = x.OrderNumber,
+                    OrderDate = x.OrderDate.ToString("MM/dd/yyyy. HH:mm", CultureInfo.InvariantCulture),
+                    TotalPrice = x.OrderProducts.Sum(x => (x.Price * x.Quantity) + 5)
+                })
+                .AsQueryable();
+
+            var customer = await this
+                .customersRepository
+                .AllAsNoTracking()
+                .Where(x => x.CustomerId == userId)
+                .Select(x => new CustomerViewModel()
+                {
+                        FirstName = x.FirstName,
+                        LastName = x.LastName,
+                        Email = x.Email,
+                        Phone = x.Phone,
+                })
+                .FirstOrDefaultAsync();
+
+            var mineOrderModel = new MineOrdersViewModel()
+            {
+                OrdersModel = orders,
+                CustomerModel = customer
+
+            };
+
+            return mineOrderModel;
+        }
+
+        public IQueryable<ProductOrderViewModel> GetProductsInOrderAsQueryable(string numberOfOrder)
+        {
+            var products = this.orderProductsRepository
+                .AllAsNoTracking()
+                .Where(x => x.Order.OrderNumber == numberOfOrder)
+                .Select(x => new ProductOrderViewModel()
+                {
+                    CategoryName = x.CategoryName,
+                    ImageUrl = x.ImageUrl,
+                    Price = x.Price,
+                    Quantity = x.Quantity,
+                    SizeName = x.SizeName,
+                    TotalPrice = x.Price * x.Quantity
+                }).AsQueryable();
+
+            return products;
         }
     }
 }

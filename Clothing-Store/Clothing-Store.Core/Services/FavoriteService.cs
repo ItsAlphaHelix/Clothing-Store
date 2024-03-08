@@ -1,19 +1,11 @@
-﻿using Clothing_Store.Core.Contracts;
-using Clothing_Store.Core.ViewModels.Favorites;
-using Clothing_Store.Core.ViewModels.Products;
-using Clothing_Store.Data.Data.Models;
-using Clothing_Store.Data.Repositories;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.Xml;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Clothing_Store.Core.Services
+﻿namespace Clothing_Store.Core.Services
 {
+    using Clothing_Store.Core.Contracts;
+    using Clothing_Store.Core.ViewModels.Favorites;
+    using Clothing_Store.Core.ViewModels.Products;
+    using Clothing_Store.Data.Data.Models;
+    using Clothing_Store.Data.Repositories;
+    using Microsoft.EntityFrameworkCore;
     public class FavoriteService : IFavoriteService
     {
         private readonly IRepository<Product> productsRepository;

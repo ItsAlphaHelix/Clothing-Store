@@ -8,5 +8,9 @@
         public Task<CompletedOrderViewModel> CompletedOrderAsync(string userId);
 
         public Task<CustomerViewModel> SaveInformationAboutCustomerForNextTime(CustomerViewModel customer, string userId);
+
+        public Task<MineOrdersViewModel> GetCustomerWithHisOrdersAsync(string userId);
+
+        public IQueryable<ProductOrderViewModel> GetProductsInOrderAsQueryable(string numberOfOrder);
     }
 }

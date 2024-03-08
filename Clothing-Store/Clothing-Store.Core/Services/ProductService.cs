@@ -3,6 +3,7 @@
     using Clothing_Store.Core.Contracts;
     using Clothing_Store.Core.ViewModels.Products;
     using Clothing_Store.Core.ViewModels.Reviews;
+    using Clothing_Store.Core.ViewModels.Shared;
     using Clothing_Store.Data.Data.Models;
     using Clothing_Store.Data.Repositories;
     using Microsoft.AspNetCore.Identity;
@@ -51,7 +52,7 @@
             return products;
         }
 
-        public IQueryable<ProductViewModel> GetAllProductsAsQueryable(PaginatedViewModel model)
+        public IQueryable<ProductViewModel> GetAllProductsAsQueryable(PaginatedViewModel<ProductViewModel> model)
         {
             var products = this.productsRepository
                 .AllAsNoTracking()

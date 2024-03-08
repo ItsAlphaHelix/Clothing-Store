@@ -1,4 +1,5 @@
 ﻿using Clothing_Store.Core.ViewModels.Products;
+using Clothing_Store.Core.ViewModels.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -2,6 +2,7 @@
 {
     using Clothing_Store.Core.ViewModels.Products;
     using Clothing_Store.Core.ViewModels.Reviews;
+    using Clothing_Store.Core.ViewModels.Shared;
 
     public interface IProductService
     {
@@ -9,7 +10,7 @@
         /// Getting all products.
         /// </summary>
         /// <returns></returns>
-        public IQueryable<ProductViewModel> GetAllProductsAsQueryable(PaginatedViewModel model);
+        public IQueryable<ProductViewModel> GetAllProductsAsQueryable(PaginatedViewModel<ProductViewModel> model);
 
         /// <summary>
         /// Getting current product by his id.

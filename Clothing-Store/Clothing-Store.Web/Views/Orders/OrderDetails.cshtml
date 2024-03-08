@@ -1,0 +1,108 @@
+﻿@using Clothing_Store.Core.ViewModels.Orders;
+@using Clothing_Store.Core.ViewModels.Shared;
+@model PaginatedViewModel<ProductOrderViewModel>
+
+@{
+    ViewData["Title"] = "Моите поръчани продукти";
+}
+
+<div class="mg-breadcrumb-outer">
+    <div class="container-fluid gx-5">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" onclick="window.history.back()">Върни назад</a></li>
+                <li class="breadcrumb-item active">@ViewData["Title"]</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="mg-page-outer">
+    <div class="container-lg gx-lg-5 gx-md-4">
+        <div class="mg-my-order-page-outer">
+            <div class="mg-order-details-list-outer">
+                <div class="order-list-heading-main">My Order List</div>
+                
+                @foreach (var product in Model.Models)
+                {
+                    <div class="mg-order-detail-list-grid">
+                        <div class="row gx-2">
+                            <div class="col-8">
+                                <div class="mg-order-image position-relative">
+                                    <img class="img-fluid" src="@product.ImageUrl" alt="">
+                                    <div class="mg-order-product-counter">@product.Quantity</div>
+                                </div>
+                                <div class="mg-left-order-tittles mg-order-details">
+                                    <div class="mg-order-tittle-heading"><a href="product.html">@product.CategoryName</a></div>
+                                    @* <div class="mg-order-price">#199 <span>tax incl.</span></div> *@
+                                    <div class="mg-order-product-size">
+                                        <ul>
+                                            <li><span class="mg-order-product-size-text">@product.SizeName</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="mg-right-order-tittles mg-order-details">
+                                    <div>Price: <span>@product.Price</span></div>
+                                    @* <div>Discount: <span>13%</span></div> *@
+                                    @* <div>Shipping Charge <span>$10</span></div> *@
+                                    @if (product.Price != product.TotalPrice)
+                                    {
+                                        <div class="order-detil-grand-total">Обща цена: @product.TotalPrice.ToString("F2")</div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                
+            </div>
+            <!-- Paginate tart -->
+            @if (Model.Models.TotalPages > 1)
+            {
+                <div class="mg-pagination-outer mt-3">
+                    <nav>
+                        <ul class="pagination justify-content-center align-items-center">
+                            <li class="page-item pagination-nextprev @(Model.Models.HasPreviousPage ? "" : "disabled")">
+                                <a class="page-link" aria-label="Previous"
+                                   asp-route-page="@(Model.Models.PageNumber - 1)"
+                                   asp-route-numberOfOrder="@ViewData["NumberOfOrder"]">
+                                    <img src="~/images/pngs/mg-arrow-left.png" alt="" />
+                                </a>
+                            </li>
+
+                            @{
+                                int startPage = Math.Max(1, Model.Models.PageNumber - 4);
+                                int endPage = Math.Min(Model.Models.TotalPages, startPage + 9);
+
+                                if (Model.Models.TotalPages >= 10 && endPage - startPage < 9)
+                                {
+                                    startPage = Math.Max(1, endPage - 9);
+                                }
+                            }
+
+                            @for (int i = startPage; i <= endPage; i++)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link @(Model.Models.PageNumber == i ? "active" : "")"
+                                       asp-route-page="@i"
+                                       asp-route-numberOfOrder="@ViewData["NumberOfOrder"]">@i</a>
+                                </li>
+                            }
+
+                            <li class="page-item pagination-nextprev @(Model.Models.HasNextPage ? "" : "disabled")">
+                                <a class="page-link" aria-label="Next"
+                                   asp-route-page="@(Model.Models.PageNumber + 1)"
+                                   asp-route-numberOfOrder="@ViewData["NumberOfOrder"]">
+                                    <img src="~/images/pngs/mg-arrow-right.png" alt="" />
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            }
+            <!-- Paginate end -->
+        </div>
+    </div>
+</div>

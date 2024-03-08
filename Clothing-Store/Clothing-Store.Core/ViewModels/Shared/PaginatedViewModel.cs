@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Clothing_Store.Core.ViewModels.Orders;
+using Clothing_Store.Core.ViewModels.Products;
 
-namespace Clothing_Store.Core.ViewModels.Products
+namespace Clothing_Store.Core.ViewModels.Shared
 {
-    public class PaginatedViewModel
+    public class PaginatedViewModel<T>
     {
-        public PaginatedList<ProductViewModel> Products { get; set; }
+        public PaginatedList<T> Models { get; set; }
+
+        public CustomerViewModel CustomerModel { get; set; }
 
         public SortEnum Sorting { get; set; }
 

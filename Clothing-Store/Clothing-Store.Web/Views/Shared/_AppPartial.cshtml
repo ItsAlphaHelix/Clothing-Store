@@ -1,6 +1,8 @@
 ﻿@using Clothing_Store.Core.Contracts;
 @using Clothing_Store.Core.ViewModels.Products;
-@model PaginatedViewModel
+@using Clothing_Store.Core.ViewModels.Shared;
+
+@model PaginatedViewModel<ProductViewModel>
 
 @inject IProductService productsService
 
@@ -167,7 +169,7 @@
                     </div> *@
                     <div class="mg-collection-grid-pannel mt-5">
                         <div class="mg-section-tittles text-center">
-                            <h2 class="mg-heading mg-heading-small" style="@(Model.Products.Count == 0 ? "color: red;" : "")">@this.ViewData["Title"]</h2>
+                            <h2 class="mg-heading mg-heading-small" style="@(Model.Models.Count == 0 ? "color: red;" : "")">@this.ViewData["Title"]</h2>
                         </div>
                         <div class="mg-sorting-outer mb-3">
                             <!--Select Input Sorting-->                     
@@ -186,27 +188,27 @@
 
                         @await Html.PartialAsync("_ProductsPartial")
 
-                        @if (Model.Products.TotalPages > 1)
+                        @if (Model.Models.TotalPages > 1)
                         {
                             <div class="mg-pagination-outer mt-3">
                                 <nav>
                                     <ul class="pagination justify-content-center align-items-center">
-                                        <li class="page-item pagination-nextprev @(Model.Products.HasPreviousPage ? "" : "disabled")">
+                                        <li class="page-item pagination-nextprev @(Model.Models.HasPreviousPage ? "" : "disabled")">
                                             <a class="page-link" aria-label="Previous"
-                                                asp-route-page="@(Model.Products.PageNumber - 1)"
+                                               asp-route-page="@(Model.Models.PageNumber - 1)"
                                                 asp-route-sorting="@ViewData["CurrentSort"]"
                                                 asp-route-selectedProducts="@ViewData["CurrentSelectedProducts"]"
                                                 asp-route-selectedPrice="@ViewData["CurrentSelectedPrice"]"
                                                 asp-route-selectedSizes="@ViewData["CurrentSelectedSizes"]">
-                                                <img src="~/images/mg-arrow-left.png" alt="" />
+                                                <img src="~/images/pngs/mg-arrow-left.png" alt="" />
                                             </a>
                                         </li>
 
                                         @{
-                                            int startPage = Math.Max(1, Model.Products.PageNumber - 4);
-                                            int endPage = Math.Min(Model.Products.TotalPages, startPage + 9);
+                                            int startPage = Math.Max(1, Model.Models.PageNumber - 4);
+                                            int endPage = Math.Min(Model.Models.TotalPages, startPage + 9);
 
-                                            if (Model.Products.TotalPages >= 10 && endPage - startPage < 9)
+                                            if (Model.Models.TotalPages >= 10 && endPage - startPage < 9)
                                             {
                                                 startPage = Math.Max(1, endPage - 9);
                                             }
@@ -215,8 +217,8 @@
                                         @for (int i = startPage; i <= endPage; i++)
                                         {
                                             <li class="page-item">
-                                                <a class="page-link @(Model.Products.PageNumber == i ? "active" : "")" 
-                                                asp-route-page="@i"
+                                                <a class="page-link @(Model.Models.PageNumber == i ? "active" : "")"
+                                                   asp-route-page="@i"
                                                 asp-route-sorting="@ViewData["CurrentSort"]"
                                                 asp-route-selectedProducts="@ViewData["CurrentSelectedProducts"]"
                                                 asp-route-selectedPrice="@ViewData["CurrentSelectedPrice"]"
@@ -224,14 +226,14 @@
                                             </li>
                                         }
 
-                                        <li class="page-item pagination-nextprev @(Model.Products.HasNextPage ? "" : "disabled")">
-                                            <a class="page-link" aria-label="Next" 
-                                                asp-route-page="@(Model.Products.PageNumber + 1)"
+                                        <li class="page-item pagination-nextprev @(Model.Models.HasNextPage ? "" : "disabled")">
+                                            <a class="page-link" aria-label="Next"
+                                               asp-route-page="@(Model.Models.PageNumber + 1)"
                                                 asp-route-sorting="@ViewData["CurrentSort"]"
                                                 asp-route-selectedProducts="@ViewData["CurrentSelectedProducts"]"
                                                 asp-route-selectedPrice="@ViewData["CurrentSelectedPrice"]"
                                                 asp-route-selectedSizes="@ViewData["CurrentSelectedSizes"]">
-                                                <img src="~/images/mg-arrow-right.png" alt="" />
+                                                <img src="~/images/pngs/mg-arrow-right.png" alt="" />
                                             </a>
                                         </li>
                                     </ul>

@@ -1,6 +1,6 @@
 ﻿using Clothing_Store.Core.Contracts;
-using Clothing_Store.Core.ViewModels;
 using Clothing_Store.Core.ViewModels.Products;
+using Clothing_Store.Core.ViewModels.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Clothing_Store.Controllers
@@ -28,9 +28,9 @@ namespace Clothing_Store.Controllers
 
             var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, pageNumber, 12);
 
-            var viewModel = new PaginatedViewModel
+            var viewModel = new PaginatedViewModel<ProductViewModel>
             {
-                Products = paginated
+                Models = paginated
             };
 
             return View(viewModel);

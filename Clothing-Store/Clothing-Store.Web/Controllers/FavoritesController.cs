@@ -1,8 +1,9 @@
 ﻿namespace Clothing_Store.Controllers
 {
     using Clothing_Store.Core.Contracts;
-    using Clothing_Store.Core.ViewModels;
     using Clothing_Store.Core.ViewModels.Favorites;
+    using Clothing_Store.Core.ViewModels.Products;
+    using Clothing_Store.Core.ViewModels.Shared;
     using Clothing_Store.Data.Data.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -35,9 +36,9 @@
 
             var paginated = await PaginatedList<FavoriteViewModel>.CreateAsync(favoritesProducts, page, 3);
 
-            var paginatedView = new FavoritePaginatedViewModel()
+            var paginatedView = new PaginatedViewModel<FavoriteViewModel>()
             {
-                Favorites = paginated
+                Models = paginated
             };
 
             return View(paginatedView);

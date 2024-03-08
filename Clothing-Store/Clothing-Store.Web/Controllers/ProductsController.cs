@@ -1,9 +1,9 @@
 ﻿namespace Clothing_Store.Controllers
 {
     using Clothing_Store.Core.Contracts;
-    using Clothing_Store.Core.ViewModels;
     using Clothing_Store.Core.ViewModels.Products;
     using Clothing_Store.Core.ViewModels.Reviews;
+    using Clothing_Store.Core.ViewModels.Shared;
     using Clothing_Store.Data.Data.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -23,46 +23,8 @@
 
         }
 
-        private IEnumerable<CheckboxViewModel> GetCourses()
-        {
-            return new List<CheckboxViewModel>
-    {
-        new CheckboxViewModel
-        {
-            Id = 1,
-            LabelName = "Physics",
-            IsChecked = true
-        },
-        new CheckboxViewModel
-        {
-            Id = 2,
-            LabelName = "Chemistry",
-            IsChecked = false
-        },
-        new CheckboxViewModel
-        {
-            Id = 3,
-            LabelName = "Mathematics",
-            IsChecked = true
-        },
-        new CheckboxViewModel
-        {
-            Id = 4,
-            LabelName = "Biology",
-            IsChecked = false
-        },
-    };
-        }
-
-        public IActionResult Courses()
-        {
-            ViewData["IsHomePage"] = false;
-            var model = GetCourses();
-            return View(model);
-        }
-
         [HttpGet]
-        public async Task<IActionResult> All([FromQuery] PaginatedViewModel model, int page = 1)
+        public async Task<IActionResult> All([FromQuery] PaginatedViewModel<ProductViewModel> model, int page = 1)
         {
             ViewData["IsHomePage"] = false;
             var products = this.productsService.GetAllProductsAsQueryable(model);
@@ -77,9 +39,9 @@
             var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, page, 12);
 
 
-            var viewModel = new PaginatedViewModel()
+            var viewModel = new PaginatedViewModel<ProductViewModel>()
             {
-                Products = paginated
+                Models = paginated
             };
 
             try
@@ -107,9 +69,9 @@
 
             var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, page, 12);
 
-            var viewModel = new PaginatedViewModel()
+            var viewModel = new PaginatedViewModel<ProductViewModel>()
             {
-                Products = paginated
+                Models = paginated
             };
 
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
@@ -128,9 +90,9 @@
 
             var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, pageNumber, 12);
 
-            var viewModel = new PaginatedViewModel()
+            var viewModel = new PaginatedViewModel<ProductViewModel>()
             {
-                Products = paginated
+                Models = paginated
             };
 
             return View(viewModel);
