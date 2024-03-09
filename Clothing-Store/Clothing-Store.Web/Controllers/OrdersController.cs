@@ -4,6 +4,7 @@
     using Clothing_Store.Core.ViewModels.Orders;
     using Clothing_Store.Core.ViewModels.Shared;
     using Clothing_Store.Data.Data.Models;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +20,6 @@
         {
             this.shoppingBagService = shoppingBagService;
             this.orderService = orderService;
-
         }
 
         [HttpGet]
@@ -39,7 +39,7 @@
             }
             else
             {
-               customer = await this.orderService.SaveInformationAboutCustomerForNextTime(customerModel, userId);
+                customer = await this.orderService.SaveInformationAboutCustomerForNextTime(customerModel, userId);
                checkoutModel.CustomerModel = customer;
             }
 
@@ -75,6 +75,7 @@
             return View(completedOrder);
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> MineOrders(int page = 1)
         {

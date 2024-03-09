@@ -184,7 +184,7 @@
             var review = new ProductReviews()
             {
                 ProductId = productReview.ProductId,
-                UserFullName = user.FullName,
+               // UserFullName = user.FullName,
                 Rating = productReview.Rating,
                 Message = productReview.Message,
                 Date = DateTime.Now

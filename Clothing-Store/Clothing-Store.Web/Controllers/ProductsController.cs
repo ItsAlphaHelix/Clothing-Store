@@ -116,7 +116,8 @@
                 var user = await GetUserAsync();
 
                 ViewBag.Email = user.Email;
-                ViewBag.FullName = user.FullName;
+                ViewBag.FirstName = user.FirstName;
+                ViewBag.LastName = user.LastName;
             }
 
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")

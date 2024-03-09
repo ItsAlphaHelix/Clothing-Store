@@ -11,6 +11,11 @@
         }
 
         [Required]
-        public string FullName { get; set; }
+        [MaxLength(30)]
+        public string FirstName { get; set; }
+
+        [Required]
+        [MaxLength(30)]
+        public string LastName { get; set; }
     }
 }

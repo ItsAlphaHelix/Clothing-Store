@@ -3,27 +3,37 @@
     using Clothing_Store.Data.Data.Models;
     using Clothing_Store.Data.Repositories;
     using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
+    using Microsoft.EntityFrameworkCore;
     using System.ComponentModel.DataAnnotations;
+    using System.Net.Http;
+
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<RegisterModel> logger;
         private readonly IRepository<ApplicationUser> usersRepository;
+        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IRepository<Customer> customersRepository;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IRepository<ApplicationUser> usersRepository)
+            IRepository<ApplicationUser> usersRepository,
+            IHttpContextAccessor httpContextAccessor,
+            IRepository<Customer> customersRepository)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.logger = logger;
             this.usersRepository = usersRepository;
+            this.httpContextAccessor = httpContextAccessor;
+            this.customersRepository = customersRepository;
         }
 
         [BindProperty]
@@ -33,8 +43,13 @@
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
         public class InputModel
         {
-            [Required(ErrorMessage = "Имената са задължителни,")]
-            public string FullName { get; set; }
+            [Required(ErrorMessage = "Името е задължително")]
+            [StringLength(30, MinimumLength = 3, ErrorMessage = "Името трябва да бъде с дължина между 3 и 30 символа.")]
+            public string FirstName { get; set; }
+
+            [Required(ErrorMessage = "Фамилията е задължителна")]
+            [StringLength(30, MinimumLength = 3, ErrorMessage = "Фамилията трябва да бъде с дължина между 3 и 30 символа.")]
+            public string LastName { get; set; }
 
             [Required(ErrorMessage = "Телефонният номер е задължителен.")]
             [Phone(ErrorMessage = "Телефонният номер, който избрахте, не е валиден.")]
@@ -73,8 +88,30 @@
                 }
                 else
                 {
+                    var httpContext = this.httpContextAccessor.HttpContext;
+                    string userId = string.Empty;
+
+
                     var user = new ApplicationUser
-                    { UserName = this.Input.Email, FullName = this.Input.FullName, Email = this.Input.Email, PhoneNumber = this.Input.PhoneNumber };
+                    { UserName = this.Input.Email, FirstName = this.Input.FirstName, LastName = this.Input.LastName, Email = this.Input.Email, PhoneNumber = this.Input.PhoneNumber };
+
+                    if (httpContext.Request.Cookies.ContainsKey("TemporaryUserId"))
+                    {
+                        userId = httpContext.Request.Cookies["TemporaryUserId"];
+                        user.Id = userId;
+
+                        httpContext.Response.Cookies.Delete("TemporaryUserId");
+
+                        var customer = await customersRepository.All()
+                            .FirstOrDefaultAsync(x => x.CustomerId == userId);
+
+                        customer.FirstName = user.FirstName;
+                        customer.LastName = user.LastName;
+                        customer.Phone = user.PhoneNumber;
+                        customer.Email = user.Email;
+
+                        await customersRepository.SaveChangesAsync();
+                    }
 
                     var result = await this.userManager.CreateAsync(user, Input.Password);
 

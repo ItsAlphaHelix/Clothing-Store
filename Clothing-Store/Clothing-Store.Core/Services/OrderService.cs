@@ -29,6 +29,7 @@
             this.ordersRepository = ordersRepository;
             this.orderProductsRepository = orderProductsRepository;
             this.usersManager = usersManager;
+
         }
 
         public async Task<CompletedOrderViewModel> GetCurrentUserOrderAsync(string userId)
@@ -237,25 +238,24 @@
             var customer = await this.customersRepository
                 .All()
                 .FirstOrDefaultAsync(x => x.CustomerId == userId);
-
-            if (customer == null)
-            {
-                customer = new Customer()
+                if (customer == null)
                 {
-                    CustomerId = userId,
-                    FirstName = customerModel.FirstName,
-                    LastName = customerModel.LastName,
-                    Address = customerModel.Address,
-                    City = customerModel.City,
-                    CityPinCode = customerModel.CityPinCode,
-                    Email = customerModel.Email,
-                    Phone = customerModel.Phone,
-                    Region = customerModel.Region,
-                    IsInformationSaved = customerModel.IsInformationSaved
-                };
-
-                await customersRepository.AddAsync(customer);
-            }
+                    customer = new Customer()
+                    {
+                        CustomerId = userId,
+                        FirstName = customerModel.FirstName,
+                        LastName = customerModel.LastName,
+                        Address = customerModel.Address,
+                        City = customerModel.City,
+                        CityPinCode = customerModel.CityPinCode,
+                        Email = customerModel.Email,
+                        Phone = customerModel.Phone,
+                        Region = customerModel.Region,
+                        IsInformationSaved = customerModel.IsInformationSaved
+                    };
+                      await customersRepository.AddAsync(customer);
+                }
+            
 
             return customer;
         }
@@ -282,11 +282,8 @@
         {
             var user = await usersManager.FindByIdAsync(userId);
 
-            string[] splittedNames = user.FullName.Split(" ");
-
-
-            string userFirstName = splittedNames[0];
-            string userLastName = splittedNames[1];
+            string userFirstName = user.FirstName;
+            string userLastName = user.LastName;
 
             var customer = new CustomerViewModel()
             {
