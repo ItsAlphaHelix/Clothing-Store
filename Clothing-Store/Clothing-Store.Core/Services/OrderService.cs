@@ -1,7 +1,6 @@
 ﻿namespace Clothing_Store.Core.Services
 {
     using Clothing_Store.Core.Contracts;
-    using Clothing_Store.Core.ViewModels.Bags;
     using Clothing_Store.Core.ViewModels.Orders;
     using Clothing_Store.Data.Data.Models;
     using Clothing_Store.Data.Repositories;
@@ -28,7 +27,7 @@
             this.orderProductsRepository = orderProductsRepository;
         }
 
-        public async Task<CompletedOrderViewModel> CompletedOrderAsync(string userId)
+        public async Task<CompletedOrderViewModel> GetCurrentUserOrderAsync(string userId)
         {
             var userOrder = await this.ordersRepository
                 .AllAsNoTracking()
@@ -87,94 +86,6 @@
             return null;
         }
 
-        public async Task CreateOrderAsync(CustomerViewModel orderModel, string userId)
-        {
-            var productOrders = await GetProductOrdersAsync(userId);
-
-            var customer = await GetOrCreateCustomerAsync(orderModel, userId);
-
-            UpdateCustomerInformation(orderModel, customer);
-
-            var orderNumber = GetNumericOrderNumber();
-
-            var order = new Order()
-            {
-                CustomerId = customer.CustomerId,
-                Customer = customer,
-                OrderDate = DateTime.Now,
-                OrderNumber = orderNumber,
-                OrderProducts = productOrders
-            };
-
-            customer.Orders.Add(order);
-
-            await customersRepository.SaveChangesAsync();
-        }
-        private string GetNumericOrderNumber()
-        {
-            var guid = Guid.NewGuid();
-            var bytes = guid.ToByteArray();
-
-            long numericOrderNumber = BitConverter.ToInt64(bytes, 0);
-            return numericOrderNumber.ToString()[..10];
-        }
-        private async Task<List<OrderProduct>> GetProductOrdersAsync(string userId)
-        {
-            return await this.productBagRepository
-                .All()
-                .Where(x => x.Bag.UserId == userId)
-                .Select(x => new OrderProduct()
-                {
-                    CategoryName = x.Product.Category,
-                    ImageUrl = x.Product.Images.Select(img => img.Url).FirstOrDefault(),
-                    Quantity = x.Quantity,
-                    Price = x.Product.Price,
-                    TotalPrice = x.Product.Price * x.Quantity,
-                    SizeName = x.SizeName
-                })
-                .ToListAsync();
-        }
-
-        private async Task<Customer> GetOrCreateCustomerAsync(CustomerViewModel orderModel, string userId)
-        {
-            var customer = await this.customersRepository
-                .All()
-                .FirstOrDefaultAsync(x => x.CustomerId == userId);
-
-            if (customer == null)
-            {
-                customer = new Customer()
-                {
-                    CustomerId = userId,
-                    FirstName = orderModel.FirstName,
-                    LastName = orderModel.LastName,
-                    Address = orderModel.Address,
-                    City = orderModel.City,
-                    CityPinCode = orderModel.CityPinCode,
-                    Email = orderModel.Email,
-                    Phone = orderModel.Phone,
-                    Region = orderModel.Region,
-                    IsInformationSaved = orderModel.IsInformationSaved
-                };
-
-                await customersRepository.AddAsync(customer);
-            }
-
-            return customer;
-        }
-
-        private void UpdateCustomerInformation(CustomerViewModel orderModel, Customer customer)
-        {
-            customer.FirstName = orderModel.FirstName;
-            customer.LastName = orderModel.LastName;
-            customer.Address = orderModel.Address;
-            customer.City = orderModel.City;
-            customer.CityPinCode = orderModel.CityPinCode;
-            customer.Email = orderModel.Email;
-            customer.Phone = orderModel.Phone;
-            customer.Region = orderModel.Region;
-            customer.IsInformationSaved = orderModel.IsInformationSaved;
-        }
 
         public async Task<MineOrdersViewModel> GetCustomerWithHisOrdersAsync(string userId)
         {
@@ -206,7 +117,6 @@
             {
                 OrdersModel = orders,
                 CustomerModel = customer
-
             };
 
             return mineOrderModel;
@@ -219,6 +129,7 @@
                 .Where(x => x.Order.OrderNumber == numberOfOrder)
                 .Select(x => new ProductOrderViewModel()
                 {
+                    Id = x.Id,
                     CategoryName = x.CategoryName,
                     ImageUrl = x.ImageUrl,
                     Price = x.Price,
@@ -228,6 +139,137 @@
                 }).AsQueryable();
 
             return products;
+        }
+
+        public async Task CreateOrderAsync(CustomerViewModel newCustomer, string userId)
+        {
+            var productOrders = await GetProductOrdersAsync(userId);
+
+            var customer = await GetOrCreateCustomerAsync(newCustomer, userId);
+
+            UpdateCustomerInformation(newCustomer, customer);
+
+            var orderNumber = GenerateOrderNumber();
+
+            var order = new Order()
+            {
+                CustomerId = customer.CustomerId,
+                Customer = customer,
+                OrderDate = DateTime.Now,
+                OrderNumber = orderNumber,
+                OrderProducts = productOrders
+            };
+
+            customer.Orders.Add(order);
+
+            await DeleteBagAsync(userId);
+
+            await customersRepository.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// When user's create successfully order, his bag should be deleted.
+        /// </summary>
+        /// <param name="userId">getting user id to to find his products in bag</param>
+        /// <returns></returns>
+        private async Task DeleteBagAsync(string userId)
+        {
+            var productsInBag = await this.productBagRepository
+                            .All()
+                            .Where(x => x.Bag.UserId == userId)
+                            .ToListAsync();
+
+            foreach (var productInBag in productsInBag)
+            {
+                productBagRepository.Delete(productInBag);
+            }
+        }
+
+        /// <summary>
+        /// Generating order number.
+        /// </summary>
+        /// <returns></returns>
+        private string GenerateOrderNumber()
+        {
+            var guid = Guid.NewGuid();
+            var bytes = guid.ToByteArray();
+
+            long numericOrderNumber = BitConverter.ToInt64(bytes, 0);
+            return numericOrderNumber.ToString()[..10];
+        }
+
+        /// <summary>
+        /// Getting product orders as async method.
+        /// </summary>
+        /// <param name="userId">user's id helps to find the products</param>
+        /// <returns>Method returns collection of order products.</returns>
+        private async Task<List<OrderProduct>> GetProductOrdersAsync(string userId)
+        {
+            return await this.productBagRepository
+                .All()
+                .Where(x => x.Bag.UserId == userId)
+                .Select(x => new OrderProduct()
+                {
+                    CategoryName = x.Product.Category,
+                    ImageUrl = x.Product.Images.Select(img => img.Url).FirstOrDefault(),
+                    Quantity = x.Quantity,
+                    Price = x.Product.Price,
+                    TotalPrice = x.Product.Price * x.Quantity,
+                    SizeName = x.SizeName
+                })
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// If the customer doesn't exists, he should be created. If he exists, he should be only returned.
+        /// </summary>
+        /// <param name="customerModel">The order model comes from model binding to bind the customer data into customer object.</param>
+        /// <param name="userId">User's id helps to find the customer.</param>
+        /// <returns>Method returns current customer</returns>
+        private async Task<Customer> GetOrCreateCustomerAsync(CustomerViewModel customerModel, string userId)
+        {
+            var customer = await this.customersRepository
+                .All()
+                .FirstOrDefaultAsync(x => x.CustomerId == userId);
+
+            if (customer == null)
+            {
+                customer = new Customer()
+                {
+                    CustomerId = userId,
+                    FirstName = customerModel.FirstName,
+                    LastName = customerModel.LastName,
+                    Address = customerModel.Address,
+                    City = customerModel.City,
+                    CityPinCode = customerModel.CityPinCode,
+                    Email = customerModel.Email,
+                    Phone = customerModel.Phone,
+                    Region = customerModel.Region,
+                    IsInformationSaved = customerModel.IsInformationSaved
+                };
+
+                await customersRepository.AddAsync(customer);
+            }
+
+            return customer;
+        }
+
+        /// <summary>
+        /// The method helps to update customer's information.
+        /// </summary>
+        /// <param name="newCustomer">The new customer comes from model binding and bind new data to the old data.</param>
+        /// <param name="oldCustomer">Old customer accepts new data.</param>
+        private void UpdateCustomerInformation(CustomerViewModel newCustomer, Customer oldCustomer)
+        {
+            oldCustomer.FirstName = newCustomer.FirstName;
+            oldCustomer.LastName = newCustomer.LastName;
+            oldCustomer.Address = newCustomer.Address;
+            oldCustomer.City = newCustomer.City;
+            oldCustomer.CityPinCode = newCustomer.CityPinCode;
+            oldCustomer.Email = newCustomer.Email;
+            oldCustomer.Phone = newCustomer.Phone;
+            oldCustomer.Region = newCustomer.Region;
+            oldCustomer.IsInformationSaved = newCustomer.IsInformationSaved;
         }
     }
 }

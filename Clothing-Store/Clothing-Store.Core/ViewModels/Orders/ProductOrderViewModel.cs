@@ -8,6 +8,8 @@ namespace Clothing_Store.Core.ViewModels.Orders
 {
     public class ProductOrderViewModel
     {
+        public int Id { get; set; }
+
         public string CategoryName { get; set; }
 
         public string ImageUrl { get; set; }

@@ -21,7 +21,8 @@
     <div class="container-lg gx-lg-5 gx-md-4">
         <div class="mg-my-order-page-outer">
             <div class="mg-order-details-list-outer">
-                <div class="order-list-heading-main">My Order List</div>
+                <h4>@ViewData["Title"]</h4>
+                <div class="order-list-heading-main"></div>
                 
                 @foreach (var product in Model.Models)
                 {
@@ -33,7 +34,7 @@
                                     <div class="mg-order-product-counter">@product.Quantity</div>
                                 </div>
                                 <div class="mg-left-order-tittles mg-order-details">
-                                    <div class="mg-order-tittle-heading"><a href="product.html">@product.CategoryName</a></div>
+                                    <div class="mg-order-tittle-heading"><a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id">@product.CategoryName</a></div>
                                     @* <div class="mg-order-price">#199 <span>tax incl.</span></div> *@
                                     <div class="mg-order-product-size">
                                         <ul>
@@ -44,7 +45,7 @@
                             </div>
                             <div class="col-4 text-end">
                                 <div class="mg-right-order-tittles mg-order-details">
-                                    <div>Price: <span>@product.Price</span></div>
+                                    <div>Цена: <span>@product.Price</span></div>
                                     @* <div>Discount: <span>13%</span></div> *@
                                     @* <div>Shipping Charge <span>$10</span></div> *@
                                     @if (product.Price != product.TotalPrice)

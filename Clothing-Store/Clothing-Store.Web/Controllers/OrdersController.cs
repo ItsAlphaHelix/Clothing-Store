@@ -2,10 +2,8 @@
 {
     using Clothing_Store.Core.Contracts;
     using Clothing_Store.Core.ViewModels.Orders;
-    using Clothing_Store.Core.ViewModels.Products;
     using Clothing_Store.Core.ViewModels.Shared;
     using Clothing_Store.Data.Data.Models;
-    using Clothing_Store.Views.Orders;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
@@ -25,13 +23,13 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Checkout(CustomerViewModel customerViewModel)
+        public async Task<IActionResult> Checkout(CustomerViewModel customerModel)
         {
             ViewData["IsHomePage"] = false;
             var userId = await GetUserId();
             var productsInBag = await shoppingBagService.GetAllProductsInBagAsync(userId);
 
-            var customer = await this.orderService.SaveInformationAboutCustomerForNextTime(customerViewModel, userId);
+            var customer = await this.orderService.SaveInformationAboutCustomerForNextTime(customerModel, userId);
 
             var checkoutModel = new CheckoutViewModel()
             {
@@ -49,7 +47,7 @@
 
             var userId = await GetUserId();
 
-            var completedOrder = await this.orderService.CompletedOrderAsync(userId);
+            var completedOrder = await this.orderService.GetCurrentUserOrderAsync(userId);
 
             return View(completedOrder);
         }
