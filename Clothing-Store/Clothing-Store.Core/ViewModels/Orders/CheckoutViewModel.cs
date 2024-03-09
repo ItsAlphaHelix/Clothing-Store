@@ -3,7 +3,7 @@
     using Clothing_Store.Core.ViewModels.Bags;
     public  class CheckoutViewModel
     {
-        public CustomerViewModel OrderModel { get; set; }
+        public CustomerViewModel CustomerModel { get; set; }
 
         public IEnumerable<BagViewModel> ProductsInBag { get; set; } = new List<BagViewModel>();
 

@@ -1,6 +1,8 @@
 ﻿namespace Clothing_Store.Core.Contracts
 {
     using Clothing_Store.Core.ViewModels.Orders;
+    using Clothing_Store.Data.Data.Models;
+
     public interface IOrderService
     {
         /// <summary>
@@ -39,5 +41,8 @@
         /// <param name="numberOfOrder">The number's of order helps to getting current order.</param>
         /// <returns></returns>
         public IQueryable<ProductOrderViewModel> GetProductsInOrderAsQueryable(string numberOfOrder);
+
+
+        public Task<CustomerViewModel> TakeInformationAboutLoggedInCustomerAsync(string userId);
     }
 }

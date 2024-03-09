@@ -4,6 +4,7 @@
     using Clothing_Store.Core.ViewModels.Orders;
     using Clothing_Store.Data.Data.Models;
     using Clothing_Store.Data.Repositories;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
     using System.Globalization;
@@ -14,17 +15,20 @@
         private readonly IRepository<ProductBag> productBagRepository;
         private readonly IRepository<Order> ordersRepository;
         private readonly IRepository<OrderProduct> orderProductsRepository;
+        private readonly UserManager<ApplicationUser> usersManager;
 
         public OrderService(
             IRepository<Customer> customersRepository,
             IRepository<ProductBag> productBagRepository,
             IRepository<Order> ordersRepository,
-            IRepository<OrderProduct> orderProductsRepository)
+            IRepository<OrderProduct> orderProductsRepository,
+            UserManager<ApplicationUser> usersManager)
         {
             this.customersRepository = customersRepository;
             this.productBagRepository = productBagRepository;
             this.ordersRepository = ordersRepository;
             this.orderProductsRepository = orderProductsRepository;
+            this.usersManager = usersManager;
         }
 
         public async Task<CompletedOrderViewModel> GetCurrentUserOrderAsync(string userId)
@@ -66,6 +70,8 @@
                     .All()
                     .Where(x => x.CustomerId == userId)
                     .FirstOrDefaultAsync();
+
+                var user = await usersManager.FindByIdAsync(userId);
 
             if (currentCustomer != null && currentCustomer.IsInformationSaved == true)
             {
@@ -189,7 +195,7 @@
         /// Generating order number.
         /// </summary>
         /// <returns></returns>
-        private string GenerateOrderNumber()
+        private static string GenerateOrderNumber()
         {
             var guid = Guid.NewGuid();
             var bytes = guid.ToByteArray();
@@ -259,7 +265,7 @@
         /// </summary>
         /// <param name="newCustomer">The new customer comes from model binding and bind new data to the old data.</param>
         /// <param name="oldCustomer">Old customer accepts new data.</param>
-        private void UpdateCustomerInformation(CustomerViewModel newCustomer, Customer oldCustomer)
+        private static void UpdateCustomerInformation(CustomerViewModel newCustomer, Customer oldCustomer)
         {
             oldCustomer.FirstName = newCustomer.FirstName;
             oldCustomer.LastName = newCustomer.LastName;
@@ -270,6 +276,31 @@
             oldCustomer.Phone = newCustomer.Phone;
             oldCustomer.Region = newCustomer.Region;
             oldCustomer.IsInformationSaved = newCustomer.IsInformationSaved;
+        }
+
+        public async Task<CustomerViewModel> TakeInformationAboutLoggedInCustomerAsync(string userId)
+        {
+            var user = await usersManager.FindByIdAsync(userId);
+
+            string[] splittedNames = user.FullName.Split(" ");
+
+
+            string userFirstName = splittedNames[0];
+            string userLastName = splittedNames[1];
+
+            var customer = new CustomerViewModel()
+            {
+                Email = user.Email,
+                Phone = user.PhoneNumber,
+                FirstName = userFirstName,
+                LastName = userLastName
+            };
+
+            var result = await this.SaveInformationAboutCustomerForNextTime(customer, userId);
+
+            result ??= customer;
+
+            return result;
         }
     }
 }

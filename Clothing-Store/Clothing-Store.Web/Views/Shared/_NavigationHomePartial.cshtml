@@ -94,11 +94,11 @@
                         }
                         @if (this.User?.Identity?.IsAuthenticated ?? false)
                         {
-                            <li><a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = string.Empty })"><img src="~/images/pngs/white-logout.png" alt="" /></a></li>
+                            <li><a asp-page="/Account/Logout" asp-route-returnUrl="@Context.Request.Path"><img src="~/images/pngs/white-logout.png" alt="" /></a></li>
                         }
                         else
                         {
-                            <li><a id="account" asp-area="Identity" asp-page="/Account/Login"><img src="~/images/svgs/account-white.svg" alt="" /></a></li>
+                            <li><a id="account" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Context.Request.Path"><img src="~/images/svgs/account-white.svg" alt="" /></a></li>
                         }
                         @if(countOfProductsInBag != 0)
                         {

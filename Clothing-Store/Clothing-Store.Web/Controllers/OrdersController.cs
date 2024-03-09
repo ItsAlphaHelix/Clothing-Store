@@ -29,15 +29,38 @@
             var userId = await GetUserId();
             var productsInBag = await shoppingBagService.GetAllProductsInBagAsync(userId);
 
-            var customer = await this.orderService.SaveInformationAboutCustomerForNextTime(customerModel, userId);
+            CheckoutViewModel checkoutModel = new CheckoutViewModel();
+            CustomerViewModel customer = new CustomerViewModel();
 
-            var checkoutModel = new CheckoutViewModel()
+            if (this.User?.Identity?.IsAuthenticated ?? false)
             {
-                ProductsInBag = productsInBag,
-                OrderModel = customer
-            };
+                customer = await this.orderService.TakeInformationAboutLoggedInCustomerAsync(userId);
+                checkoutModel.CustomerModel = customer;
+            }
+            else
+            {
+               customer = await this.orderService.SaveInformationAboutCustomerForNextTime(customerModel, userId);
+               checkoutModel.CustomerModel = customer;
+            }
 
+            checkoutModel.ProductsInBag = productsInBag;
             return View(checkoutModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Checkout(CheckoutViewModel model)
+        {
+            ViewData["IsHomePage"] = false;
+            var userId = await GetUserId();
+
+            if (this.User?.Identity?.IsAuthenticated ?? false)
+            {
+
+            }
+
+            await this.orderService.CreateOrderAsync(model.CustomerModel, userId);
+
+            return RedirectToAction(nameof(CompletedOrder));
         }
 
         [HttpGet]
@@ -85,17 +108,6 @@
             };
 
             return View(viewModel);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Checkout(CheckoutViewModel model)
-        {
-            ViewData["IsHomePage"] = false;
-            var userId = await GetUserId();
-
-            await this.orderService.CreateOrderAsync(model.OrderModel, userId);
-
-            return RedirectToAction(nameof(CompletedOrder));
         }
         public async Task<IActionResult> Pay()
         {

@@ -18,19 +18,16 @@
     {
         private readonly IRepository<Product> productsRepository;
         private readonly IRepository<ProductReviews> productReviewsRepository;
-        private readonly IRepository<ProductSize> productSizesRepository;
         private readonly IRepository<Size> sizesRepository;
         private readonly UserManager<ApplicationUser> usersManager;
         public ProductService(
             IRepository<Product> productsRepository,
             IRepository<ProductReviews> productReviewsRepository,
-            IRepository<ProductSize> productSizes,
             IRepository<Size> sizesRepository,
             UserManager<ApplicationUser> usersManager)
         {
             this.productsRepository = productsRepository;
             this.productReviewsRepository = productReviewsRepository;
-            this.productSizesRepository = productSizes;
             this.sizesRepository = sizesRepository;
             this.usersManager = usersManager;
         }

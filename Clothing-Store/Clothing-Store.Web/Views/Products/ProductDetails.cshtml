@@ -10,20 +10,8 @@
     var productReview = new PostProductReviewViewModel();
     productReview.ProductId = Model.Id;
 
-    // var reviews = await this.productsService.GetProductReviewsAsync(Model.Id);
-    // var averageRatingOfProduct = reviews.Any() ? (reviews.Sum(x => x.Rating) / reviews.Count()) : 0;
-
     var gender = Model.IsMale ? "Мъжки" : "Женски";
     var navigation = Model.IsMale ? "AllMenProducts" : "AllWomenProducts";
-
-    // var exellentRatings = reviews.Where(x => x.Rating == 5.0).Count() != 100 ? reviews.Where(x => x.Rating == 5.0).Count() : 100;
-    // var goodRatings = reviews.Where(x => x.Rating == 4.0).Count() != 100 ? reviews.Where(x => x.Rating == 4.0).Count() : 100;
-    // var averageRatings = reviews.Where(x => x.Rating == 3.0).Count() != 100 ? reviews.Where(x => x.Rating == 3.0).Count() : 100;
-    // var belowAverageRatings = reviews.Where(x => x.Rating == 2.0).Count() != 100 ? reviews.Where(x => x.Rating == 2.0).Count() : 100;
-    // var poorRatings = reviews.Where(x => x.Rating == 1.0).Count() != 100 ? reviews.Where(x => x.Rating == 1.0).Count() : 100;
-
-
-    /// double percentageOfAverageStars = double.Parse(averageRatingOfProduct.ToString("F1")) * 20;
 }
 
 <partial name="_SearchPartial" />
@@ -559,13 +547,18 @@
         });
 
         $(document).on('click', '#write-review', function (event) {
+            var currentUrl = window.location.href;
+            var baseUrl = window.location.origin;
+            var relativeUrl = currentUrl.replace(baseUrl, '');
+            var returnUrl = encodeURIComponent(relativeUrl);
+
             $.ajax({
                 type: "GET",
                 url: '/Products/IsUserLogin',
                 success: function (response) {
                     if (!response.isLoggedIn) {
                         $('.mg-write-review-pannel-outer').hide();
-                        window.location.href = '/Identity/Account/Login';
+                        window.location.href = `/Identity/Account/Login?returnUrl=${returnUrl}`;
                     }
                 },
                 error: function (xhr, status, error) {
