@@ -1,9 +1,8 @@
 ﻿namespace Clothing_Store.Core.Contracts
 {
     using Clothing_Store.Core.ViewModels.Bags;
-    using Clothing_Store.Core.ViewModels.Products;
 
-    public interface IShoppingBagService
+    public interface IBagsService
     {
         public Task<IEnumerable<BagViewModel>> GetAllProductsInBagAsync(string userId);
 

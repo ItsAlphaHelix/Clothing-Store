@@ -4,7 +4,7 @@ using Clothing_Store.Data.Data.Models;
 
 namespace Clothing_Store.Core.Contracts
 {
-    public interface IFavoriteService
+    public interface IFavoritesService
     {
         public IQueryable<FavoriteViewModel> AllFavoritesProductsAsync(string userId);
 

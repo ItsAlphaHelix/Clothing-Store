@@ -2,17 +2,19 @@
 @using Clothing_Store.Data.Data.Models;
 @using Microsoft.AspNetCore.Identity;
 @using System.Security.Claims;
-@inject IFavoriteService favoriteService
-@inject IShoppingBagService shoppingBagService
+@inject IFavoritesService favoritesService
+@inject IBagsService bagsService
+@inject IOrdersService ordersService;
 
 @{
     string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-    string temporaryUserId = shoppingBagService.GetOrCreateTemporaryUserId();
+    string temporaryUserId = bagsService.GetOrCreateTemporaryUserId();
     userId ??= temporaryUserId;
 
-    int countOfFavoriteProducts = await this.favoriteService.CountOfFavoriteProductsAsync(userId);
-    int countOfProductsInBag = await this.shoppingBagService.CountOfProductsInBagAsync(userId);
+    bool isCustomerHasOrders = await this.ordersService.IsCustomerHasOrdersAsync(userId);
+    int countOfFavoriteProducts = await this.favoritesService.CountOfFavoriteProductsAsync(userId);
+    int countOfProductsInBag = await this.bagsService.CountOfProductsInBagAsync(userId);
 }
 
 <div class="mg-header-outer">
@@ -46,9 +48,12 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="menu-item">
-                                <a asp-controller="Orders" asp-action="MineOrders">Моите поръчки</a>
-                            </li>
+                            @if(isCustomerHasOrders)
+                            {
+                                <li class="menu-item">
+                                    <a asp-controller="Orders" asp-action="MineOrders">Моите поръчки</a>
+                                </li>
+                            }
                             <li class="menu-item">
                                 <a href="contact-us.html">Контакти</a>
                             </li>

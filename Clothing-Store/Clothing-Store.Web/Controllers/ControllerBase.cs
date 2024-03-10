@@ -9,8 +9,8 @@
     public class ControllerBase : Controller
     {
         private readonly UserManager<ApplicationUser> usersManager;
-        private readonly IShoppingBagService shoppingBagService;
-        public ControllerBase(UserManager<ApplicationUser> usersManager, IShoppingBagService shoppingBagService)
+        private readonly IBagsService shoppingBagService;
+        public ControllerBase(UserManager<ApplicationUser> usersManager, IBagsService shoppingBagService)
         {
             this.usersManager = usersManager;
             this.shoppingBagService = shoppingBagService;

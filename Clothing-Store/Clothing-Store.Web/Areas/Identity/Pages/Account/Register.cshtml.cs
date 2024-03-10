@@ -89,21 +89,21 @@
                 else
                 {
                     var httpContext = this.httpContextAccessor.HttpContext;
-                    string userId = string.Empty;
-
 
                     var user = new ApplicationUser
                     { UserName = this.Input.Email, FirstName = this.Input.FirstName, LastName = this.Input.LastName, Email = this.Input.Email, PhoneNumber = this.Input.PhoneNumber };
 
                     if (httpContext.Request.Cookies.ContainsKey("TemporaryUserId"))
                     {
-                        userId = httpContext.Request.Cookies["TemporaryUserId"];
+                        string userId = httpContext.Request.Cookies["TemporaryUserId"];
                         user.Id = userId;
 
                         httpContext.Response.Cookies.Delete("TemporaryUserId");
 
                         var customer = await customersRepository.All()
                             .FirstOrDefaultAsync(x => x.CustomerId == userId);
+
+                        customer ??= new Customer();
 
                         customer.FirstName = user.FirstName;
                         customer.LastName = user.LastName;

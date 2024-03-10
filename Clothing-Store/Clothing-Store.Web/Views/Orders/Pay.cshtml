@@ -1,6 +1,6 @@
 ﻿@using System.Security.Claims;
 @using Clothing_Store.Core.Contracts;
-@inject IShoppingBagService shoppingBagService
+@inject IBagsService shoppingBagService
 
 @{
     string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

@@ -1,9 +1,8 @@
 ﻿namespace Clothing_Store.Core.Contracts
 {
     using Clothing_Store.Core.ViewModels.Orders;
-    using Clothing_Store.Data.Data.Models;
 
-    public interface IOrderService
+    public interface IOrdersService
     {
         /// <summary>
         /// The method helps to create order async.
@@ -44,5 +43,7 @@
 
 
         public Task<CustomerViewModel> TakeInformationAboutLoggedInCustomerAsync(string userId);
+
+        public Task<bool> IsCustomerHasOrdersAsync(string userId);
     }
 }

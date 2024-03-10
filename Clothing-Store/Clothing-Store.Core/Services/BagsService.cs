@@ -10,7 +10,7 @@
     using Microsoft.EntityFrameworkCore;
     using System.Threading.Tasks;
 
-    public class ShoppingBagService : IShoppingBagService
+    public class BagsService : IBagsService
     {
         private readonly IRepository<Bag> bagsRepository;
         private readonly IRepository<ProductBag> productsBagRepository;
@@ -18,7 +18,7 @@
         private readonly IRepository<Product> productsRepository;
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public ShoppingBagService(
+        public BagsService(
             IRepository<Bag> bagsRepository,
             IRepository<ProductBag> productsBagRepository,
             IRepository<ProductSize> productsSizeRepository,

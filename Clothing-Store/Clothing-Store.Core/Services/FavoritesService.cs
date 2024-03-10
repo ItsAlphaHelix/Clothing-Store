@@ -6,12 +6,12 @@
     using Clothing_Store.Data.Data.Models;
     using Clothing_Store.Data.Repositories;
     using Microsoft.EntityFrameworkCore;
-    public class FavoriteService : IFavoriteService
+    public class FavoritesService : IFavoritesService
     {
         private readonly IRepository<Product> productsRepository;
         private readonly IRepository<Favorite> favoritesRepository;
         private readonly IRepository<ProductFavorites> productFavoritesRepository;
-        public FavoriteService(
+        public FavoritesService(
             IRepository<Product> productsRepository,
             IRepository<Favorite> favoritesRepository,
             IRepository<ProductFavorites> productFavoritesRepository)

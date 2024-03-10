@@ -12,10 +12,10 @@
     [Authorize]
     public class FavoritesController : ControllerBase
     {
-        private readonly IFavoriteService favoriteService;
+        private readonly IFavoritesService favoriteService;
         public FavoritesController(
             UserManager<ApplicationUser> usersManager,
-            IFavoriteService favoriteService)
+            IFavoritesService favoriteService)
             : base(usersManager, null)
         {
             this.favoriteService = favoriteService;

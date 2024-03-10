@@ -4,7 +4,7 @@
     using Clothing_Store.Core.ViewModels.Reviews;
     using Clothing_Store.Core.ViewModels.Shared;
 
-    public interface IProductService
+    public interface IProductsService
     {
         /// <summary>
         /// Getting all products.

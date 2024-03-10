@@ -13,9 +13,9 @@
 
     public class ProductsController : ControllerBase
     {
-        private readonly IProductService productsService;
+        private readonly IProductsService productsService;
         public ProductsController(
-            IProductService productsService,
+            IProductsService productsService,
             UserManager<ApplicationUser> usersManager)
             : base(usersManager, null)
         {

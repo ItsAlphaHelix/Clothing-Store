@@ -14,13 +14,13 @@
     using System.Threading.Tasks;
     using System.Web;
 
-    public class ProductService : IProductService
+    public class ProductsService : IProductsService
     {
         private readonly IRepository<Product> productsRepository;
         private readonly IRepository<ProductReviews> productReviewsRepository;
         private readonly IRepository<Size> sizesRepository;
         private readonly UserManager<ApplicationUser> usersManager;
-        public ProductService(
+        public ProductsService(
             IRepository<Product> productsRepository,
             IRepository<ProductReviews> productReviewsRepository,
             IRepository<Size> sizesRepository,

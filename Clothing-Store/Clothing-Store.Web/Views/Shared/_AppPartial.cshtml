@@ -4,7 +4,7 @@
 
 @model PaginatedViewModel<ProductViewModel>
 
-@inject IProductService productsService
+@inject IProductsService productsService
 
 @{
     var sizes = await this.productsService.GetAllSizesAsync();

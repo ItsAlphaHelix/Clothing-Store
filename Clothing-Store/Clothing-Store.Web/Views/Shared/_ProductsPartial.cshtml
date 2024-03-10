@@ -4,7 +4,7 @@
 @using System.Security.Claims;
 
 @model PaginatedViewModel<ProductViewModel>
-@inject IFavoriteService favoriteService
+@inject IFavoritesService favoriteService
 
 @{
     string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

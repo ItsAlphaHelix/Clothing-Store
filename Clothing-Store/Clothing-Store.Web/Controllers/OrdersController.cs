@@ -10,12 +10,12 @@
 
     public class OrdersController : ControllerBase
     {
-        private readonly IShoppingBagService shoppingBagService;
-        private readonly IOrderService orderService;
+        private readonly IBagsService shoppingBagService;
+        private readonly IOrdersService orderService;
         public OrdersController(
             UserManager<ApplicationUser> usersManager,
-            IShoppingBagService shoppingBagService,
-            IOrderService orderService)
+            IBagsService shoppingBagService,
+            IOrdersService orderService)
             : base(usersManager, shoppingBagService)
         {
             this.shoppingBagService = shoppingBagService;
@@ -40,7 +40,7 @@
             else
             {
                 customer = await this.orderService.SaveInformationAboutCustomerForNextTime(customerModel, userId);
-               checkoutModel.CustomerModel = customer;
+                checkoutModel.CustomerModel = customer;
             }
 
             checkoutModel.ProductsInBag = productsInBag;
@@ -81,7 +81,9 @@
         {
             ViewData["IsHomePage"] = false;
             var userId = await GetUserId();
+
             var model = await this.orderService.GetCustomerWithHisOrdersAsync(userId);
+
 
             var paginated = await PaginatedList<OrderViewModel>.CreateAsync(model.OrdersModel, page, 3);
 

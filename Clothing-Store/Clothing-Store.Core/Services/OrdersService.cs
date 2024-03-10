@@ -9,7 +9,7 @@
     using System.Collections.Generic;
     using System.Globalization;
 
-    public class OrderService : IOrderService
+    public class OrdersService : IOrdersService
     {
         private readonly IRepository<Customer> customersRepository;
         private readonly IRepository<ProductBag> productBagRepository;
@@ -17,7 +17,7 @@
         private readonly IRepository<OrderProduct> orderProductsRepository;
         private readonly UserManager<ApplicationUser> usersManager;
 
-        public OrderService(
+        public OrdersService(
             IRepository<Customer> customersRepository,
             IRepository<ProductBag> productBagRepository,
             IRepository<Order> ordersRepository,
@@ -96,16 +96,6 @@
 
         public async Task<MineOrdersViewModel> GetCustomerWithHisOrdersAsync(string userId)
         {
-            var orders = this.ordersRepository
-                .AllAsNoTracking()
-                .Where(x => x.CustomerId == userId)
-                .Select(x => new OrderViewModel()
-                {
-                    NumberOfOrder = x.OrderNumber,
-                    OrderDate = x.OrderDate.ToString("MM/dd/yyyy. HH:mm", CultureInfo.InvariantCulture),
-                    TotalPrice = x.OrderProducts.Sum(x => (x.Price * x.Quantity) + 5)
-                })
-                .AsQueryable();
 
             var customer = await this
                 .customersRepository
@@ -119,6 +109,23 @@
                         Phone = x.Phone,
                 })
                 .FirstOrDefaultAsync();
+
+            var orders = this.ordersRepository
+                .AllAsNoTracking()
+                .Where(x => x.CustomerId == userId)
+                .Select(x => new OrderViewModel()
+                {
+                    NumberOfOrder = x.OrderNumber,
+                    OrderDate = x.OrderDate.ToString("MM/dd/yyyy. HH:mm", CultureInfo.InvariantCulture),
+                    TotalPrice = x.OrderProducts.Sum(x => (x.Price * x.Quantity) + 5)
+                })
+                .AsQueryable();
+
+
+            if (customer == null || !orders.Any())
+            {
+                throw new NullReferenceException("Вие все още нямате поръчки.");
+            }
 
             var mineOrderModel = new MineOrdersViewModel()
             {
@@ -298,6 +305,18 @@
             result ??= customer;
 
             return result;
+        }
+
+        public async Task<bool> IsCustomerHasOrdersAsync(string userId)
+        {
+            var customer = await this.customersRepository.AllAsNoTracking().AnyAsync(x => x.CustomerId == userId);
+
+            if (customer)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

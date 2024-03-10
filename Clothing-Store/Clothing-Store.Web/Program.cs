@@ -18,6 +18,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.Get
     .AddErrorDescriber<IdentityErrorDescriberProvider>()
     .AddEntityFrameworkStores<ClothingStoreContext>();
 
+
 builder.Services.AddControllersWithViews(
     options =>
     {

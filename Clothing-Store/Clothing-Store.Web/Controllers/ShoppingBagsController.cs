@@ -9,11 +9,11 @@
 
     public class ShoppingBagsController : ControllerBase
     {
-        private readonly IShoppingBagService shoppingBagService;
+        private readonly IBagsService shoppingBagService;
 
         public ShoppingBagsController(
             UserManager<ApplicationUser> usersManager,
-            IShoppingBagService shoppingBagService)
+            IBagsService shoppingBagService)
             :base(usersManager, shoppingBagService)
         {
             this.shoppingBagService = shoppingBagService;   
