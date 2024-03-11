@@ -9,7 +9,6 @@
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.EntityFrameworkCore;
     using System.ComponentModel.DataAnnotations;
-    using System.Net.Http;
 
     public class RegisterModel : PageModel
     {

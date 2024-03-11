@@ -30,7 +30,7 @@
         /// Getting all products by gender.
         /// </summary>
         /// <returns></returns>
-        public IQueryable<ProductViewModel> GetAllProductsByGenderAsQueryable(bool isMen);
+        public IQueryable<ProductViewModel> GetAllProductsByGenderAsQueryable(PaginatedViewModel<ProductViewModel> model, bool isMale);
 
         public Task<IEnumerable<SizeViewModel>> GetAllSizesAsync();
 

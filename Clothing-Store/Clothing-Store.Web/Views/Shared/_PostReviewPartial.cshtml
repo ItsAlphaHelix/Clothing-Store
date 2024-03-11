@@ -33,7 +33,7 @@
             <span asp-validation-for="@Model.Message" class="text-danger"></span>
         </div>
         <div class="text-center mt-2 mb-3 col-12">
-            <button type="submit" class="btn mg-btn mg-light-bg-btn mg-form-btn" onclick="submitReview(event)">Изпратете вашето ревю</button>
+            <button type="submit" class="btn mg-btn mg-light-bg-btn mg-form-btn" @* onclick="submitReview(event)" *@ id="post-review">Изпратете вашето ревю</button>
         </div>
     </div>
 </form>

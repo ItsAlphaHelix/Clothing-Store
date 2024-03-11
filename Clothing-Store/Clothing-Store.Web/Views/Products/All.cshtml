@@ -3,251 +3,36 @@
 
 @model PaginatedViewModel<ProductViewModel>
 
+@{
+    ViewData["Title"] = "Всички продукти";
+}
 
 @await Html.PartialAsync("_AppPartial")
 
 @section Scripts {
+    <script src="~/js/loadModalProductDetails.js"></script>
+    <script src="~/js/filterProducts.js"></script>
     <script>
-        function loadProductDetails(productId) {
-            $.ajax({
-                url: '/Products/GetSmallDetails',
-                data: { productId: productId },
-                type: 'GET',
-                success: function (data) {
-                    $.getScript('/js/mg-common.js', function () {
-                        $('#mg-quick-view-modal').find('.modal-dialog').html(data);
-                        $('#mg-quick-view-modal').modal('show');
-                    });
-                },
-                error: function () {
-                    alert('Error! Cannot retrieve product details.');
-                }
-            });
+        function handleChangeSizes(element) {
+            callOnChangeSizes(element, sorting);
+        }
+        function handleChangeProducts(element) {
+            callChangeProducts(element, sorting)
+        }
+        function handleChangePrices(element) {
+            callOnChangePrices(element, sorting);
         }
     </script>
+    <script src="~/js/addToBag.js"></script>
     <script>
+        var page = '@ViewData["CurrentPage"]';
+        var sorting = '@ViewData["CurrentSort"]';
+        var selectedProducts = '@Html.Raw(ViewData["CurrentSelectedProducts"])'
+        var selectedPrice = '@ViewData["CurrentSelectedPrice"]';
+        var selectedSizes = '@ViewData["CurrentSelectedSizes"]';
 
-        function callChangeOrder(sorting) {
-
-            var selectedProducts = getSelectedProducts();
-            var selectedSizes = getSelectedSizes();
-            var selectedPrice = localStorage.getItem("selectedPrice");
-
-            var resultSelectedProducts = selectedProducts.length != 0 ? `&selectedProducts=${selectedProducts.join(',')}` : " ";
-            var resultSelectedPrice = selectedPrice != " " ? `&selectedPrice=${selectedPrice}` : " ";
-            var resultSelectedSizes = selectedSizes.length != 0 ? `&selectedSizes=${selectedSizes.join(',')}` : " ";
-
-            window.location.href = `/Products/All?page=1&sorting=${sorting}${resultSelectedProducts}${resultSelectedPrice}${resultSelectedSizes}`
-        }
-
-        function callOnChangeSizes(element) {
-             var checkboxValue = element.getAttribute('value');
-             var selectedSizes = getSelectedSizes();
-
-            if (selectedSizes.includes(checkboxValue)) {
-
-                selectedSizes = selectedSizes.filter(size => size !== checkboxValue);
-            } else {
-
-                selectedSizes.push(checkboxValue);
-            }
-
-            setSelectedSizes(selectedSizes);
-
-            var selectedProducts = getSelectedProducts();
-            var selectedSizes = getSelectedSizes();                       
-            var selectedPrice = localStorage.getItem("selectedPrice");
-
-            var resultSelectedProducts = selectedProducts.length != 0 ? `&selectedProducts=${selectedProducts.join(',')}` : " ";
-            var resultSelectedPrice = selectedPrice != " " ? `&selectedPrice=${selectedPrice}` : " ";
-            var resultSelectedSizes = selectedSizes.length != 0 ? `&selectedSizes=${selectedSizes.join(',')}` : " ";
-
-            window.location.href = `/Products/All?page=1&sorting=@Model.Sorting${resultSelectedProducts}${resultSelectedPrice}${resultSelectedSizes}`
-        }
-
-        function getSelectedSizes() {
-            var storedSizes = localStorage.getItem('selectedSizes');
-            return storedSizes ? storedSizes.split(',') : [];
-        }
-
-        function setSelectedSizes(selectedSizes) {
-            localStorage.setItem('selectedSizes', selectedSizes.join(','));
-        }
-
-        function callOnChangePrices(element) {
-
-            if (localStorage.getItem("selectedPrice") != " ") {
-                localStorage.setItem('selectedPrice', " ");
-            }
-            else {
-
-                var checkboxValue = element.getAttribute('value');
-                localStorage.setItem("selectedPrice", checkboxValue)
-            }
-
-
-            var selectedProducts = getSelectedProducts();
-            var selectedSizes = getSelectedSizes();
-            var selectedPrice = localStorage.getItem("selectedPrice");
-
-            var resultSelectedProducts = selectedProducts.length != 0 ? `&selectedProducts=${selectedProducts.join(',')}` : " ";
-            var resultSelectedPrice = selectedPrice != " " ? `&selectedPrice=${selectedPrice}` : " ";
-            var resultSelectedSizes = selectedSizes.length != 0 ? `&selectedSizes=${selectedSizes.join(',')}` : " ";
-
-            window.location.href = `/Products/All?page=1&sorting=@Model.Sorting${resultSelectedProducts}${resultSelectedPrice}${resultSelectedSizes}`
-        }
-
-        function getSelectedProducts() {
-            var storedProducts = localStorage.getItem('selectedProducts');
-            return storedProducts ? storedProducts.split(',') : [];
-        }
-
-        function setSelectedProducts(selectedProducts) {
-            localStorage.setItem('selectedProducts', selectedProducts.join(','));
-        }
-
-        function callChangeProducts(element) {
-
-            var checkboxValue = element.getAttribute('value');
-            var selectedProducts = getSelectedProducts();
-
-            if (selectedProducts.includes(checkboxValue)) {
-
-                selectedProducts = selectedProducts.filter(product => product !== checkboxValue);
-            } else {
-
-                selectedProducts.push(checkboxValue);
-            }
-
-            setSelectedProducts(selectedProducts);
-
-            var selectedSizes = getSelectedSizes();
-            var selectedPrice = localStorage.getItem("selectedPrice");
-
-            var resultSelectedProducts = selectedProducts.length != 0 ? `&selectedProducts=${selectedProducts.join(',')}` : " ";
-            var resultSelectedPrice = selectedPrice != " " ? `&selectedPrice=${selectedPrice}` : " ";
-            var resultSelectedSizes = selectedSizes.length != 0 ? `&selectedSizes=${selectedSizes.join(',')}` : " ";
-
-            window.location.href = `/Products/All?page=1&sorting=@Model.Sorting${resultSelectedProducts}${resultSelectedPrice}${resultSelectedSizes}`
-
-        }
-
-
-        document.addEventListener('DOMContentLoaded', function () {
-            var selectedProducts = getSelectedProducts();
-            selectedProducts.forEach(function (product) {
-                var anchorProduct = document.querySelector('a[value="' + product + '"]');
-                if (anchorProduct) {
-                    anchorProduct.parentNode.classList.add('active');
-                }
-            });
-
-            var selectedSizes = getSelectedSizes();
-
-            selectedSizes.forEach(function (size) {
-                var anchorSize = document.querySelector('a[value="' + size + '"]');
-                if (anchorSize) {
-                    anchorSize.parentNode.classList.add('active');
-                }
-            });
-
-            var price = localStorage.getItem("selectedPrice");
-            var anchorPrice = document.querySelector('a[value="' + price + '"]');
-
-            if (anchorPrice) {
-                anchorPrice.parentNode.classList.add('active');
-            }
-        });
-
-    </script>
-    <script>
-
-        $(document).on('click', '.mg-size-variant-outer ul li', function (event) {
-            event.preventDefault();
-            $('.mg-size-variant-outer ul li').removeClass('active');
-
-            $(this).addClass('active');
-            clearErrorMessage('size-error-message')
-        });
-
-        function decrementQuantity() {
-            var quantityInput = $('.mg-cart-quantity')[0];
-            if (quantityInput.value > 1) {
-                quantityInput.stepDown();
-                clearErrorMessage('quantity-error-message');
-            } else {
-                displayErrorMessage("quantity-error-message");
-            }
-        }
-
-        function incrementQuantity() {
-            var quantityInput = $('.mg-cart-quantity')[0];
-            quantityInput.stepUp();
-            clearErrorMessage('quantity-error-message');
-        }
-
-        function addProductToBag(productId) {
-
-            var activeSizeElement = $('.mg-size-variant-outer ul li.active')[0];
-            var sizeName = " ";
-            var quantity = $('.mg-cart-quantity')[0].value;
-
-            if (activeSizeElement) {
-                sizeName = activeSizeElement.innerText;
-            }
-
-            var antiForgeryToken = $('input[name="__RequestVerificationToken"]').val();
-
-            var page = '@ViewData["CurrentPage"]';
-            var sorting = '@ViewData["CurrentSort"]';
-            var selectedProducts = '@Html.Raw(ViewData["CurrentSelectedProducts"])'
-            var selectedPrice = '@ViewData["CurrentSelectedPrice"]';
-            var selectedSizes = '@ViewData["CurrentSelectedSizes"]';
-
-            $.ajax({
-                type: "POST",
-                url: '/ShoppingBags/AddProductToBag',
-                headers: {
-                    'RequestVerificationToken': antiForgeryToken
-                },
-                data:
-                {
-                    productId,
-                    sizeName,
-                    quantity,
-                },
-                success: function (response) {
-
-                    console.log("Everything is okey.")
-
-                    var resultSelectedProducts = selectedProducts != '' ? `&selectedProducts=${selectedProducts}` : " ";
-                    var resultSelectedPrice = selectedPrice != '' ? `&selectedPrice=${selectedPrice}` : " ";
-                    var resultSelectedSizes = selectedSizes != '' ? `&selectedSizes=${splittedSelectedSizes.join(',')}` : " ";
-
-                    return window.location.href = `/Products/All?page=${page}&sorting=${sorting}${resultSelectedProducts}${resultSelectedPrice}${selectedSizes}`;
-
-                },
-                error: function (xhr, status, error) {
-                    var jsonResponse = JSON.parse(xhr.responseText);
-                    var errorMessage = jsonResponse;
-
-                    if (errorMessage.sizeError) {
-                        displayErrorMessage(errorMessage.sizeError, 'size-error-message');
-                    } if (errorMessage.quantityError) {
-                        displayErrorMessage(errorMessage.quantityError, 'quantity-error-message');
-                        clearErrorMessage('size-error-message')
-                    }
-                }
-            });
-        }
-        function displayErrorMessage(message, elementId) {
-            var errorMessageElement = $('#' + elementId);
-            errorMessageElement.text(message);
-        }
-
-        function clearErrorMessage(elementId) {
-            var errorMessageElement = $('#' + elementId);
-            errorMessageElement.text('');
+        function handleAddToBagClick(productId) {
+            addProductToBag(productId, page, sorting, selectedProducts, selectedPrice, selectedSizes);
         }
     </script>
 }

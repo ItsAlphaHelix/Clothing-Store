@@ -1,6 +1,7 @@
 ﻿namespace Clothing_Store.Core.Services
 {
     using Clothing_Store.Core.Contracts;
+    using Clothing_Store.Core.Services.HelperServices;
     using Clothing_Store.Core.ViewModels.Products;
     using Clothing_Store.Core.ViewModels.Reviews;
     using Clothing_Store.Core.ViewModels.Shared;
@@ -10,11 +11,9 @@
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Linq.Expressions;
     using System.Threading.Tasks;
-    using System.Web;
 
-    public class ProductsService : IProductsService
+    public class ProductsService : Filter, IProductsService
     {
         private readonly IRepository<Product> productsRepository;
         private readonly IRepository<ProductReviews> productReviewsRepository;
@@ -32,19 +31,26 @@
             this.usersManager = usersManager;
         }
 
-        public IQueryable<ProductViewModel> GetAllProductsByGenderAsQueryable(bool isMen)
+        public IQueryable<ProductViewModel> GetAllProductsByGenderAsQueryable(PaginatedViewModel<ProductViewModel> model, bool isMale)
         {
             var products = this.productsRepository
                 .AllAsNoTracking()
-                .Where(x => x.IsMale == isMen)
+                .Where(x => x.IsMale == isMale)
                 .Select(x => new ProductViewModel()
                 {
                     Id = x.Id,
                     Category = x.Category,
                     Price = x.Price,
+                    AverageRating = x.ProductReviews.Any() ? (x.ProductReviews.Sum(x => x.Rating) / x.ProductReviews.Count) : 0,
                     Images = x.Images.Select(x => x.Url).Take(2).ToList(),
+                    ProductSizes = x.ProductSizes
+                    .Where(x => x.Count != 0)
+                    .Select(x => new SizeViewModel() { SizeName = x.Size.Name })
+                    .ToList()
                 })
                 .AsQueryable();
+
+            products = FilterProducts(model, products);
 
             return products;
         }
@@ -67,36 +73,7 @@
                 })
                 .AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(model.SelectedProducts))
-            {
-                products = products.Where(x => model.SelectedProducts.Contains(x.Category));
-            }
-
-
-            if (!string.IsNullOrWhiteSpace(model.SelectedSizes))
-            {
-               string[] splitSelectedSizes = model.SelectedSizes.Split(",");
-               products = products.Where(x => x.ProductSizes.Any(x => splitSelectedSizes.Contains(x.SizeName)));
-            }
-
-            if (!string.IsNullOrEmpty(model.SelectedPrice))
-            {
-                switch (model.SelectedPrice)
-                {
-                    case "5-15": products = products.Where(x => x.Price >= 5 && x.Price <= 15); break;
-                    case "15-30": products = products.Where(x => x.Price >= 15 && x.Price <= 30); break;
-                    case "30-50": products = products.Where(x => x.Price >= 30 && x.Price <= 50); break;
-                    case "50-100": products = products.Where(x => x.Price >= 50 && x.Price <= 100); break;
-                }
-            }
-
-            switch (model.Sorting)
-            {
-                case SortEnum.Default: products = products.AsQueryable(); break;
-                case SortEnum.AverageRating: products = products.OrderByDescending(x => x.AverageRating); break;
-                case SortEnum.PriceAsc: products = products.OrderBy(x => x.Price); break;
-                case SortEnum.PriceDesc: products = products.OrderByDescending(x => x.Price); break;
-            }
+            products = FilterProducts(model, products);
 
             return products;
         }
@@ -180,11 +157,12 @@
         public async Task PostProductReviewAsync(PostProductReviewViewModel productReview, string userId)
         {
             var user = await this.usersManager.FindByIdAsync(userId);
+            string userFullName = $"{user.FirstName} {user.LastName}";
 
             var review = new ProductReviews()
             {
                 ProductId = productReview.ProductId,
-               // UserFullName = user.FullName,
+                UserFullName = userFullName,
                 Rating = productReview.Rating,
                 Message = productReview.Message,
                 Date = DateTime.Now
@@ -231,6 +209,5 @@
 
             return countOfReviews;
         }
-
     }
 }

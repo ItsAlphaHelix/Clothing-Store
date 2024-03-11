@@ -27,17 +27,15 @@
         public async Task<IActionResult> All([FromQuery] PaginatedViewModel<ProductViewModel> model, int page = 1)
         {
             ViewData["IsHomePage"] = false;
-            var products = this.productsService.GetAllProductsAsQueryable(model);
-
-            ViewData["Title"] = "Всички продукти";
-
             ViewData["CurrentPage"] = page;
             ViewData["CurrentSort"] = model.Sorting;
             ViewData["CurrentSelectedProducts"] = model.SelectedProducts;
             ViewData["CurrentSelectedSizes"] = model.SelectedSizes;
             ViewData["CurrentSelectedPrice"] = model.SelectedPrice;
-            var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, page, 12);
 
+            var products = this.productsService.GetAllProductsAsQueryable(model);
+
+            var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, page, 12);
 
             var viewModel = new PaginatedViewModel<ProductViewModel>()
             {
@@ -62,10 +60,16 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> AllMenProducts(int page = 1)
+        public async Task<IActionResult> AllMenProducts([FromQuery] PaginatedViewModel<ProductViewModel> model, int page = 1)
         {
             ViewData["IsHomePage"] = false;
-            var products = this.productsService.GetAllProductsByGenderAsQueryable(true);
+            ViewData["CurrentPage"] = page;
+            ViewData["CurrentSort"] = model.Sorting;
+            ViewData["CurrentSelectedProducts"] = model.SelectedProducts;
+            ViewData["CurrentSelectedSizes"] = model.SelectedSizes;
+            ViewData["CurrentSelectedPrice"] = model.SelectedPrice;
+
+            var products = this.productsService.GetAllProductsByGenderAsQueryable(model, true);
 
             var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, page, 12);
 
@@ -83,12 +87,18 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> AllWomenProducts(int pageNumber = 1)
+        public async Task<IActionResult> AllWomenProducts([FromQuery] PaginatedViewModel<ProductViewModel> model, int page = 1)
         {
             ViewData["IsHomePage"] = false;
-            var products = this.productsService.GetAllProductsByGenderAsQueryable(false);
+            ViewData["CurrentPage"] = page;
+            ViewData["CurrentSort"] = model.Sorting;
+            ViewData["CurrentSelectedProducts"] = model.SelectedProducts;
+            ViewData["CurrentSelectedSizes"] = model.SelectedSizes;
+            ViewData["CurrentSelectedPrice"] = model.SelectedPrice;
 
-            var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, pageNumber, 12);
+            var products = this.productsService.GetAllProductsByGenderAsQueryable(model, false);
+
+            var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, page, 12);
 
             var viewModel = new PaginatedViewModel<ProductViewModel>()
             {
@@ -115,9 +125,7 @@
             {
                 var user = await GetUserAsync();
 
-                ViewBag.Email = user.Email;
-                ViewBag.FirstName = user.FirstName;
-                ViewBag.LastName = user.LastName;
+                ViewBag.UserFullName = $"{user.FirstName} {user.LastName}";
             }
 
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")

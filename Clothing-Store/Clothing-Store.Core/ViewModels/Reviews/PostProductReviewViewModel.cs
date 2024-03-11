@@ -5,7 +5,7 @@
     {
         public int ProductId { get; set; }
 
-        public string UserFullName { get; set; } = null!;
+        public string userFullName { get; set; } = null!;
 
         public int Rating { get; set; }
 

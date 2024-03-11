@@ -43,8 +43,8 @@
                                         <div class="mg-filter-panel">
                                             <div class="mg-filter-checkbox">
                                                 <ul>
-                                                    <li><a href="#" name="selectedProducts" value="Пуловер" class="filter-link" onclick="callChangeProducts(this)">Пуловери</a></li>
-                                                    <li><a href="#" name="selectedProducts" value="Тениска" class="filter-link" onclick="callChangeProducts(this)">Тениски</a></li>
+                                                    <li><a href="#" name="selectedProducts" value="Пуловер" class="filter-link" onclick="handleChangeProducts(this)">Пуловери</a></li>
+                                                    <li><a href="#" name="selectedProducts" value="Тениска" class="filter-link" onclick="handleChangeProducts(this)">Тениски</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -85,10 +85,10 @@
                                         <div class="mg-filter-panel">
                                             <div class="mg-filter-checkbox">
                                                 <ul>
-                                                    <li><a href="#" name="selectedPrice" value="5-15" onclick="callOnChangePrices(this)">5 BGN - 15 BGN</a></li>
-                                                    <li><a href="#" name="selectedPrice" value="15-30" onclick="callOnChangePrices(this)">15 BGN - 30 BGN</a></li>
-                                                    <li><a href="#" name="selectedPrice" value="30-50" onclick="callOnChangePrices(this)">30 BGN - 50 BGN</a></li>
-                                                    <li><a href="#" name="selectedPrice" value="50-100" onclick="callOnChangePrices(this)">50 BGN - 100 BGN</a></li>
+                                                    <li><a href="#" name="selectedPrice" value="5-15" onclick="handleChangePrices(this)">5 BGN - 15 BGN</a></li>
+                                                    <li><a href="#" name="selectedPrice" value="15-30" onclick="handleChangePrices(this)">15 BGN - 30 BGN</a></li>
+                                                    <li><a href="#" name="selectedPrice" value="30-50" onclick="handleChangePrices(this)">30 BGN - 50 BGN</a></li>
+                                                    <li><a href="#" name="selectedPrice" value="50-100" onclick="handleChangePrices(this)">50 BGN - 100 BGN</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -143,7 +143,7 @@
                                                             <a href="#"
                                                                name="selectedSizes"
                                                                value="@size.SizeName"
-                                                               onclick="callOnChangeSizes(this)">
+                                                               onclick="handleChangeSizes(this)">
                                                                @size.SizeName</a>
                                                             </li>
                                                     }
@@ -199,7 +199,8 @@
                                                 asp-route-sorting="@ViewData["CurrentSort"]"
                                                 asp-route-selectedProducts="@ViewData["CurrentSelectedProducts"]"
                                                 asp-route-selectedPrice="@ViewData["CurrentSelectedPrice"]"
-                                                asp-route-selectedSizes="@ViewData["CurrentSelectedSizes"]">
+                                                asp-route-selectedSizes="@ViewData["CurrentSelectedSizes"]"
+                                                asp-route-searchBy="@ViewData["CurrentSearchWord"]">
                                                 <img src="~/images/pngs/mg-arrow-left.png" alt="" />
                                             </a>
                                         </li>
@@ -218,11 +219,12 @@
                                         {
                                             <li class="page-item">
                                                 <a class="page-link @(Model.Models.PageNumber == i ? "active" : "")"
-                                                   asp-route-page="@i"
+                                                asp-route-page="@i"
                                                 asp-route-sorting="@ViewData["CurrentSort"]"
                                                 asp-route-selectedProducts="@ViewData["CurrentSelectedProducts"]"
                                                 asp-route-selectedPrice="@ViewData["CurrentSelectedPrice"]"
-                                                asp-route-selectedSizes="@ViewData["CurrentSelectedSizes"]">@i</a>
+                                                asp-route-selectedSizes="@ViewData["CurrentSelectedSizes"]"
+                                                asp-route-searchBy="@ViewData["CurrentSearchWord"]">@i</a>
                                             </li>
                                         }
 
@@ -232,7 +234,8 @@
                                                 asp-route-sorting="@ViewData["CurrentSort"]"
                                                 asp-route-selectedProducts="@ViewData["CurrentSelectedProducts"]"
                                                 asp-route-selectedPrice="@ViewData["CurrentSelectedPrice"]"
-                                                asp-route-selectedSizes="@ViewData["CurrentSelectedSizes"]">
+                                                asp-route-selectedSizes="@ViewData["CurrentSelectedSizes"]"
+                                                asp-route-searchBy="@ViewData["CurrentSearchWord"]">
                                                 <img src="~/images/pngs/mg-arrow-right.png" alt="" />
                                             </a>
                                         </li>
