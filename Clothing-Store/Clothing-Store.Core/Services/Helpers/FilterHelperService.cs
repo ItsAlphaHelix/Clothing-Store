@@ -1,14 +1,8 @@
-﻿using Clothing_Store.Core.ViewModels.Products;
-using Clothing_Store.Core.ViewModels.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Clothing_Store.Core.Services.HelperServices
+﻿namespace Clothing_Store.Core.Services.HelperServices
 {
-    public class Filter
+    using Clothing_Store.Core.ViewModels.Products;
+    using Clothing_Store.Core.ViewModels.Shared;
+    public class FilterHelperService
     {
         protected static IQueryable<ProductViewModel> FilterProducts(PaginatedViewModel<ProductViewModel> model, IQueryable<ProductViewModel> products)
         {

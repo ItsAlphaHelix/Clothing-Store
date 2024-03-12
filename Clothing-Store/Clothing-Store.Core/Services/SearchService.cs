@@ -7,7 +7,7 @@
     using Clothing_Store.Data.Data.Models;
     using Clothing_Store.Data.Repositories;
     using Microsoft.EntityFrameworkCore;
-    public class SearchService : Filter, ISearchService
+    public class SearchService : FilterHelperService, ISearchService
     {
         private readonly IRepository<Product> productsRepository;
         public SearchService(IRepository<Product> productsRepository)

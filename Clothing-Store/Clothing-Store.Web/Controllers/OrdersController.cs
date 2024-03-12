@@ -12,14 +12,18 @@
     {
         private readonly IBagsService shoppingBagService;
         private readonly IOrdersService orderService;
+        private readonly IPaymentsService paymentsService;
         public OrdersController(
             UserManager<ApplicationUser> usersManager,
             IBagsService shoppingBagService,
-            IOrdersService orderService)
+            IOrdersService orderService,
+            IPaymentsService paymentsService)
             : base(usersManager, shoppingBagService)
         {
             this.shoppingBagService = shoppingBagService;
             this.orderService = orderService;
+            this.paymentsService = paymentsService;
+
         }
 
         [HttpGet]
@@ -53,14 +57,11 @@
             ViewData["IsHomePage"] = false;
             var userId = await GetUserId();
 
-            if (this.User?.Identity?.IsAuthenticated ?? false)
-            {
-
-            }
-
             await this.orderService.CreateOrderAsync(model.CustomerModel, userId);
 
-            return RedirectToAction(nameof(CompletedOrder));
+            string sessionUrl = await this.paymentsService.CreateCheckoutSessionAsync(userId); 
+
+            return Redirect(sessionUrl);
         }
 
         [HttpGet]
@@ -111,12 +112,14 @@
             };
 
             return View(viewModel);
+
         }
-        public async Task<IActionResult> Pay()
+
+        [HttpGet]
+        public IActionResult PaymentFailed()
         {
             ViewData["IsHomePage"] = false;
             return View();
         }
-
     }
 }

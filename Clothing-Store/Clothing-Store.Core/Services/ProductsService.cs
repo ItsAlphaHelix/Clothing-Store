@@ -13,7 +13,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class ProductsService : Filter, IProductsService
+    public class ProductsService : FilterHelperService, IProductsService
     {
         private readonly IRepository<Product> productsRepository;
         private readonly IRepository<ProductReviews> productReviewsRepository;

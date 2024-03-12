@@ -27,8 +27,8 @@ builder.Services.AddControllersWithViews(
     }
 );
 
+StripeConfiguration.ApiKey = builder.Configuration.GetValue<string>("StripeSettings:SecretKey");
 builder.Services.AddApplicationServices(builder.Configuration);
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

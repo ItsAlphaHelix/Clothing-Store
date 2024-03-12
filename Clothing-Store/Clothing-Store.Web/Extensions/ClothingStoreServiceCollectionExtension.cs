@@ -3,6 +3,8 @@
     using Clothing_Store.Core.Contracts;
     using Clothing_Store.Core.Services;
     using Clothing_Store.Data.Repositories;
+    using Stripe;
+
     public static class ClothingStoreServiceCollectionExtension
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
@@ -13,6 +15,8 @@
             services.AddScoped<IFavoritesService, FavoritesService>();
             services.AddScoped<IBagsService, BagsService>();
             services.AddScoped<IOrdersService, OrdersService>();
+            services.AddScoped<IPaymentsService, PaymentsService>();
+
 
             return services;
         }

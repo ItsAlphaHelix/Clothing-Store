@@ -1,4 +1,4 @@
-﻿/* 
+﻿﻿ /* 
     Created on : Jul 22, 2021, 11:00:57 AM
     Author     : MG
 */
@@ -35,9 +35,9 @@ body:not(.modal-open) .modal-dialog {
     pointer-events: none;
 }
 
-body:not(.modal-open) .modal-dialog .mg-account-form-outer {
-    pointer-events: auto;
-}
+    body:not(.modal-open) .modal-dialog .mg-account-form-outer {
+        pointer-events: auto;
+    }
 
 .mg-btn {
     background-color: #8F6B6C;
@@ -3189,4 +3189,3 @@ span.mg-spcb-bar-two {
 }
 
 /*MG search pop close button end here*/
-
