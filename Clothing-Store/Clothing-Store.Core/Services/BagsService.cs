@@ -99,7 +99,7 @@
 
             var productsInBag = await this.bagsRepository
                 .AllAsNoTracking()
-                .Where(x => x.UserId == userId)
+                .Where(x => x.UserId == userId && x.ProductBags.Count != 0)
                 .Select(x => new BagViewModel()
                 {
                     BagId = x.Id,

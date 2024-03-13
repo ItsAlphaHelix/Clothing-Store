@@ -1,9 +1,6 @@
 ﻿namespace Clothing_Store.Core.Services
 {
     using Clothing_Store.Core.Contracts;
-    using Clothing_Store.Data.Repositories;
-    using Microsoft.EntityFrameworkCore;
-    using Stripe;
     using Stripe.Checkout;
     using System.Threading.Tasks;
 

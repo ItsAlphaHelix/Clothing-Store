@@ -38,6 +38,9 @@ namespace Clothing_Store.Core.ViewModels.Orders
 
         public bool IsInformationSaved { get; set; }
 
+
+        public bool IsCustomerWantsToPayOnline { get; set; }
+
         public IQueryable<OrderViewModel> Orders { get; set; }
     }
 }

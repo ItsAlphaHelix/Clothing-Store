@@ -4,9 +4,12 @@
     using Clothing_Store.Core.ViewModels.Orders;
     using Clothing_Store.Core.ViewModels.Shared;
     using Clothing_Store.Data.Data.Models;
+    using Clothing_Store.Data.Repositories;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+    using Stripe;
 
     public class OrdersController : ControllerBase
     {
@@ -26,11 +29,26 @@
 
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> ChangePaymentMethod(CustomerViewModel customerModel)
+        {
+            ViewData["IsHomePage"] = false;
+
+            var userId = await GetUserId();
+
+            await this.orderService.ChangeCustomerPaymentMethodAsync(customerModel, userId);
+
+            return RedirectToAction(nameof(Checkout));
+        }
+
         [HttpGet]
         public async Task<IActionResult> Checkout(CustomerViewModel customerModel)
         {
             ViewData["IsHomePage"] = false;
+
             var userId = await GetUserId();
+
             var productsInBag = await shoppingBagService.GetAllProductsInBagAsync(userId);
 
             CheckoutViewModel checkoutModel = new CheckoutViewModel();
@@ -57,11 +75,17 @@
             ViewData["IsHomePage"] = false;
             var userId = await GetUserId();
 
+
+            if (model.CustomerModel.IsCustomerWantsToPayOnline == true)
+            {
+                string sessionUrl = await this.paymentsService.CreateCheckoutSessionAsync(userId);
+
+                return Redirect(sessionUrl);
+            }
+
             await this.orderService.CreateOrderAsync(model.CustomerModel, userId);
 
-            string sessionUrl = await this.paymentsService.CreateCheckoutSessionAsync(userId); 
-
-            return Redirect(sessionUrl);
+            return RedirectToAction(nameof(CompletedOrder));
         }
 
         [HttpGet]

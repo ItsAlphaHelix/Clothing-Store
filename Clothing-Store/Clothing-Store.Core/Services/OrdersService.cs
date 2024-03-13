@@ -34,6 +34,7 @@
 
         public async Task<CompletedOrderViewModel> GetCurrentUserOrderAsync(string userId)
         {
+
             var userOrder = await this.ordersRepository
                 .AllAsNoTracking()
                 .Where(x => x.CustomerId == userId)
@@ -62,6 +63,8 @@
                 })
                 .FirstOrDefaultAsync();
 
+            await DeleteBagAsync(userId);
+
             return userOrder;
         }
 
@@ -77,7 +80,8 @@
             if (currentCustomer != null && currentCustomer.IsInformationSaved == true)
             {
 
-                customer.IsInformationSaved = currentCustomer.IsInformationSaved;
+               customer.IsInformationSaved = currentCustomer.IsInformationSaved;
+                customer.IsCustomerWantsToPayOnline = currentCustomer.IsCustomerWantsToPayOnline;
                 customer.FirstName = currentCustomer.FirstName;
                 customer.LastName = currentCustomer.LastName;
                 customer.City = currentCustomer.City;
@@ -175,7 +179,6 @@
             };
 
             customer.Orders.Add(order);
-
             await DeleteBagAsync(userId);
 
             await customersRepository.SaveChangesAsync();
@@ -258,7 +261,9 @@
                         Email = customerModel.Email,
                         Phone = customerModel.Phone,
                         Region = customerModel.Region,
-                        IsInformationSaved = customerModel.IsInformationSaved
+                        IsInformationSaved = customerModel.IsInformationSaved,
+                        IsCustomerWantsToPayOnline = customerModel.IsCustomerWantsToPayOnline
+                        
                     };
                       await customersRepository.AddAsync(customer);
                 }
@@ -282,7 +287,6 @@
             oldCustomer.Email = newCustomer.Email;
             oldCustomer.Phone = newCustomer.Phone;
             oldCustomer.Region = newCustomer.Region;
-            oldCustomer.IsInformationSaved = newCustomer.IsInformationSaved;
         }
 
         public async Task<CustomerViewModel> TakeInformationAboutLoggedInCustomerAsync(string userId)
@@ -317,6 +321,24 @@
             }
 
             return false;
+        }
+
+        public async Task ChangeCustomerPaymentMethodAsync(CustomerViewModel customerModel, string userId)
+        {
+            var customer = await this.customersRepository
+                .All()
+                .FirstOrDefaultAsync(x => x.CustomerId == userId);
+
+            if (customerModel.IsCustomerWantsToPayOnline == true)
+            {
+                customer.IsCustomerWantsToPayOnline = customerModel.IsCustomerWantsToPayOnline;
+            }
+            else
+            {
+                customer.IsCustomerWantsToPayOnline = customerModel.IsCustomerWantsToPayOnline;
+            }
+
+            await this.customersRepository.SaveChangesAsync();
         }
     }
 }

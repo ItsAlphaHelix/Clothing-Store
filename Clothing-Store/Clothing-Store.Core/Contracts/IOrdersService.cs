@@ -45,5 +45,7 @@
         public Task<CustomerViewModel> TakeInformationAboutLoggedInCustomerAsync(string userId);
 
         public Task<bool> IsCustomerHasOrdersAsync(string userId);
+
+        public Task ChangeCustomerPaymentMethodAsync(CustomerViewModel customerModel, string userId);
     }
 }

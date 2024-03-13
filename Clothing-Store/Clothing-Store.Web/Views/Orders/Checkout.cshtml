@@ -98,11 +98,24 @@
                             <div class="mb-3">
                                 <div class="form-check">
                                     <input asp-for="@Model.CustomerModel.IsInformationSaved" type="checkbox" class="form-check-input" id="keep-information">
-                                    <label class="form-check-label" for="keep-information">Запазване на информацията за следващия път</label>
+                                    <label class="form-check-label" for="keep-information">Запазване на информацията за следващия път.</label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input asp-for="@Model.CustomerModel.IsCustomerWantsToPayOnline" type="checkbox" class="form-check-input" id="payment" onclick="onChangePayment(this);">
+                                    <label class="form-check-label" for="keep-information">Можете да изберете опция онлайн плащане.</label>
                                 </div>
                             </div>
                             <div class="text-center mg-checkout-btn mt-4">
-                                <button type="submit" class="btn mg-btn mg-light-bg-btn mg-form-btn">Продължете с плащане</button>
+                                @if(@Model.CustomerModel.IsCustomerWantsToPayOnline)
+                                {
+                                    <button type="submit" class="btn mg-btn mg-light-bg-btn mg-form-btn">Онлайн плащане</button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn mg-btn mg-light-bg-btn mg-form-btn">Наложен платеж</button>
+                                }
                             </div>
                         </form>
                     </div>
@@ -217,4 +230,20 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function onChangePayment(checkbox) {
+            var isCustomerWantsToPayOnline = checkbox.checked
+            $.ajax({
+                type: "GET",
+                url: '/Orders/ChangePaymentMethod',
+                data: {
+                    "customerModel.IsCustomerWantsToPayOnline": isCustomerWantsToPayOnline
+                },
+                success: function () {
+                   window.location.href = 'Checkout';
+                }
+            });
+        }
+    </script>
 }
