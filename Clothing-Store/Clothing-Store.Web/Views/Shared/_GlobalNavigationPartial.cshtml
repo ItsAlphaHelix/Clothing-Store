@@ -5,6 +5,7 @@
 @inject IFavoritesService favoritesService
 @inject IBagsService bagsService
 @inject IOrdersService ordersService;
+@inject ICustomersService customerService;
 
 @{
     string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -12,7 +13,7 @@
     string temporaryUserId = this.bagsService.GetOrCreateTemporaryUserId();
     userId ??= temporaryUserId;
 
-    bool isCustomerHasOrders = await this.ordersService.IsCustomerHasOrdersAsync(userId);
+    bool isCustomerHasOrders = await this.customerService.IsCustomerHasOrdersAsync(userId);
     int countOfFavoriteProducts = await this.favoritesService.CountOfFavoriteProductsAsync(userId);
     int countOfProductsInBag = await this.bagsService.CountOfProductsInBagAsync(userId);
 }

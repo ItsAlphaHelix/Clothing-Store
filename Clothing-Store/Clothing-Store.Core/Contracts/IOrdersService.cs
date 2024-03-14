@@ -19,20 +19,6 @@
         /// <returns>Returns </returns>
         public Task<CompletedOrderViewModel> GetCurrentUserOrderAsync(string userId);
 
-        /// <summary>
-        /// The method helps to saves the information about the customer for the next time.
-        /// </summary>
-        /// <param name="customer">The customer comes from model binder to bind the new data to the old.</param>
-        /// <param name="userId">The user's id helps to find the current customer in the app.</param>
-        /// <returns></returns>
-        public Task<CustomerViewModel> SaveInformationAboutCustomerForNextTime(CustomerViewModel customer, string userId);
-
-        /// <summary>
-        /// The method helps to getting current customer with his orders async.
-        /// </summary>
-        /// <param name="userId">THe user's id helps to getting the customer's orders async.</param>
-        /// <returns></returns>
-        public Task<MineOrdersViewModel> GetCustomerWithHisOrdersAsync(string userId);
 
         /// <summary>
         /// The method helps to getting all products in order as queryable.
@@ -41,11 +27,6 @@
         /// <returns></returns>
         public IQueryable<ProductOrderViewModel> GetProductsInOrderAsQueryable(string numberOfOrder);
 
-
-        public Task<CustomerViewModel> TakeInformationAboutLoggedInCustomerAsync(string userId);
-
-        public Task<bool> IsCustomerHasOrdersAsync(string userId);
-
-        public Task ChangeCustomerPaymentMethodAsync(CustomerViewModel customerModel, string userId);
+        Task<MineOrdersViewModel> GetCustomerWithHisOrdersAsync(string userId);
     }
 }

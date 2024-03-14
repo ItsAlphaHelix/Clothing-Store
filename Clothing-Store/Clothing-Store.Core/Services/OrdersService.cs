@@ -11,22 +11,25 @@
 
     public class OrdersService : IOrdersService
     {
-        private readonly IRepository<Customer> customersRepository;
+        private readonly ICustomersService customersService;
         private readonly IRepository<ProductBag> productBagRepository;
+        private readonly IRepository<Customer> customersRepository;
         private readonly IRepository<Order> ordersRepository;
         private readonly IRepository<OrderProduct> orderProductsRepository;
         private readonly UserManager<ApplicationUser> usersManager;
 
         public OrdersService(
-            IRepository<Customer> customersRepository,
+            ICustomersService customersService,
             IRepository<ProductBag> productBagRepository,
             IRepository<Order> ordersRepository,
+            IRepository<Customer> customersRepository,
             IRepository<OrderProduct> orderProductsRepository,
             UserManager<ApplicationUser> usersManager)
         {
-            this.customersRepository = customersRepository;
+            this.customersService = customersService;
             this.productBagRepository = productBagRepository;
             this.ordersRepository = ordersRepository;
+            this.customersRepository = customersRepository;
             this.orderProductsRepository = orderProductsRepository;
             this.usersManager = usersManager;
 
@@ -66,51 +69,21 @@
             return userOrder;
         }
 
-        public async Task<CustomerViewModel> SaveInformationAboutCustomerForNextTime(CustomerViewModel customer, string userId)
-        {
-                var currentCustomer = await this.customersRepository
-                    .All()
-                    .Where(x => x.CustomerId == userId)
-                    .FirstOrDefaultAsync();
-
-                var user = await usersManager.FindByIdAsync(userId);
-
-            if (currentCustomer != null && currentCustomer.IsInformationSaved == true)
-            {
-
-               customer.IsInformationSaved = currentCustomer.IsInformationSaved;
-                customer.IsCustomerWantsToPayOnline = currentCustomer.IsCustomerWantsToPayOnline;
-                customer.FirstName = currentCustomer.FirstName;
-                customer.LastName = currentCustomer.LastName;
-                customer.City = currentCustomer.City;
-                customer.Region = currentCustomer.Region;
-                customer.CityPinCode = currentCustomer.CityPinCode;
-                customer.Phone = currentCustomer.Phone;
-                customer.Address = currentCustomer.Address;
-                customer.Email = currentCustomer.Email;
-
-               return customer;
-            }
-
-            return null;
-        }
-
-
         public async Task<MineOrdersViewModel> GetCustomerWithHisOrdersAsync(string userId)
         {
-
             var customer = await this
                 .customersRepository
                 .AllAsNoTracking()
                 .Where(x => x.CustomerId == userId)
                 .Select(x => new CustomerViewModel()
                 {
-                        FirstName = x.FirstName,
-                        LastName = x.LastName,
-                        Email = x.Email,
-                        Phone = x.Phone,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Email = x.Email,
+                    Phone = x.Phone,
                 })
                 .FirstOrDefaultAsync();
+
 
             var orders = this.ordersRepository
                 .AllAsNoTracking()
@@ -159,11 +132,11 @@
 
         public async Task CreateOrderAsync(CustomerViewModel newCustomer, string userId)
         {
-            var productOrders = await GetProductOrdersAsync(userId);
+            var productOrders = await GetAllOrdersWithTheirProductsAsync(userId);
 
-            var customer = await GetOrCreateCustomerAsync(newCustomer, userId);
+            var customer = await this.customersService.GetOrCreateCustomerAsync(newCustomer, userId);
 
-            UpdateCustomerInformation(newCustomer, customer);
+            this.customersService.UpdateCustomerInformation(newCustomer, customer);
 
             var orderNumber = GenerateOrderNumber();
 
@@ -199,7 +172,7 @@
         /// </summary>
         /// <param name="userId">user's id helps to find the products</param>
         /// <returns>Method returns collection of order products.</returns>
-        private async Task<List<OrderProduct>> GetProductOrdersAsync(string userId)
+        private async Task<List<OrderProduct>> GetAllOrdersWithTheirProductsAsync(string userId)
         {
             return await this.productBagRepository
                 .All()
@@ -214,110 +187,6 @@
                     SizeName = x.SizeName
                 })
                 .ToListAsync();
-        }
-
-        /// <summary>
-        /// If the customer doesn't exists, he should be created. If he exists, he should be only returned.
-        /// </summary>
-        /// <param name="customerModel">The order model comes from model binding to bind the customer data into customer object.</param>
-        /// <param name="userId">User's id helps to find the customer.</param>
-        /// <returns>Method returns current customer</returns>
-        private async Task<Customer> GetOrCreateCustomerAsync(CustomerViewModel customerModel, string userId)
-        {
-            var customer = await this.customersRepository
-                .All()
-                .FirstOrDefaultAsync(x => x.CustomerId == userId);
-                if (customer == null)
-                {
-                    customer = new Customer()
-                    {
-                        CustomerId = userId,
-                        FirstName = customerModel.FirstName,
-                        LastName = customerModel.LastName,
-                        Address = customerModel.Address,
-                        City = customerModel.City,
-                        CityPinCode = customerModel.CityPinCode,
-                        Email = customerModel.Email,
-                        Phone = customerModel.Phone,
-                        Region = customerModel.Region,
-                        IsInformationSaved = customerModel.IsInformationSaved,
-                        IsCustomerWantsToPayOnline = customerModel.IsCustomerWantsToPayOnline
-                        
-                    };
-                      await customersRepository.AddAsync(customer);
-                }
-            
-
-            return customer;
-        }
-
-        /// <summary>
-        /// The method helps to update customer's information.
-        /// </summary>
-        /// <param name="newCustomer">The new customer comes from model binding and bind new data to the old data.</param>
-        /// <param name="oldCustomer">Old customer accepts new data.</param>
-        private static void UpdateCustomerInformation(CustomerViewModel newCustomer, Customer oldCustomer)
-        {
-            oldCustomer.FirstName = newCustomer.FirstName;
-            oldCustomer.LastName = newCustomer.LastName;
-            oldCustomer.Address = newCustomer.Address;
-            oldCustomer.City = newCustomer.City;
-            oldCustomer.CityPinCode = newCustomer.CityPinCode;
-            oldCustomer.Email = newCustomer.Email;
-            oldCustomer.Phone = newCustomer.Phone;
-            oldCustomer.Region = newCustomer.Region;
-        }
-
-        public async Task<CustomerViewModel> TakeInformationAboutLoggedInCustomerAsync(string userId)
-        {
-            var user = await usersManager.FindByIdAsync(userId);
-
-            string userFirstName = user.FirstName;
-            string userLastName = user.LastName;
-
-            var customer = new CustomerViewModel()
-            {
-                Email = user.Email,
-                Phone = user.PhoneNumber,
-                FirstName = userFirstName,
-                LastName = userLastName
-            };
-
-            var result = await this.SaveInformationAboutCustomerForNextTime(customer, userId);
-
-            result ??= customer;
-
-            return result;
-        }
-
-        public async Task<bool> IsCustomerHasOrdersAsync(string userId)
-        {
-            var customer = await this.customersRepository.AllAsNoTracking().AnyAsync(x => x.CustomerId == userId);
-
-            if (customer)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public async Task ChangeCustomerPaymentMethodAsync(CustomerViewModel customerModel, string userId)
-        {
-            var customer = await this.customersRepository
-                .All()
-                .FirstOrDefaultAsync(x => x.CustomerId == userId);
-
-            if (customerModel.IsCustomerWantsToPayOnline == true)
-            {
-                customer.IsCustomerWantsToPayOnline = customerModel.IsCustomerWantsToPayOnline;
-            }
-            else
-            {
-                customer.IsCustomerWantsToPayOnline = customerModel.IsCustomerWantsToPayOnline;
-            }
-
-            await this.customersRepository.SaveChangesAsync();
         }
     }
 }

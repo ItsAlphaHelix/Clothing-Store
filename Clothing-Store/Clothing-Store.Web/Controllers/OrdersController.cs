@@ -16,15 +16,18 @@
         private readonly IBagsService shoppingBagService;
         private readonly IOrdersService orderService;
         private readonly IPaymentsService paymentsService;
+        private readonly ICustomersService customersService;
         public OrdersController(
             UserManager<ApplicationUser> usersManager,
             IBagsService shoppingBagService,
             IOrdersService orderService,
-            IPaymentsService paymentsService)
+            IPaymentsService paymentsService,
+            ICustomersService customersService)
             : base(usersManager, shoppingBagService)
         {
             this.shoppingBagService = shoppingBagService;
             this.orderService = orderService;
+            this.customersService = customersService;
             this.paymentsService = paymentsService;
 
         }
@@ -37,7 +40,7 @@
 
             var userId = await GetUserId();
 
-            await this.orderService.ChangeCustomerPaymentMethodAsync(customerModel, userId);
+            await this.customersService.ChangeCustomerPaymentMethodAsync(customerModel, userId);
 
             return RedirectToAction(nameof(Checkout));
         }
@@ -51,17 +54,17 @@
 
             var productsInBag = await shoppingBagService.GetAllProductsInBagAsync(userId);
 
-            CheckoutViewModel checkoutModel = new CheckoutViewModel();
-            CustomerViewModel customer = new CustomerViewModel();
+            CheckoutViewModel checkoutModel = new();
+            CustomerViewModel customer = null;
 
             if (this.User?.Identity?.IsAuthenticated ?? false)
             {
-                customer = await this.orderService.TakeInformationAboutLoggedInCustomerAsync(userId);
+                customer = await this.customersService.TakeInformationAboutLoggedInCustomerAsync(userId);
                 checkoutModel.CustomerModel = customer;
             }
             else
             {
-                customer = await this.orderService.SaveInformationAboutCustomerForNextTime(customerModel, userId);
+                customer = await this.customersService.SaveInformationAboutCustomerForNextTimeAsync(customerModel, userId);
                 checkoutModel.CustomerModel = customer;
             }
 
@@ -75,14 +78,13 @@
             ViewData["IsHomePage"] = false;
             var userId = await GetUserId();
 
+            await this.orderService.CreateOrderAsync(model.CustomerModel, userId);
 
             if (model.CustomerModel.IsCustomerWantsToPayOnline == true)
             {
                 string sessionUrl = await this.paymentsService.CreateCheckoutSessionAsync(userId);
                 return Redirect(sessionUrl);
             }
-
-            await this.orderService.CreateOrderAsync(model.CustomerModel, userId);
 
             return RedirectToAction(nameof(CompletedOrder));
         }
