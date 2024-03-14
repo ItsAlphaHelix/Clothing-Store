@@ -10,8 +10,8 @@
 @await Html.PartialAsync("_AppPartial")
 
 @section Scripts {
-    <script src="~/js/loadModalProductDetails.js"></script>
-    <script src="~/js/filterProducts.js"></script>
+    <script src="~/js/loadModalProductDetails.js" asp-append-version="true"></script>
+    <script src="~/js/filterProducts.js" asp-append-version="true"></script>
     <script>
         function handleChangeSizes(element) {
             callOnChangeSizes(element, sorting);
@@ -23,7 +23,7 @@
             callOnChangePrices(element, sorting);
         }
     </script>
-    <script src="~/js/addToBag.js"></script>
+     <script src="~/js/addToBag.js" asp-append-version="true"></script>
     <script>
         var page = '@ViewData["CurrentPage"]';
         var sorting = '@ViewData["CurrentSort"]';

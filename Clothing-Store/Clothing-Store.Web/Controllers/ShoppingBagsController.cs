@@ -23,7 +23,7 @@
         public async Task<IActionResult> All()
         {
             ViewData["IsHomePage"] = false;
-            string userId = await GetUserId();
+            string userId = await GetUserIdAsync();
 
             var productsInBag = await this.shoppingBagService.GetAllProductsInBagAsync(userId);
 
@@ -40,7 +40,7 @@
         public async Task<IActionResult> AddProductToBag(int productId, string sizeName, int quantity)
         {
 
-            string userId = await GetUserId();
+            string userId = await GetUserIdAsync();
             try
             {
                 await this.shoppingBagService.AddProductToBagAsync(productId, sizeName, quantity, userId);
@@ -63,7 +63,7 @@
         public async Task<IActionResult> Delete(int bagId)
         {
             await this.shoppingBagService.DeleteProductFromBagAsync(bagId);
-            string userId = await GetUserId();
+            string userId = await GetUserIdAsync();
             int countOfProductsInBag = await this.shoppingBagService.CountOfProductsInBagAsync(userId);
 
             var redirection = countOfProductsInBag == 0 ? RedirectToAction("Index", "Home") : RedirectToAction(nameof(All));
@@ -75,7 +75,7 @@
         public async Task<IActionResult> DecrementQuantityOfProductInBag(string sizeName, int productId)
         {
 
-            string userId = await GetUserId();
+            string userId = await GetUserIdAsync();
 
             await this.shoppingBagService.DecrementQuantityOfProductAsync(sizeName, productId, userId);
 
@@ -86,7 +86,7 @@
         public async Task<IActionResult> IncrementQuantityOfProductInBag(string sizeName, int productId, int currentQuantity)
         {
 
-            string userId = await GetUserId();
+            string userId = await GetUserIdAsync();
 
             try
             {

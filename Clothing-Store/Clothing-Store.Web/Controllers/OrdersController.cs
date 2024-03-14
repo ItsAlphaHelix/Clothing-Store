@@ -4,12 +4,9 @@
     using Clothing_Store.Core.ViewModels.Orders;
     using Clothing_Store.Core.ViewModels.Shared;
     using Clothing_Store.Data.Data.Models;
-    using Clothing_Store.Data.Repositories;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
-    using Stripe;
 
     public class OrdersController : ControllerBase
     {
@@ -38,7 +35,7 @@
         {
             ViewData["IsHomePage"] = false;
 
-            var userId = await GetUserId();
+            var userId = await GetUserIdAsync();
 
             await this.customersService.ChangeCustomerPaymentMethodAsync(customerModel, userId);
 
@@ -50,7 +47,7 @@
         {
             ViewData["IsHomePage"] = false;
 
-            var userId = await GetUserId();
+            var userId = await GetUserIdAsync();
 
             var productsInBag = await shoppingBagService.GetAllProductsInBagAsync(userId);
 
@@ -76,7 +73,7 @@
         public async Task<IActionResult> Checkout(CheckoutViewModel model)
         {
             ViewData["IsHomePage"] = false;
-            var userId = await GetUserId();
+            var userId = await GetUserIdAsync();
 
             await this.orderService.CreateOrderAsync(model.CustomerModel, userId);
 
@@ -94,7 +91,7 @@
         {
             ViewData["IsHomePage"] = false;
 
-            var userId = await GetUserId();
+            var userId = await GetUserIdAsync();
 
             var completedOrder = await this.orderService.GetCurrentUserOrderAsync(userId);
             await this.shoppingBagService.DeleteBagsAsync(userId);
@@ -107,7 +104,7 @@
         public async Task<IActionResult> MineOrders(int page = 1)
         {
             ViewData["IsHomePage"] = false;
-            var userId = await GetUserId();
+            var userId = await GetUserIdAsync();
 
             var model = await this.orderService.GetCustomerWithHisOrdersAsync(userId);
 

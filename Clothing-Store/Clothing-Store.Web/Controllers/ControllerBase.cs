@@ -24,7 +24,7 @@
         /// If the user exists, it returns their ID; otherwise, it generates a temporary user ID, adds it to a cookie, and returns the generated ID.
         /// </summary>
         /// <returns></returns>
-        protected async Task<string> GetUserId()
+        protected async Task<string> GetUserIdAsync()
         {
             string temporaryUserId = shoppingBagService.GetOrCreateTemporaryUserId();
             var user = await GetUserAsync();

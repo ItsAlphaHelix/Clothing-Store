@@ -138,7 +138,6 @@
                 var product = await this.productsService.GetProductDetailsByIdAsync(id, 1, pageSize);
                 return View(product);
             }
-
         }
 
         [Authorize]

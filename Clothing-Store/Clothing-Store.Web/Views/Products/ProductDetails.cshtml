@@ -444,11 +444,11 @@
     <script src="https://cdn.jsdelivr.net/npm/dompurify@2.3.0/dist/purify.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/js/productReviews.js"></script>
+    <script src="~/js/productReviews.js" asp-append-version="true"></script>
     <script>
         var userFullName = '@Html.Raw(ViewBag.UserFullName)';
         var productId = '@Model.Id';
         bindRazorProperties(productId, userFullName);
     </script>
-    <script src="~/js/addToBag.js"></script>
+    <script src="~/js/addToBag.js" asp-append-version="true"></script>
 }
