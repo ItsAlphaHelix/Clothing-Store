@@ -63,8 +63,6 @@
                 })
                 .FirstOrDefaultAsync();
 
-            await DeleteBagAsync(userId);
-
             return userOrder;
         }
 
@@ -179,27 +177,8 @@
             };
 
             customer.Orders.Add(order);
-            await DeleteBagAsync(userId);
 
             await customersRepository.SaveChangesAsync();
-        }
-
-        /// <summary>
-        /// When user's create successfully order, his bag should be deleted.
-        /// </summary>
-        /// <param name="userId">getting user id to to find his products in bag</param>
-        /// <returns></returns>
-        private async Task DeleteBagAsync(string userId)
-        {
-            var productsInBag = await this.productBagRepository
-                            .All()
-                            .Where(x => x.Bag.UserId == userId)
-                            .ToListAsync();
-
-            foreach (var productInBag in productsInBag)
-            {
-                productBagRepository.Delete(productInBag);
-            }
         }
 
         /// <summary>

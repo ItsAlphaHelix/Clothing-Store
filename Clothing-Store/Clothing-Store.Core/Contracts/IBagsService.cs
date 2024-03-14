@@ -21,6 +21,7 @@
         public Task DecrementQuantityOfProductAsync(string sizeName, int productId, string userId);
 
         public Task IncrementQuantityOfProductAsync(string sizeName, int productId, string userId, int currentQuantity);
- 
+
+        Task DeleteBagsAsync(string userId);
     }
 }

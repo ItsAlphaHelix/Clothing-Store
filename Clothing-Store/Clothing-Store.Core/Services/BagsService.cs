@@ -210,5 +210,21 @@
                 return temporaryUserId;
             }
         }
+
+        public async Task DeleteBagsAsync(string userId)
+        {
+            var bagsForDelete = await this.bagsRepository
+                            .All()
+                            .Where(x => x.UserId == userId)
+                            .Select(x => new Bag() { Id = x.Id })
+                            .ToListAsync();
+
+            foreach (var bagForDelete in bagsForDelete)
+            {
+                bagsRepository.Delete(bagForDelete);
+            }
+
+            await this.productsBagRepository.SaveChangesAsync();
+        }
     }
 }

@@ -79,7 +79,6 @@
             if (model.CustomerModel.IsCustomerWantsToPayOnline == true)
             {
                 string sessionUrl = await this.paymentsService.CreateCheckoutSessionAsync(userId);
-
                 return Redirect(sessionUrl);
             }
 
@@ -96,6 +95,7 @@
             var userId = await GetUserId();
 
             var completedOrder = await this.orderService.GetCurrentUserOrderAsync(userId);
+            await this.shoppingBagService.DeleteBagsAsync(userId);
 
             return View(completedOrder);
         }

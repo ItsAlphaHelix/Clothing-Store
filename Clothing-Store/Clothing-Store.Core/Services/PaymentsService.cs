@@ -7,7 +7,6 @@
     public class PaymentsService : IPaymentsService
     {
         private readonly IOrdersService ordersService;
-
         public PaymentsService(IOrdersService ordersService)
         {
             this.ordersService = ordersService;

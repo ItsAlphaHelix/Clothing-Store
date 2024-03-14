@@ -197,7 +197,7 @@
                 .Where(x => x.ProductId == productId)
                 .ToListAsync();
 
-            double averageRatingOfProduct = productReviews.Any() ? (productReviews.Sum(x => x.Rating) / productReviews.Count()) : 0;
+            double averageRatingOfProduct = productReviews.Any() ? (productReviews.Sum(x => x.Rating) / productReviews.Count) : 0;
 
             return averageRatingOfProduct;
         }
