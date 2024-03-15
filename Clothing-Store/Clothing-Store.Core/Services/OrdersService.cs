@@ -6,6 +6,8 @@
     using Clothing_Store.Data.Repositories;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Options;
+    using Stripe.Checkout;
     using System.Collections.Generic;
     using System.Globalization;
 
@@ -37,7 +39,6 @@
 
         public async Task<CompletedOrderViewModel> GetCurrentUserOrderAsync(string userId)
         {
-
             var userOrder = await this.ordersRepository
                 .AllAsNoTracking()
                 .Where(x => x.CustomerId == userId)
@@ -130,7 +131,8 @@
             return products;
         }
 
-        public async Task CreateOrderAsync(CustomerViewModel newCustomer, string userId)
+        public async Task CreateOrderAsync
+            (CustomerViewModel newCustomer, string userId, string stripePaymentStatus, string stripeSessionId)
         {
             var productOrders = await GetAllOrdersWithTheirProductsAsync(userId);
 
@@ -152,6 +154,8 @@
             customer.Orders.Add(order);
 
             await customersRepository.SaveChangesAsync();
+
+            await this.SetStripePaymentStatusAndSessionId(orderNumber, stripePaymentStatus, stripeSessionId);
         }
 
         /// <summary>
@@ -187,6 +191,17 @@
                     SizeName = x.SizeName
                 })
                 .ToListAsync();
+        }
+
+        private async Task SetStripePaymentStatusAndSessionId(string orderNumber, string stripePaymentStatus, string stripeSessionId)
+        {
+            var order = await ordersRepository
+                .All()
+                .FirstOrDefaultAsync(x => x.OrderNumber == orderNumber);
+
+            order.StripePaymentStatus = stripePaymentStatus;
+            order.StripeSessionId = stripeSessionId; 
+            await ordersRepository.SaveChangesAsync();
         }
     }
 }
