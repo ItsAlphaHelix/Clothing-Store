@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Clothing_Store.Core.Contracts
+﻿namespace Clothing_Store.Core.Contracts
 {
+    using Stripe.Checkout;
     public interface IPaymentsService
     {
-        Task<string> CreateCheckoutSessionAsync(string userId);
+        Task<Session> CreateCheckoutSessionAsync(string userId);
+
+        Task RefundAsync(string orderNumber);
     }
 }

@@ -19,6 +19,11 @@
 
         public virtual Customer Customer { get; set; } = null!;
 
+        public string? StripePaymentStatus { get; set; }
+
+        public string? StripePaymentIntendId { get; set; }
+
+        public string? StripeSessionId { get; set; }
         public virtual ICollection<OrderProduct> OrderProducts { get; set; } = new HashSet<OrderProduct>();
     }
 }

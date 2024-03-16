@@ -7,6 +7,8 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Newtonsoft.Json;
+    using Stripe.Checkout;
 
     public class OrdersController : ControllerBase
     {
@@ -29,7 +31,6 @@
 
         }
 
-
         [HttpGet]
         public async Task<IActionResult> ChangePaymentMethod(CustomerViewModel customerModel)
         {
@@ -40,6 +41,16 @@
             await this.customersService.ChangeCustomerPaymentMethodAsync(customerModel, userId);
 
             return RedirectToAction(nameof(Checkout));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RefundOrder(string numberOfOrder)
+        {
+            ViewData["IsHomePage"] = false;
+
+            await this.paymentsService.RefundAsync(numberOfOrder);
+
+            return RedirectToAction(nameof(MineOrders));
         }
 
         [HttpGet]
@@ -75,26 +86,51 @@
             ViewData["IsHomePage"] = false;
             var userId = await GetUserIdAsync();
 
-            await this.orderService.CreateOrderAsync(model.CustomerModel, userId);
-
             if (model.CustomerModel.IsCustomerWantsToPayOnline == true)
             {
-                string sessionUrl = await this.paymentsService.CreateCheckoutSessionAsync(userId);
-                return Redirect(sessionUrl);
+                var session = await this.paymentsService.CreateCheckoutSessionAsync(userId);
+
+                TempData["Model"] = JsonConvert.SerializeObject(model);
+                TempData["Session"] = session.Id;
+
+                return Redirect(session.Url);
             }
 
-            return RedirectToAction(nameof(CompletedOrder));
+            await this.orderService.CreateOrderAsync(model.CustomerModel, userId);
+            await this.shoppingBagService.DeleteBagsAsync(userId);
+
+            return RedirectToAction(nameof(OrderConfirmation));
         }
 
         [HttpGet]
-        public async Task<IActionResult> CompletedOrder()
+        public async Task<IActionResult> OrderConfirmation()
         {
             ViewData["IsHomePage"] = false;
 
             var userId = await GetUserIdAsync();
 
+            var service = new SessionService();
+
+            if (TempData["Session"] != null)
+            {
+                var session = await service.GetAsync(TempData["Session"].ToString());
+
+                if (session.PaymentStatus == "paid")
+                {
+                    var checkoutModel = JsonConvert.DeserializeObject<CheckoutViewModel>(TempData["Model"].ToString());
+                    
+                    await this.orderService.CreateOrderAsync(
+                        checkoutModel.CustomerModel,
+                        userId,
+                        session.PaymentStatus,
+                        session.Id, 
+                        session.PaymentIntentId);
+
+                    await this.shoppingBagService.DeleteBagsAsync(userId);
+                }
+            }
+
             var completedOrder = await this.orderService.GetCurrentUserOrderAsync(userId);
-            await this.shoppingBagService.DeleteBagsAsync(userId);
 
             return View(completedOrder);
         }

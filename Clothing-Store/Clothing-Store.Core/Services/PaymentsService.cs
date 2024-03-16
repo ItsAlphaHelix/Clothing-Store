@@ -1,20 +1,27 @@
 ﻿namespace Clothing_Store.Core.Services
 {
     using Clothing_Store.Core.Contracts;
+    using Clothing_Store.Data.Data.Models;
+    using Clothing_Store.Data.Repositories;
+    using Microsoft.EntityFrameworkCore;
+    using Stripe;
     using Stripe.Checkout;
     using System.Threading.Tasks;
 
     public class PaymentsService : IPaymentsService
     {
-        private readonly IOrdersService ordersService;
-        public PaymentsService(IOrdersService ordersService)
+        private readonly IBagsService bagService;
+        private readonly IRepository<Order> ordersRepository;
+        public PaymentsService(IBagsService bagService, IRepository<Order> ordersRepository)
         {
-            this.ordersService = ordersService;
+            this.bagService = bagService;
+            this.ordersRepository = ordersRepository;
+
         }
-        public async Task<string> CreateCheckoutSessionAsync(string userId)
+        public async Task<Session> CreateCheckoutSessionAsync(string userId)
         {
             string baseUrl = "https://localhost:44312/";
-            string successUrl = $"{baseUrl}Orders/CompletedOrder";
+            string successUrl = $"{baseUrl}Orders/OrderConfirmation";
             string cancelUrl = $"{baseUrl}Orders/PaymentFailed";
 
             var options = new SessionCreateOptions()
@@ -25,27 +32,30 @@
                 Mode = "payment",
             };
 
-            var completedOrder = await this.ordersService.GetCurrentUserOrderAsync(userId);
+            var bags = await this.bagService.GetAllProductsInBagAsync(userId);
 
-            foreach (var product in completedOrder.ProductOrderModel)
+            foreach (var bag in bags)
             {
-                var sessionListItem = new SessionLineItemOptions()
+                foreach (var product in bag.ProductBags)
                 {
-                    PriceData = new SessionLineItemPriceDataOptions()
+                    var sessionListItem = new SessionLineItemOptions()
                     {
-                        UnitAmountDecimal = product.Price * 100,
-                        Currency = "bgn",
-                        ProductData = new SessionLineItemPriceDataProductDataOptions()
+                        PriceData = new SessionLineItemPriceDataOptions()
                         {
-                            Images = new List<string> { product.ImageUrl },
-                            Name = product.CategoryName
-                            
-                        }
-                    },
-                    Quantity = product.Quantity
-                };
+                            UnitAmountDecimal = product.Price * 100,
+                            Currency = "bgn",
+                            ProductData = new SessionLineItemPriceDataProductDataOptions()
+                            {
+                                Images = new List<string> { product.ImageUrl },
+                                Name = product.CategoryName
 
-                options.LineItems.Add(sessionListItem);
+                            }
+                        },
+                        Quantity = product.Quantity
+                    };
+
+                    options.LineItems.Add(sessionListItem);
+                }
             }
 
             decimal shipping = 5.00M;
@@ -63,12 +73,33 @@
                 },
                 Quantity = 1
             };
+
             options.LineItems.Add(shippingLineItem);
 
             var service = new SessionService();
             Session session = await service.CreateAsync(options);
 
-            return session.Url;
+            return session;
+        }
+
+        public async Task RefundAsync(string orderNumber)
+        {
+            var order = await this.ordersRepository
+                .AllAsNoTracking()
+                .FirstOrDefaultAsync(x => x.OrderNumber == orderNumber);
+
+
+            if (order.StripePaymentStatus == "paid")
+            {
+                var options = new RefundCreateOptions()
+                {
+                    Reason = RefundReasons.RequestedByCustomer,
+                    PaymentIntent = order.StripePaymentIntendId
+                };
+
+                var service = new RefundService();
+                Refund refund = await service.CreateAsync(options);
+            }
         }
     }
 }

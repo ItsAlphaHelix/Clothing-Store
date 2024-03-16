@@ -132,7 +132,11 @@
         }
 
         public async Task CreateOrderAsync
-            (CustomerViewModel newCustomer, string userId, string stripePaymentStatus, string stripeSessionId)
+            (CustomerViewModel newCustomer,
+            string userId,
+            string stripePaymentStatus,
+            string stripeSessionId,
+            string stripePaymentSessionIntendId)
         {
             var productOrders = await GetAllOrdersWithTheirProductsAsync(userId);
 
@@ -148,14 +152,15 @@
                 Customer = customer,
                 OrderDate = DateTime.Now,
                 OrderNumber = orderNumber,
+                StripePaymentStatus = stripePaymentStatus,
+                StripeSessionId = stripeSessionId,
+                StripePaymentIntendId = stripePaymentSessionIntendId,
                 OrderProducts = productOrders
             };
 
             customer.Orders.Add(order);
 
             await customersRepository.SaveChangesAsync();
-
-            await this.SetStripePaymentStatusAndSessionId(orderNumber, stripePaymentStatus, stripeSessionId);
         }
 
         /// <summary>
@@ -191,17 +196,6 @@
                     SizeName = x.SizeName
                 })
                 .ToListAsync();
-        }
-
-        private async Task SetStripePaymentStatusAndSessionId(string orderNumber, string stripePaymentStatus, string stripeSessionId)
-        {
-            var order = await ordersRepository
-                .All()
-                .FirstOrDefaultAsync(x => x.OrderNumber == orderNumber);
-
-            order.StripePaymentStatus = stripePaymentStatus;
-            order.StripeSessionId = stripeSessionId; 
-            await ordersRepository.SaveChangesAsync();
         }
     }
 }

@@ -44,6 +44,8 @@
                                 <h5>Номер на поръчката:  @order.NumberOfOrder</h5>
                                  <br>
                                 <a asp-action="OrderDetails" asp-route-numberOfOrder="@order.NumberOfOrder" class="btn btn-outline-primary" role="button" aria-pressed="true">Вижте продуктите</a>
+                                <a asp-action="RefundOrder" asp-route-numberOfOrder="@order.NumberOfOrder" class="btn btn-outline-danger" style="margin-left: 10px" role="button" aria-pressed="true">Отказване на поръчката</a>
+
                             </div>
                             <div class="col-4 text-end">
                                 <div class="mg-right-order-tittles mg-order-details">

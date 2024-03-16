@@ -10,7 +10,12 @@
         /// <param name="customerModel">Customer model comes from model binder, with his help you can create the customer.</param>
         /// <param name="userId">The user's id helps to find current customer in the app.</param>
         /// <returns></returns>
-        public Task CreateOrderAsync(CustomerViewModel newCustomer, string userId);
+        public Task CreateOrderAsync(
+            CustomerViewModel newCustomer,
+            string userId,
+            string stripePaymentStatus = null,
+            string stripeSessionId = null,
+            string stripePaymentSessionIntendId = null);
 
         /// <summary>
         /// The method helps to getting current user's order.
