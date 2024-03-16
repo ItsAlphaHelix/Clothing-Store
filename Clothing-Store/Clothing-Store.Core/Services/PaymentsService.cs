@@ -1,5 +1,6 @@
 ﻿namespace Clothing_Store.Core.Services
 {
+    using AspNetCoreHero.ToastNotification.Abstractions;
     using Clothing_Store.Core.Contracts;
     using Clothing_Store.Data.Data.Models;
     using Clothing_Store.Data.Repositories;
@@ -12,7 +13,8 @@
     {
         private readonly IBagsService bagService;
         private readonly IRepository<Order> ordersRepository;
-        public PaymentsService(IBagsService bagService, IRepository<Order> ordersRepository)
+        public PaymentsService(IBagsService bagService,
+            IRepository<Order> ordersRepository)
         {
             this.bagService = bagService;
             this.ordersRepository = ordersRepository;
@@ -85,7 +87,7 @@
         public async Task RefundAsync(string orderNumber)
         {
             var order = await this.ordersRepository
-                .AllAsNoTracking()
+                .All()
                 .FirstOrDefaultAsync(x => x.OrderNumber == orderNumber);
 
 
@@ -100,6 +102,9 @@
                 var service = new RefundService();
                 Refund refund = await service.CreateAsync(options);
             }
+
+            ordersRepository.Delete(order);
+            await ordersRepository.SaveChangesAsync();
         }
     }
 }

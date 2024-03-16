@@ -56,7 +56,9 @@
     <script src="~/js/mg-collection.js" asp-append-version="true"></script>
     <script src="~/js/mg-home-2.js" asp-append-version="true"></script>
     <script src="~/js/mg-common.js" asp-append-version="true"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js" asp-append-version="true"></script>
 
+    @await Component.InvokeAsync("Notyf") 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

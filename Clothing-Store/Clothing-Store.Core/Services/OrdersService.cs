@@ -18,22 +18,19 @@
         private readonly IRepository<Customer> customersRepository;
         private readonly IRepository<Order> ordersRepository;
         private readonly IRepository<OrderProduct> orderProductsRepository;
-        private readonly UserManager<ApplicationUser> usersManager;
 
         public OrdersService(
             ICustomersService customersService,
             IRepository<ProductBag> productBagRepository,
             IRepository<Order> ordersRepository,
             IRepository<Customer> customersRepository,
-            IRepository<OrderProduct> orderProductsRepository,
-            UserManager<ApplicationUser> usersManager)
+            IRepository<OrderProduct> orderProductsRepository)
         {
             this.customersService = customersService;
             this.productBagRepository = productBagRepository;
             this.ordersRepository = ordersRepository;
             this.customersRepository = customersRepository;
             this.orderProductsRepository = orderProductsRepository;
-            this.usersManager = usersManager;
 
         }
 
@@ -89,11 +86,13 @@
             var orders = this.ordersRepository
                 .AllAsNoTracking()
                 .Where(x => x.CustomerId == userId)
+                .OrderByDescending(x => x.OrderDate)
                 .Select(x => new OrderViewModel()
                 {
                     NumberOfOrder = x.OrderNumber,
                     OrderDate = x.OrderDate.ToString("MM/dd/yyyy. HH:mm", CultureInfo.InvariantCulture),
-                    TotalPrice = x.OrderProducts.Sum(x => (x.Price * x.Quantity) + 5)
+                    TotalPrice = x.OrderProducts.Sum(x => (x.Price * x.Quantity) + 5),
+                    StripePaymentStatus =  x.StripePaymentStatus 
                 })
                 .AsQueryable();
 

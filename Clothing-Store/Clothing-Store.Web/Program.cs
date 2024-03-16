@@ -1,3 +1,4 @@
+using AspNetCoreHero.ToastNotification.Extensions;
 using Clothing_Store.Data.Data;
 using Clothing_Store.Data.Data.Models;
 using Clothing_Store.Extensions;
@@ -62,6 +63,8 @@ app.UseSession();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.UseNotyf();
 app.MapRazorPages();
 
 app.Run();

@@ -44,7 +44,7 @@
                                 <h5>Номер на поръчката:  @order.NumberOfOrder</h5>
                                  <br>
                                 <a asp-action="OrderDetails" asp-route-numberOfOrder="@order.NumberOfOrder" class="btn btn-outline-primary" role="button" aria-pressed="true">Вижте продуктите</a>
-                                <a asp-action="RefundOrder" asp-route-numberOfOrder="@order.NumberOfOrder" class="btn btn-outline-danger" style="margin-left: 10px" role="button" aria-pressed="true">Отказване на поръчката</a>
+                                <a onclick="deleteOrder('@order.StripePaymentStatus', '@order.NumberOfOrder')" class="btn btn-outline-danger" style="margin-left: 10px" role="button" aria-pressed="true">Отказване на поръчката</a>
 
                             </div>
                             <div class="col-4 text-end">
@@ -103,3 +103,41 @@
                 </div>
             </div>
         </div>
+
+@section Scripts{
+    <script>
+
+        function deleteOrder(stripePaymentStatus, numberOfOrder) {
+            let text = '';
+            if (stripePaymentStatus === 'paid') {
+                text = 'Ако пожелате да изтриете поръчката, парите Ви ще бъдат върнати.'
+            }else {
+                text = '';
+            }
+            swal({
+                title: "Сиргурен ли сте, че искате да изтриете поръчката?",
+                text: text,
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            type: "GET",
+                            url: '/Orders/RefundOrder',
+                            data: { numberOfOrder },
+                            success: function () {
+                                swal("Поръчката Ви беше успешно изтрита.", {
+                                    icon: "success",
+                                }).then(function () {
+                                    location.reload();
+                                });
+                            }
+                        });
+                    }
+                });
+        }
+
+    </script>
+}

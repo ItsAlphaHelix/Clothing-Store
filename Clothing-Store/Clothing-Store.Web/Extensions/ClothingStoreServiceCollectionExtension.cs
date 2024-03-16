@@ -1,5 +1,6 @@
 ﻿namespace Clothing_Store.Extensions
 {
+    using AspNetCoreHero.ToastNotification;
     using Clothing_Store.Core.Contracts;
     using Clothing_Store.Core.Services;
     using Clothing_Store.Data.Repositories;
@@ -16,7 +17,12 @@
             services.AddScoped<IOrdersService, OrdersService>();
             services.AddScoped<IPaymentsService, PaymentsService>();
             services.AddScoped<ICustomersService, CustomersService>();
-
+            services.AddNotyf(configuration =>
+            {
+                configuration.DurationInSeconds = 5;
+                configuration.IsDismissable = true;
+                configuration.Position = NotyfPosition.TopRight;
+            });
 
             return services;
         }
