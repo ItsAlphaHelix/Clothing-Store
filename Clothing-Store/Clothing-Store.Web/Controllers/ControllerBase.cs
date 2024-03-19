@@ -9,11 +9,11 @@
     public class ControllerBase : Controller
     {
         private readonly UserManager<ApplicationUser> usersManager;
-        private readonly IBagsService shoppingBagService;
-        public ControllerBase(UserManager<ApplicationUser> usersManager, IBagsService shoppingBagService)
+        private readonly IBagsService bagsService;
+        public ControllerBase(UserManager<ApplicationUser> usersManager, IBagsService bagsService)
         {
             this.usersManager = usersManager;
-            this.shoppingBagService = shoppingBagService;
+            this.bagsService = bagsService;
         }
 
         protected async Task<ApplicationUser> GetUserAsync()
@@ -26,7 +26,7 @@
         /// <returns></returns>
         protected async Task<string> GetUserIdAsync()
         {
-            string temporaryUserId = shoppingBagService.GetOrCreateTemporaryUserId();
+            string temporaryUserId = bagsService.GetOrCreateTemporaryUserId();
             var user = await GetUserAsync();
             string userId = string.Empty;
 

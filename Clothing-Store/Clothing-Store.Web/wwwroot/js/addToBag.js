@@ -38,7 +38,7 @@ function addProductToBag(productId, page, sorting, selectedProducts, selectedPri
 
     $.ajax({
         type: "POST",
-        url: '/ShoppingBags/AddProductToBag',
+        url: '/Bags/AddProductToBag',
         headers: {
             'RequestVerificationToken': antiForgeryToken
         },

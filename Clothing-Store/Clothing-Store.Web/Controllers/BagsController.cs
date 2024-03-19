@@ -1,22 +1,25 @@
 ﻿namespace Clothing_Store.Controllers
 {
     using Clothing_Store.Core.Contracts;
+    using Clothing_Store.Core.ViewModels.Bags;
+    using Clothing_Store.Core.ViewModels.Orders;
+    using Clothing_Store.Core.ViewModels.Shared;
     using Clothing_Store.CustomExceptions;
     using Clothing_Store.Data.Data.Models;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using System.Security.Claims;
 
-    public class ShoppingBagsController : ControllerBase
+    public class BagsController : ControllerBase
     {
-        private readonly IBagsService shoppingBagService;
+        private readonly IBagsService bagsService;
 
-        public ShoppingBagsController(
+        public BagsController(
             UserManager<ApplicationUser> usersManager,
-            IBagsService shoppingBagService)
-            :base(usersManager, shoppingBagService)
+            IBagsService bagsService)
+            :base(usersManager, bagsService)
         {
-            this.shoppingBagService = shoppingBagService;   
+            this.bagsService = bagsService;   
         }
 
         [HttpGet]
@@ -25,7 +28,7 @@
             ViewData["IsHomePage"] = false;
             string userId = await GetUserIdAsync();
 
-            var productsInBag = await this.shoppingBagService.GetAllProductsInBagAsync(userId);
+            var productsInBag = await this.bagsService.GetAllProductsInBagAsync(userId);
 
             if (!productsInBag.Any())
             {
@@ -43,7 +46,7 @@
             string userId = await GetUserIdAsync();
             try
             {
-                await this.shoppingBagService.AddProductToBagAsync(productId, sizeName, quantity, userId);
+                await this.bagsService.AddProductToBagAsync(productId, sizeName, quantity, userId);
             }
             catch (InvalidSizeException ex)
             {
@@ -62,9 +65,9 @@
         [HttpGet]
         public async Task<IActionResult> Delete(int bagId)
         {
-            await this.shoppingBagService.DeleteProductFromBagAsync(bagId);
+            await this.bagsService.DeleteProductFromBagAsync(bagId);
             string userId = await GetUserIdAsync();
-            int countOfProductsInBag = await this.shoppingBagService.CountOfProductsInBagAsync(userId);
+            int countOfProductsInBag = await this.bagsService.CountOfProductsInBagAsync(userId);
 
             var redirection = countOfProductsInBag == 0 ? RedirectToAction("Index", "Home") : RedirectToAction(nameof(All));
 
@@ -77,7 +80,7 @@
 
             string userId = await GetUserIdAsync();
 
-            await this.shoppingBagService.DecrementQuantityOfProductAsync(sizeName, productId, userId);
+            await this.bagsService.DecrementQuantityOfProductAsync(sizeName, productId, userId);
 
             return Ok();
         }
@@ -90,7 +93,7 @@
 
             try
             {
-                await this.shoppingBagService.IncrementQuantityOfProductAsync(sizeName, productId, userId, currentQuantity);
+                await this.bagsService.IncrementQuantityOfProductAsync(sizeName, productId, userId, currentQuantity);
             }
             catch (InvalidOperationException)
             {

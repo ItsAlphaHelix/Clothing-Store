@@ -87,7 +87,7 @@
                         }
                         @if (this.User?.Identity?.IsAuthenticated ?? false)
                         {
-                            <li><a asp-area="Identity" asp-page="/Account/Logout"  asp-route-returnUrl="@Context.Request.Path"><img src="~/images/pngs/logout.png" alt="" /></a></li>
+                            <li><a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/Home/Index"><img src="~/images/pngs/logout.png" alt="" /></a></li>
                         }
                         else
                         {
@@ -95,7 +95,7 @@
                         }
                         @if(countOfProductsInBag != 0)
                         {
-                            <li><a asp-controller="ShoppingBags" asp-action="All"><img src="~/images/svgs/cart.svg" alt="" /><span class="mg-header-icon-counter cart-counter">@countOfProductsInBag</span></a></li>
+                            <li><a asp-controller="Bags" asp-action="All"><img src="~/images/svgs/cart.svg" alt="" /><span class="mg-header-icon-counter cart-counter">@countOfProductsInBag</span></a></li>
                         }
                         else
                         {

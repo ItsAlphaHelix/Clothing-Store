@@ -82,7 +82,7 @@
 
             var orders = this.ordersRepository
                 .AllAsNoTracking()
-                .Where(x => x.CustomerId == userId)
+                .Where(x => x.CustomerId == userId && x.StripePaymentStatus != "refunded")
                 .OrderByDescending(x => x.OrderDate)
                 .Select(x => new OrderViewModel()
                 {

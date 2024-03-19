@@ -12,13 +12,13 @@
     [Authorize]
     public class FavoritesController : ControllerBase
     {
-        private readonly IFavoritesService favoriteService;
+        private readonly IFavoritesService favoritesService;
         public FavoritesController(
             UserManager<ApplicationUser> usersManager,
-            IFavoritesService favoriteService)
+            IFavoritesService favoritesService)
             : base(usersManager, null)
         {
-            this.favoriteService = favoriteService;
+            this.favoritesService = favoritesService;
         }
        
         public async Task<IActionResult> All(int page = 1)
@@ -27,7 +27,7 @@
 
             var user = await GetUserAsync();
 
-            var favoritesProducts = this.favoriteService.AllFavoritesProductsAsync(user.Id);
+            var favoritesProducts = this.favoritesService.AllFavoritesProductsAsync(user.Id);
 
             if (!favoritesProducts.Any())
             {
@@ -45,13 +45,13 @@
         }
 
         public async Task<IActionResult> Add(
-            int id, int page, string sorting, string selectedProducts, string selectedPrice, string selectedSizes)
+            int id, string sorting, string selectedProducts, string selectedPrice, string selectedSizes, int page = 1)
         {
             ViewData["IsHomePage"] = false;
 
             var user = await GetUserAsync();
 
-            await this.favoriteService.AddFavoriteProduct(user.Id, id);
+            await this.favoritesService.AddFavoriteProduct(user.Id, id);
 
             var redirection = new
             {
@@ -68,10 +68,10 @@
         {
             ViewData["IsHomePage"] = false;
 
-            await this.favoriteService.DeleteFavoriteProduct(favoriteId);
+            await this.favoritesService.DeleteFavoriteProduct(favoriteId);
 
             string userId = GetUserAsync().Result.Id;
-            var favoritesProducts = this.favoriteService.AllFavoritesProductsAsync(userId);
+            var favoritesProducts = this.favoritesService.AllFavoritesProductsAsync(userId);
             var paginated = await PaginatedList<FavoriteViewModel>.CreateAsync(favoritesProducts, page, 3);
 
             if (paginated.Count == 0)

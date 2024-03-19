@@ -12,20 +12,20 @@
 
     public class OrdersController : ControllerBase
     {
-        private readonly IBagsService shoppingBagService;
-        private readonly IOrdersService orderService;
+        private readonly IBagsService bagsService;
+        private readonly IOrdersService ordersService;
         private readonly IPaymentsService paymentsService;
         private readonly ICustomersService customersService;
         public OrdersController(
             UserManager<ApplicationUser> usersManager,
-            IBagsService shoppingBagService,
-            IOrdersService orderService,
+            IBagsService bagsService,
+            IOrdersService ordersService,
             IPaymentsService paymentsService,
             ICustomersService customersService)
-            : base(usersManager, shoppingBagService)
+            : base(usersManager, bagsService)
         {
-            this.shoppingBagService = shoppingBagService;
-            this.orderService = orderService;
+            this.bagsService = bagsService;
+            this.ordersService = ordersService;
             this.customersService = customersService;
             this.paymentsService = paymentsService;
 
@@ -60,7 +60,7 @@
 
             var userId = await GetUserIdAsync();
 
-            var productsInBag = await shoppingBagService.GetAllProductsInBagAsync(userId);
+            var productsInBag = await bagsService.GetAllProductsInBagAsync(userId);
 
             CheckoutViewModel checkoutModel = new();
             CustomerViewModel customer = null;
@@ -96,8 +96,8 @@
                 return Redirect(session.Url);
             }
 
-            await this.orderService.CreateOrderAsync(model.CustomerModel, userId);
-            await this.shoppingBagService.DeleteBagsAsync(userId);
+            await this.ordersService.CreateOrderAsync(model.CustomerModel, userId);
+            await this.bagsService.DeleteBagsAsync(userId);
 
             return RedirectToAction(nameof(OrderConfirmation));
         }
@@ -119,18 +119,18 @@
                 {
                     var checkoutModel = JsonConvert.DeserializeObject<CheckoutViewModel>(TempData["Model"].ToString());
                     
-                    await this.orderService.CreateOrderAsync(
+                    await this.ordersService.CreateOrderAsync(
                         checkoutModel.CustomerModel,
                         userId,
                         session.PaymentStatus,
                         session.Id, 
                         session.PaymentIntentId);
 
-                    await this.shoppingBagService.DeleteBagsAsync(userId);
+                    await this.bagsService.DeleteBagsAsync(userId);
                 }
             }
 
-            var completedOrder = await this.orderService.GetCurrentUserOrderAsync(userId);
+            var completedOrder = await this.ordersService.GetCurrentUserOrderAsync(userId);
 
             return View(completedOrder);
         }
@@ -145,7 +145,7 @@
 
             try
             {
-                model = await this.orderService.GetCustomerWithHisOrdersAsync(userId);
+                model = await this.ordersService.GetCustomerWithHisOrdersAsync(userId);
             }
             catch (NullReferenceException)
             {
@@ -168,7 +168,7 @@
         {
             ViewData["IsHomePage"] = false;
             ViewData["NumberOfOrder"] = numberOfOrder;
-            var products = this.orderService.GetProductsInOrderAsQueryable(numberOfOrder);
+            var products = this.ordersService.GetProductsInOrderAsQueryable(numberOfOrder);
 
             var paginated = await PaginatedList<ProductOrderViewModel>.CreateAsync(products, page, 3);
 

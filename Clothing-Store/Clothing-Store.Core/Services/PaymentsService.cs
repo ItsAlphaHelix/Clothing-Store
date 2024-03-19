@@ -103,7 +103,7 @@
                 Refund refund = await service.CreateAsync(options);
             }
 
-            ordersRepository.Delete(order);
+            order.StripePaymentStatus = "refunded";
             await ordersRepository.SaveChangesAsync();
         }
     }

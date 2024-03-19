@@ -46,7 +46,8 @@
         {
             var isCustomerHasOrders = await this.customersRepository
                 .AllAsNoTracking()
-                .AnyAsync(x => x.Orders.Any());
+                .Where(x => x.CustomerId == userId)
+                .AnyAsync(x => x.Orders.Any(x => x.StripePaymentStatus != "refunded"));
 
             if (isCustomerHasOrders)
             {
