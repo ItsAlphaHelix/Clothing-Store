@@ -34,63 +34,75 @@
         }
         public async Task AddProductToBagAsync(int productId, string sizeName, int quantity, string userId)
         {
+
             if (string.IsNullOrWhiteSpace(sizeName))
             {
                 throw new InvalidSizeException("Моля изберете размер.");
             }
 
-            int quantityOfCurrentSize = await this.GetTotalQuantityOfSizeOfProduct(sizeName, productId);
+            var bag = await bagsRepository
+            .All()
+            .Include(x => x.ProductBags)
+            .Where(x => x.UserId == userId && x.ProductBags.Any(x => x.ProductId == productId && x.SizeName == sizeName))
+            .FirstOrDefaultAsync();
 
-            if (quantityOfCurrentSize < quantity)
+            if (bag == null)
             {
-                throw new QuantityException("Няма достатъчно бройки от този размер.");
-            }
+                bag = new Bag
+                {
+                    UserId = userId,
+                    CreatedOn = DateTime.UtcNow
+                };
 
-            int quantityOfCurrentSizeProductInBag = await this.productsBagRepository
-                .AllAsNoTracking()
-                .Where(x => x.ProductId == productId && x.SizeName == sizeName && x.Bag.UserId == userId)
-                .Select(x => x.Quantity)
+                var product = await this.productsRepository
+                .All()
+                .Where(x => x.Id == productId)
                 .FirstOrDefaultAsync();
 
-            if (quantityOfCurrentSizeProductInBag >= quantityOfCurrentSize)
-            {
-                throw new QuantityException("Няма достатъчно бройки от този размер в чантата.");
-            }
+                var productBag = new ProductBag
+                {
+                    Product = product,
+                    ProductId = productId,
+                    SizeName = sizeName,
+                    Bag = bag,
+                    BagId = bag.Id,
+                    Quantity = quantity,
+                };
 
-           
+                await bagsRepository.AddAsync(bag);
+                bag.ProductBags.Add(productBag);
+            }
+            else
+            {
+                int quantityOfCurrentSize = await this.GetTotalQuantityOfSizeOfProduct(sizeName, productId);
+
+                int quantityOfCurrentSizeProductInBag = await this.productsBagRepository
+                    .AllAsNoTracking()
+                    .Where(x => x.ProductId == productId && x.SizeName == sizeName && x.Bag.UserId == userId)
+                    .Select(x => x.Quantity)
+                    .FirstOrDefaultAsync();
+
+                if (quantityOfCurrentSizeProductInBag + quantity > quantityOfCurrentSize)
+                {
+                    throw new QuantityException("Няма достатъчно бройки от този размер.");
+                }
+
+
                 var currentProduct = await this.productsBagRepository
                     .All()
                     .Where(x => x.Bag.UserId == userId && x.ProductId == productId && x.SizeName == sizeName)
                     .FirstOrDefaultAsync();
 
                 if (currentProduct != null)
-                {
-                    currentProduct.Quantity += quantity;
-                }
-                else
-                {
-                    var bag = new Bag { UserId = userId };
-
-                    var product = await this.productsRepository
-                        .All()
-                        .Where(x => x.Id == productId)
-                        .FirstOrDefaultAsync();
-
-                    var productBag = new ProductBag
-                    {
-                        Product = product,
-                        ProductId = productId,
-                        SizeName = sizeName,
-                        Bag = bag,
-                        BagId = bag.Id,
-                        Quantity = quantity,
-                    };
-
-                    await bagsRepository.AddAsync(bag);
-                    bag.ProductBags.Add(productBag);
+                {             
+                    currentProduct.Quantity += quantity;   
                 }
 
-                await bagsRepository.SaveChangesAsync();
+                bag.IsDeleted = false;            
+                bag.ModifiedOn = DateTime.UtcNow;
+            }
+
+            await bagsRepository.SaveChangesAsync();
         }
 
 
@@ -99,7 +111,7 @@
 
             var productsInBag = await this.bagsRepository
                 .AllAsNoTracking()
-                .Where(x => x.UserId == userId && x.ProductBags.Count != 0)
+                .Where(x => x.UserId == userId && !x.IsDeleted)
                 .Select(x => new BagViewModel()
                 {
                     BagId = x.Id,
@@ -122,7 +134,7 @@
         {
             decimal totalPrice = await this.productsBagRepository
                 .AllAsNoTracking()
-                .Where(x => x.Bag.UserId == userId)
+                .Where(x => x.Bag.UserId == userId && !x.Bag.IsDeleted)
                 .SumAsync(x => x.Product.Price * x.Quantity);
 
             return totalPrice;
@@ -132,7 +144,7 @@
         {
             int count = await this.productsBagRepository
                 .AllAsNoTracking()
-                .Where(x => x.Bag.UserId == userId)
+                .Where(x => x.Bag.UserId == userId && !x.Bag.IsDeleted)
                 .SumAsync(x => x.Quantity);
 
             return count;
@@ -142,9 +154,17 @@
         {
             var bag = await this.bagsRepository
                 .All()
+                .Include(x => x.ProductBags)
                 .FirstOrDefaultAsync(x => x.Id == bagId);
 
-            this.bagsRepository.Delete(bag);
+            bag.IsDeleted = true;
+            bag.DeletedOn = DateTime.UtcNow;
+
+            foreach (var product in bag.ProductBags)
+            {
+                product.Quantity = 0;
+            }
+
             await this.bagsRepository.SaveChangesAsync();
         }
 

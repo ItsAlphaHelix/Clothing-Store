@@ -164,7 +164,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: '/ShoppingBags/DecrementQuantityOfProductInBag',
+                    url: '/Bags/DecrementQuantityOfProductInBag',
                     headers: {
                         'RequestVerificationToken': antiForgeryToken
                     },
@@ -177,7 +177,7 @@
                     success: function (response) {
 
                         console.log("Everything is okey.")
-                        window.location.href = "/ShoppingBags/All";
+                        window.location.href = "/Bags/All";
 
                     },
                     error: function (xhr, status, error) {
@@ -197,7 +197,7 @@
 
             $.ajax({
                 type: "POST",
-                url: '/ShoppingBags/IncrementQuantityOfProductInBag',
+                url: '/Bags/IncrementQuantityOfProductInBag',
                 headers: {
                     'RequestVerificationToken': antiForgeryToken
                 },
