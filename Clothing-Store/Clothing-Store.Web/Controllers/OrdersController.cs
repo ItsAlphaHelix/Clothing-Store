@@ -50,7 +50,7 @@
 
             await this.paymentsService.RefundAsync(numberOfOrder);
 
-            return RedirectToAction(nameof(MineOrders));
+            return Ok();
         }
 
         [HttpGet]
@@ -141,9 +141,16 @@
         {
             ViewData["IsHomePage"] = false;
             var userId = await GetUserIdAsync();
+            MineOrdersViewModel model = new();
 
-            var model = await this.orderService.GetCustomerWithHisOrdersAsync(userId);
-
+            try
+            {
+                model = await this.orderService.GetCustomerWithHisOrdersAsync(userId);
+            }
+            catch (NullReferenceException)
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
             var paginated = await PaginatedList<OrderViewModel>.CreateAsync(model.OrdersModel, page, 3);
 

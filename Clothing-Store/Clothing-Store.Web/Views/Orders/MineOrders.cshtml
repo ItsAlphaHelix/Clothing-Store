@@ -131,7 +131,13 @@
                                 swal("Поръчката Ви беше успешно изтрита.", {
                                     icon: "success",
                                 }).then(function () {
-                                    location.reload();
+                                    let page = @Model.Models.PageNumber;
+
+                                    if (@Model.Models.Count - 1 == 0) {
+                                        page--;
+                                    }
+                                    console.log('@Model.Models.Count')
+                                    window.location.href = `/Orders/MineOrders?page=${page}`;
                                 });
                             }
                         });

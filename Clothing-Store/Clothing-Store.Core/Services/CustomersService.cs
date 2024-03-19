@@ -44,9 +44,11 @@
 
         public async Task<bool> IsCustomerHasOrdersAsync(string userId)
         {
-            var customer = await this.customersRepository.AllAsNoTracking().AnyAsync(x => x.CustomerId == userId);
+            var isCustomerHasOrders = await this.customersRepository
+                .AllAsNoTracking()
+                .AnyAsync(x => x.Orders.Any());
 
-            if (customer)
+            if (isCustomerHasOrders)
             {
                 return true;
             }

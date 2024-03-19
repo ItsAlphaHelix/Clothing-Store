@@ -4,10 +4,7 @@
     using Clothing_Store.Core.ViewModels.Orders;
     using Clothing_Store.Data.Data.Models;
     using Clothing_Store.Data.Repositories;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Options;
-    using Stripe.Checkout;
     using System.Collections.Generic;
     using System.Globalization;
 
