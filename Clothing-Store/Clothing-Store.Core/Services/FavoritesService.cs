@@ -22,11 +22,20 @@
 
         }
         public async Task AddFavoriteProduct(string userId, int productId)
-        {   
-               var favorite = new Favorite()
+        {
+            var favorite = await this.favoritesRepository
+                .All()
+                .Where(x => x.UserId == userId && x.ProductFavorites.Any(x => x.ProductId == productId))
+                .FirstOrDefaultAsync();
+
+            if (favorite == null)
+            {
+                favorite = new Favorite()
                 {
-                    UserId = userId
+                    UserId = userId,
+                    CreatedOn = DateTime.UtcNow,
                 };
+
                 var product = await productsRepository
                     .All()
                     .Where(x => x.Id == productId)
@@ -42,8 +51,14 @@
 
 
                 favorite.ProductFavorites.Add(productFavorite);
+                await this.favoritesRepository.AddAsync(favorite);
+            }
+            else
+            {
+                favorite.IsDeleted = false;
+                favorite.ModifiedOn = DateTime.UtcNow;
+            }
 
-            await this.favoritesRepository.AddAsync(favorite);
             await favoritesRepository.SaveChangesAsync();
         }
 
@@ -51,7 +66,7 @@
         {
             var favorites = this.favoritesRepository
                 .AllAsNoTracking()
-                .Where(x => x.UserId == userId)
+                .Where(x => x.UserId == userId && !x.IsDeleted)
                 .Select(x => new FavoriteViewModel()
                 {
                     Id = x.Id,
@@ -73,7 +88,7 @@
         {
             var countOfFavoriteProducts = await this.favoritesRepository
                 .AllAsNoTracking()
-                .Where(x => x.UserId == userId)
+                .Where(x => x.UserId == userId && !x.IsDeleted)
                 .CountAsync();
 
             return countOfFavoriteProducts;
@@ -87,8 +102,8 @@
 
             var favoriteProducts = await this.productFavoritesRepository
                 .AllAsNoTracking()
-                .Where(x => x.Favorite.UserId == userId && products.Contains(x.ProductId))
-                .Select(x => new ProductViewModel() { Id = x.ProductId})
+                .Where(x => x.Favorite.UserId == userId && products.Contains(x.ProductId) && !x.Favorite.IsDeleted)
+                .Select(x => new ProductViewModel() { Id = x.ProductId })
                 .ToListAsync();
 
             if (favoriteProducts != null && favoriteProducts.Any())
@@ -105,7 +120,9 @@
                 .All()
                 .FirstOrDefaultAsync(x => x.Id == favoriteId);
 
-            favoritesRepository.Delete(favoriteProduct);
+            favoriteProduct.IsDeleted = true;
+            favoriteProduct.DeletedOn = DateTime.UtcNow;
+
             await favoritesRepository.SaveChangesAsync();
         }
     }
