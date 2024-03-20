@@ -53,7 +53,7 @@
                     UserId = userId,
                     CreatedOn = DateTime.UtcNow
                 };
-
+                
                 var product = await this.productsRepository
                 .All()
                 .Where(x => x.Id == productId)

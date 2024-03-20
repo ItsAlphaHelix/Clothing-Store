@@ -16,6 +16,8 @@ namespace Clothing_Store.Core.ViewModels.Products
 
         public bool IsProductInStock { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public IEnumerable<SizeViewModel> ProductSizes { get; set; } = new List<SizeViewModel>();
     }
 }

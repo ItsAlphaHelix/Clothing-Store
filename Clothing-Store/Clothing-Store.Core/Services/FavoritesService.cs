@@ -6,6 +6,7 @@
     using Clothing_Store.Data.Data.Models;
     using Clothing_Store.Data.Repositories;
     using Microsoft.EntityFrameworkCore;
+
     public class FavoritesService : IFavoritesService
     {
         private readonly IRepository<Product> productsRepository;
@@ -25,7 +26,7 @@
         {
             var favorite = await this.favoritesRepository
                 .All()
-                .Where(x => x.UserId == userId && x.ProductFavorites.Any(x => x.ProductId == productId))
+                .Where(x => x.UserId == userId)
                 .FirstOrDefaultAsync();
 
             if (favorite == null)
@@ -36,59 +37,71 @@
                     CreatedOn = DateTime.UtcNow,
                 };
 
+                await this.favoritesRepository.AddAsync(favorite);
+            }
+
+            var productFavorite = await productFavoritesRepository
+                .All()
+                .Where(x => x.ProductId == productId && x.Favorite.UserId == userId)
+                .FirstOrDefaultAsync();
+
+            if (productFavorite == null)
+            {
                 var product = await productsRepository
-                    .All()
+                    .AllAsNoTracking()
                     .Where(x => x.Id == productId)
                     .FirstOrDefaultAsync();
 
-                var productFavorite = new ProductFavorites()
+                productFavorite = new ProductFavorites()
                 {
                     Favorite = favorite,
                     FavoriteId = favorite.Id,
                     Product = product,
-                    ProductId = productId
+                    ProductId = productId,
+                    CreatedOn = DateTime.UtcNow
                 };
 
-
                 favorite.ProductFavorites.Add(productFavorite);
-                await this.favoritesRepository.AddAsync(favorite);
             }
-            else
-            {
-                favorite.IsDeleted = false;
-                favorite.ModifiedOn = DateTime.UtcNow;
-            }
+
+            productFavorite.IsDeleted = false;
+            productFavorite.ModifiedOn = DateTime.UtcNow;
 
             await favoritesRepository.SaveChangesAsync();
         }
-
-        public IQueryable<FavoriteViewModel> AllFavoritesProductsAsync(string userId)
+        public IQueryable<ProductViewModel> AllFavoritesProductsAsQueryable(string userId)
         {
-            var favorites = this.favoritesRepository
+            var favorite = this.favoritesRepository
                 .AllAsNoTracking()
-                .Where(x => x.UserId == userId && !x.IsDeleted)
-                .Select(x => new FavoriteViewModel()
-                {
-                    Id = x.Id,
-                    FavoriteProducts = x.ProductFavorites
-                    .Select(x => new ProductViewModel()
-                    {
-                        Id = x.ProductId,
-                        Images = x.Product.Images.Select(x => x.Url).ToList(),
-                        Category = x.Product.Category,
-                        Price = x.Product.Price,
-                        IsProductInStock = x.Product.ProductSizes.Any(x => x.Count != 0)
-                    }).ToList()
-                }).AsQueryable();
+                .Include(x => x.ProductFavorites)
+                    .ThenInclude(pf => pf.Product) // Include Product
+                        .ThenInclude(p => p.Images) // Include Images
+                .Include(x => x.ProductFavorites)
+                    .ThenInclude(pf => pf.Product.ProductFavorites) // Include ProductSizes
+                .Where(x => x.UserId == userId)
+                .FirstOrDefault();
 
-            return favorites;
+            var products = favorite.ProductFavorites
+                .Where(x => !x.IsDeleted)
+                .Select(x => new ProductViewModel()
+                {
+                    Id = x.ProductId,
+                    Images = x.Product.Images.Select(x => x.Url).ToList(),
+                    Category = x.Product.Category,
+                    Price = x.Product.Price,
+                    IsProductInStock = x.Product.ProductSizes.Any(x => x.Count != 0),
+                    IsDeleted = x.IsDeleted 
+                })
+                .AsQueryable();
+
+            return products;
         }
 
         public async Task<int> CountOfFavoriteProductsAsync(string userId)
         {
-            var countOfFavoriteProducts = await this.favoritesRepository
+            var countOfFavoriteProducts = await this.productFavoritesRepository
                 .AllAsNoTracking()
-                .Where(x => x.UserId == userId && !x.IsDeleted)
+                .Where(x => x.Favorite.UserId == userId && !x.IsDeleted)
                 .CountAsync();
 
             return countOfFavoriteProducts;
@@ -102,7 +115,7 @@
 
             var favoriteProducts = await this.productFavoritesRepository
                 .AllAsNoTracking()
-                .Where(x => x.Favorite.UserId == userId && products.Contains(x.ProductId) && !x.Favorite.IsDeleted)
+                .Where(x => x.Favorite.UserId == userId && products.Contains(x.ProductId) && !x.IsDeleted)
                 .Select(x => new ProductViewModel() { Id = x.ProductId })
                 .ToListAsync();
 
@@ -114,11 +127,11 @@
             return favoriteProducts;
         }
 
-        public async Task DeleteFavoriteProduct(int favoriteId)
+        public async Task DeleteFavoriteProduct(int productId)
         {
-            var favoriteProduct = await this.favoritesRepository
+            var favoriteProduct = await this.productFavoritesRepository
                 .All()
-                .FirstOrDefaultAsync(x => x.Id == favoriteId);
+                .FirstOrDefaultAsync(x => x.ProductId == productId);
 
             favoriteProduct.IsDeleted = true;
             favoriteProduct.DeletedOn = DateTime.UtcNow;

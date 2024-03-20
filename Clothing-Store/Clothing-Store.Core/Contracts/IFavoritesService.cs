@@ -6,7 +6,7 @@ namespace Clothing_Store.Core.Contracts
 {
     public interface IFavoritesService
     {
-        public IQueryable<FavoriteViewModel> AllFavoritesProductsAsync(string userId);
+        public IQueryable<ProductViewModel> AllFavoritesProductsAsQueryable(string userId);
 
         public Task AddFavoriteProduct(string userId, int productId);
 
@@ -14,6 +14,6 @@ namespace Clothing_Store.Core.Contracts
 
         public Task<IEnumerable<ProductViewModel>> AllUserFavoriteProductsAsync(string userId);
 
-        public Task DeleteFavoriteProduct(int favoriteId);
+        public Task DeleteFavoriteProduct(int productId);
     }
 }

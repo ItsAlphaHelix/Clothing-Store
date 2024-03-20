@@ -27,16 +27,16 @@
 
             var user = await GetUserAsync();
 
-            var favoritesProducts = this.favoritesService.AllFavoritesProductsAsync(user.Id);
+            var products = this.favoritesService.AllFavoritesProductsAsQueryable(user.Id);
 
-            if (!favoritesProducts.Any())
+            if (products.All(x => x.IsDeleted))
             {
                 return RedirectToAction("Index", "Home");
             }
 
-            var paginated = await PaginatedList<FavoriteViewModel>.CreateAsync(favoritesProducts, page, 3);
+            var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, page, 3);
 
-            var paginatedView = new PaginatedViewModel<FavoriteViewModel>()
+            var paginatedView = new PaginatedViewModel<ProductViewModel>()
             {
                 Models = paginated
             };
@@ -64,15 +64,15 @@
             return RedirectToAction("All", "Products", redirection);
         }
 
-        public async Task<IActionResult> Delete(int favoriteId, int page)
+        public async Task<IActionResult> Delete(int productId, int page)
         {
             ViewData["IsHomePage"] = false;
 
-            await this.favoritesService.DeleteFavoriteProduct(favoriteId);
+            await this.favoritesService.DeleteFavoriteProduct(productId);
 
             string userId = GetUserAsync().Result.Id;
-            var favoritesProducts = this.favoritesService.AllFavoritesProductsAsync(userId);
-            var paginated = await PaginatedList<FavoriteViewModel>.CreateAsync(favoritesProducts, page, 3);
+            var products =  this.favoritesService.AllFavoritesProductsAsQueryable(userId);
+            var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, page, 3);
 
             if (paginated.Count == 0)
             {
