@@ -1,7 +1,6 @@
 ﻿namespace Clothing_Store.Core.Services
 {
     using Clothing_Store.Core.Contracts;
-    using Clothing_Store.Core.ViewModels.Favorites;
     using Clothing_Store.Core.ViewModels.Products;
     using Clothing_Store.Data.Data.Models;
     using Clothing_Store.Data.Repositories;
@@ -71,18 +70,9 @@
         }
         public IQueryable<ProductViewModel> AllFavoritesProductsAsQueryable(string userId)
         {
-            var favorite = this.favoritesRepository
+            var products = productFavoritesRepository
                 .AllAsNoTracking()
-                .Include(x => x.ProductFavorites)
-                    .ThenInclude(pf => pf.Product) // Include Product
-                        .ThenInclude(p => p.Images) // Include Images
-                .Include(x => x.ProductFavorites)
-                    .ThenInclude(pf => pf.Product.ProductFavorites) // Include ProductSizes
-                .Where(x => x.UserId == userId)
-                .FirstOrDefault();
-
-            var products = favorite.ProductFavorites
-                .Where(x => !x.IsDeleted)
+                .Where(x => x.Favorite.UserId == userId && !x.IsDeleted)
                 .Select(x => new ProductViewModel()
                 {
                     Id = x.ProductId,

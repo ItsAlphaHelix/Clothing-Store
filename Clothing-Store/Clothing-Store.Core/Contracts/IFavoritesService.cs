@@ -1,9 +1,6 @@
-﻿using Clothing_Store.Core.ViewModels.Favorites;
-using Clothing_Store.Core.ViewModels.Products;
-using Clothing_Store.Data.Data.Models;
-
-namespace Clothing_Store.Core.Contracts
+﻿namespace Clothing_Store.Core.Contracts
 {
+    using Clothing_Store.Core.ViewModels.Products;
     public interface IFavoritesService
     {
         public IQueryable<ProductViewModel> AllFavoritesProductsAsQueryable(string userId);
