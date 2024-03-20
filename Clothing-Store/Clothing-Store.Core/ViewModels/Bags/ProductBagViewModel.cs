@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Clothing_Store.Core.ViewModels.Bags
+﻿namespace Clothing_Store.Core.ViewModels.Bags
 {
     public class ProductBagViewModel
     {
@@ -22,5 +15,7 @@ namespace Clothing_Store.Core.ViewModels.Bags
         public string ImageUrl { get; set; }
 
         public bool IsProductInStock { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

@@ -1,12 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Clothing_Store.Core.ViewModels.Shared
+﻿namespace Clothing_Store.Core.ViewModels.Shared
 {
+    using Microsoft.EntityFrameworkCore;
     public class PaginatedList<T> : List<T>
     {
         public PaginatedList(List<T> items, int itemsCount, int pageNumber, int pageSize)

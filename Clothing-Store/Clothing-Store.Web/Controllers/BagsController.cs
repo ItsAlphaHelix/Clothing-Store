@@ -28,9 +28,9 @@
             ViewData["IsHomePage"] = false;
             string userId = await GetUserIdAsync();
 
-            var productsInBag = await this.bagsService.GetAllProductsInBagAsync(userId);
+            var productsInBag = await this.bagsService.GetAllProductsInBagAsQueryable(userId);
 
-            if (!productsInBag.Any())
+            if (productsInBag.All(x => x.IsDeleted))
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -63,9 +63,9 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Delete(int bagId)
+        public async Task<IActionResult> Delete(int productId)
         {
-            await this.bagsService.DeleteProductFromBagAsync(bagId);
+            await this.bagsService.DeleteProductFromBagAsync(productId);
             string userId = await GetUserIdAsync();
             int countOfProductsInBag = await this.bagsService.CountOfProductsInBagAsync(userId);
 

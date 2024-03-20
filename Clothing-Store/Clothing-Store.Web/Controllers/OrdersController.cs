@@ -60,7 +60,7 @@
 
             var userId = await GetUserIdAsync();
 
-            var productsInBag = await bagsService.GetAllProductsInBagAsync(userId);
+            var productsInBag = bagsService.GetAllProductsInBagAsQueryable(userId);
 
             CheckoutViewModel checkoutModel = new();
             CustomerViewModel customer = null;
@@ -76,7 +76,7 @@
                 checkoutModel.CustomerModel = customer;
             }
 
-            checkoutModel.ProductsInBag = productsInBag;
+           // checkoutModel.ProductsInBag = productsInBag;
             return View(checkoutModel);
         }
 

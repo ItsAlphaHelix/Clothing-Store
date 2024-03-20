@@ -19,5 +19,13 @@
         public string SizeName { get; set; } = null!;
 
         public int Quantity { get; set; }
+
+        public bool IsDeleted { get; set; }
+
+        public DateTime? DeletedOn { get; set; }
+
+        public DateTime? ModifiedOn { get; set; }
+
+        public DateTime? CreatedOn { get; set; }
     }
 }

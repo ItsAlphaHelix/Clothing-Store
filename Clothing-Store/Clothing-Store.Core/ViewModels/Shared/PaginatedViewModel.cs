@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Clothing_Store.Core.ViewModels.Orders;
-using Clothing_Store.Core.ViewModels.Products;
-
-namespace Clothing_Store.Core.ViewModels.Shared
+﻿namespace Clothing_Store.Core.ViewModels.Shared
 {
+    using Clothing_Store.Core.ViewModels.Orders;
+    using Clothing_Store.Core.ViewModels.Products;
     public class PaginatedViewModel<T>
     {
         public PaginatedList<T> Models { get; set; }

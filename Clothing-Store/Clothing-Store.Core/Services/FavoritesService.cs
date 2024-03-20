@@ -80,7 +80,7 @@
                     Category = x.Product.Category,
                     Price = x.Product.Price,
                     IsProductInStock = x.Product.ProductSizes.Any(x => x.Count != 0),
-                    IsDeleted = x.IsDeleted 
+                    IsDeleted = x.IsDeleted
                 })
                 .AsQueryable();
 

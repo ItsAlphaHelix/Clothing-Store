@@ -34,11 +34,9 @@
                 Mode = "payment",
             };
 
-            var bags = await this.bagService.GetAllProductsInBagAsync(userId);
+            var products = await this.bagService.GetAllProductsInBagAsQueryable(userId);
 
-            foreach (var bag in bags)
-            {
-                foreach (var product in bag.ProductBags)
+                foreach (var product in products)
                 {
                     var sessionListItem = new SessionLineItemOptions()
                     {
@@ -58,7 +56,7 @@
 
                     options.LineItems.Add(sessionListItem);
                 }
-            }
+            
 
             decimal shipping = 5.00M;
 
