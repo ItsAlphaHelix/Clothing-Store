@@ -126,9 +126,7 @@
                             <div class="mg-cart-product-list-heading">
                                 Вашите продукти, които искате да поръчате
                             </div>
-                            @foreach (var productInBag in Model.ProductsInBag)
-                            {
-                                foreach (var product in productInBag.ProductBags)
+                                @foreach (var product in Model.ProductsInBag)
                                 {
                                     <div class="mg-order-detail-list-grid">
                                         <div class="row gx-2">
@@ -156,7 +154,6 @@
                                     </div>
                                     
                                 }
-                            }
                         </div>
                     </div>
 

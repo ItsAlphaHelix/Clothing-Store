@@ -3,6 +3,7 @@
     using Clothing_Store.Core.Contracts;
     using Clothing_Store.Core.ViewModels.Bags;
     using Clothing_Store.Core.ViewModels.Orders;
+    using Clothing_Store.Core.ViewModels.Products;
     using Clothing_Store.Core.ViewModels.Shared;
     using Clothing_Store.CustomExceptions;
     using Clothing_Store.Data.Data.Models;
@@ -23,19 +24,26 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All(int page = 1)
         {
             ViewData["IsHomePage"] = false;
             string userId = await GetUserIdAsync();
 
-            var productsInBag = await this.bagsService.GetAllProductsInBagAsQueryable(userId);
+            var productsInBag = this.bagsService.GetAllProductsInBagAsQueryable(userId);
 
             if (productsInBag.All(x => x.IsDeleted))
             {
                 return RedirectToAction("Index", "Home");
             }
 
-            return View(productsInBag);
+            var paginated = await PaginatedList<ProductBagViewModel>.CreateAsync(productsInBag, page, 3);
+
+            var paginatedView = new PaginatedViewModel<ProductBagViewModel>()
+            {
+                Models = paginated
+            };
+
+            return View(paginatedView);
         }
 
 
@@ -63,13 +71,19 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Delete(int productId)
+        public async Task<IActionResult> Delete(int productId, int page = 1)
         {
             await this.bagsService.DeleteProductFromBagAsync(productId);
             string userId = await GetUserIdAsync();
-            int countOfProductsInBag = await this.bagsService.CountOfProductsInBagAsync(userId);
+            var products = this.bagsService.GetAllProductsInBagAsQueryable(userId);
+            var paginated = await PaginatedList<ProductBagViewModel>.CreateAsync(products, page, 3);
 
-            var redirection = countOfProductsInBag == 0 ? RedirectToAction("Index", "Home") : RedirectToAction(nameof(All));
+            if (paginated.Count == 0)
+            {
+                page--;
+            }
+
+            var redirection = page == 0 ? RedirectToAction("Index", "Home") : RedirectToAction(nameof(All), new { page });
 
             return redirection;
         }

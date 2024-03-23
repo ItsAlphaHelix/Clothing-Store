@@ -34,7 +34,7 @@
                 Mode = "payment",
             };
 
-            var products = await this.bagService.GetAllProductsInBagAsQueryable(userId);
+            var products = this.bagService.GetAllProductsInBagAsQueryable(userId);
 
                 foreach (var product in products)
                 {

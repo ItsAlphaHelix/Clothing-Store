@@ -76,7 +76,7 @@
                 checkoutModel.CustomerModel = customer;
             }
 
-           // checkoutModel.ProductsInBag = productsInBag;
+            checkoutModel.ProductsInBag = productsInBag;
             return View(checkoutModel);
         }
 
@@ -97,7 +97,7 @@
             }
 
             await this.ordersService.CreateOrderAsync(model.CustomerModel, userId);
-            await this.bagsService.DeleteBagsAsync(userId);
+            await this.bagsService.DeleteProductFromBagAsync(null, userId);
 
             return RedirectToAction(nameof(OrderConfirmation));
         }
@@ -126,7 +126,7 @@
                         session.Id, 
                         session.PaymentIntentId);
 
-                    await this.bagsService.DeleteBagsAsync(userId);
+                    await this.bagsService.DeleteProductFromBagAsync(null, userId);
                 }
             }
 

@@ -4,7 +4,7 @@
 
     public interface IBagsService
     {
-        public Task<IEnumerable<ProductBagViewModel>> GetAllProductsInBagAsQueryable(string userId);
+        public IQueryable<ProductBagViewModel> GetAllProductsInBagAsQueryable(string userId);
 
         public Task AddProductToBagAsync(int productId, string sizeName, int quantity, string userId);
 
@@ -14,14 +14,12 @@
 
         string GetOrCreateTemporaryUserId();
 
-        public Task DeleteProductFromBagAsync(int productId);
+        public Task DeleteProductFromBagAsync(int? productId, string userId = null);
 
         public Task<int> GetTotalQuantityOfSizeOfProduct(string sizeName, int productId);
 
         public Task DecrementQuantityOfProductAsync(string sizeName, int productId, string userId);
 
         public Task IncrementQuantityOfProductAsync(string sizeName, int productId, string userId, int currentQuantity);
-
-        Task DeleteBagsAsync(string userId);
     }
 }

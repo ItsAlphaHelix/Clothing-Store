@@ -5,7 +5,7 @@
     {
         public CustomerViewModel CustomerModel { get; set; }
 
-        public IEnumerable<BagViewModel> ProductsInBag { get; set; } = new List<BagViewModel>();
+        public IEnumerable<ProductBagViewModel> ProductsInBag { get; set; } = new List<ProductBagViewModel>();
 
     }
 }

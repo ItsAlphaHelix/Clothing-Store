@@ -49,7 +49,9 @@
                     Region = x.Customer.Region,
                     OrderDate = x.OrderDate.ToString("MM/dd/yyyy. HH:mm", CultureInfo.InvariantCulture),
                     OrderNumber = x.OrderNumber,
-                    ProductOrderModel = x.OrderProducts.Select(x => new ProductOrderViewModel()
+                    ProductOrderModel = x.OrderProducts
+                    .Where(x => x.Quantity != 0)
+                    .Select(x => new ProductOrderViewModel()
                     {
                         CategoryName = x.CategoryName,
                         ImageUrl = x.ImageUrl,

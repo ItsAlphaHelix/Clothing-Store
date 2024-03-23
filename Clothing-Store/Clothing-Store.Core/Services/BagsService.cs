@@ -114,10 +114,10 @@
         }
 
 
-        public async Task<IEnumerable<ProductBagViewModel>> GetAllProductsInBagAsQueryable(string userId)
+        public IQueryable<ProductBagViewModel> GetAllProductsInBagAsQueryable(string userId)
         {
 
-            var products = await this.productsBagRepository
+            var products = this.productsBagRepository
                 .AllAsNoTracking()
                 .Where(x => x.Bag.UserId == userId && !x.IsDeleted)
                 .Select(x => new ProductBagViewModel()
@@ -130,7 +130,8 @@
                     ImageUrl = x.Product.Images.Select(x => x.Url).FirstOrDefault(),
                     IsProductInStock = x.Product.ProductSizes.Any(x => x.Count != 0),
                     IsDeleted = x.IsDeleted
-                }).ToListAsync();
+                })
+                .AsQueryable();
 
             return products;
         }
@@ -154,19 +155,17 @@
             return count;
         }
 
-        public async Task DeleteProductFromBagAsync(int productId)
+        public async Task DeleteProductFromBagAsync(int? productId, string userId)
         {
             var productsInBag = await this.productsBagRepository
                 .All()
-                .Where(x => x.ProductId == productId)
-                .ToListAsync();
+                .Include(x => x.Bag)
+                .Where(x => x.ProductId == productId || x.Bag.UserId == userId)
+                .FirstOrDefaultAsync();
 
-            foreach (var product in productsInBag)
-            {
-                product.IsDeleted = true;
-                product.Quantity = 0;
-                product.DeletedOn = DateTime.UtcNow;
-            }
+            productsInBag.IsDeleted = true;
+            productsInBag.Quantity = 0;
+            productsInBag.DeletedOn = DateTime.UtcNow;
 
             await this.productsBagRepository.SaveChangesAsync();
         }
@@ -233,22 +232,6 @@
 
                 return temporaryUserId;
             }
-        }
-
-        public async Task DeleteBagsAsync(string userId)
-        {
-            var bagsForDelete = await this.bagsRepository
-                            .All()
-                            .Where(x => x.UserId == userId)
-                            .Select(x => new Bag() { Id = x.Id })
-                            .ToListAsync();
-
-            foreach (var bagForDelete in bagsForDelete)
-            {
-                bagsRepository.Delete(bagForDelete);
-            }
-
-            await this.productsBagRepository.SaveChangesAsync();
         }
     }
 }
