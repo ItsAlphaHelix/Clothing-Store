@@ -60,6 +60,7 @@
                 selectedPrice,
                 selectedSizes
             };
+
             return RedirectToAction("All", "Products", redirection);
         }
 

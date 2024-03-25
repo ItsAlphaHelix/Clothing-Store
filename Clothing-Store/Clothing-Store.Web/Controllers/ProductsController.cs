@@ -135,7 +135,12 @@
             }
             else
             {
+
                 var product = await this.productsService.GetProductDetailsByIdAsync(id, 1, pageSize);
+                var recommendedProducts = await this.productsService.GetRecommendedProductsAsync(id);
+
+                product.RecommendedProducts = recommendedProducts;
+
                 return View(product);
             }
         }

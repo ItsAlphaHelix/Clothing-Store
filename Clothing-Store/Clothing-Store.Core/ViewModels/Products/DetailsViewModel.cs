@@ -34,6 +34,8 @@ namespace Clothing_Store.Core.ViewModels.Products
 
         public bool IsProductInStock { get; set; }
 
+        public IEnumerable<ProductViewModel> RecommendedProducts = new List<ProductViewModel>();
+
         public IEnumerable<GetProductReviewViewModel> Reviews { get; set; } = new List<GetProductReviewViewModel>();
 
         public IEnumerable<SizeViewModel> Sizes { get; set; } = new List<SizeViewModel>();

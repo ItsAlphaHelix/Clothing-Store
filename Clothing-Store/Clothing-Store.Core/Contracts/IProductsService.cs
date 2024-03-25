@@ -35,5 +35,7 @@
         public Task<IEnumerable<SizeViewModel>> GetAllSizesAsync();
 
         public Task PostProductReviewAsync(PostProductReviewViewModel productReview, string userId);
+
+        public Task<IEnumerable<ProductViewModel>> GetRecommendedProductsAsync(int productId);
     }
 }

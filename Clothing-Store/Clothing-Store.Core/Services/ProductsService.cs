@@ -10,6 +10,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
+    using System.Drawing.Printing;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -208,6 +209,33 @@
                 .CountAsync();
 
             return countOfReviews;
+        }
+
+        public async Task<IEnumerable<ProductViewModel>> GetRecommendedProductsAsync(int productId)
+        {
+            var product = await this.GetProductDetailsByIdAsync(productId, 1, 3);
+
+            var recommendedProducts = await this.productsRepository
+                .AllAsNoTracking()
+                .Where(x => x.IsMale == product.IsMale && x.Id != product.Id)
+                .Select(x => new ProductViewModel()
+                {
+                    Id = x.Id,
+                    Category = x.Category,
+                    Price = x.Price,
+                    AverageRating = x.ProductReviews.Any() ? (x.ProductReviews.Sum(x => x.Rating) / x.ProductReviews.Count) : 0,
+                    Images = x.Images.Select(x => x.Url).Take(2).ToList(),
+                    ProductSizes = x.ProductSizes
+                    .Where(x => x.Count != 0)
+                    .Select(x => new SizeViewModel() { SizeName = x.Size.Name })
+                    .ToList()
+                })
+                .Where(x => x.Price <= product.Price && x.Category == product.Category)
+                .OrderByDescending(x => x.AverageRating)
+                .Take(10)
+                .ToListAsync();
+
+            return recommendedProducts;
         }
     }
 }
