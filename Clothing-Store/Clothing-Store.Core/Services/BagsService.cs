@@ -9,6 +9,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     public class BagsService : IBagsService
@@ -239,14 +240,11 @@
         {
             var productsInBag = this.GetAllProductsInBagAsQueryable(userId);
 
-            var maxPrice = await productsInBag.MaxAsync(x => x.Price);
-
+            var maxPrice = await productsInBag.MaxAsync(x => (x.Price * x.Quantity)); 
+            
             var recommendedProducts = await this.productsRepository
                 .AllAsNoTracking()
-                .Where(x => productsInBag.Any(pb => pb.CategoryName == x.Category) &&
-                            x.Price <= maxPrice &&
-                            productsInBag.Any(pb => x.ProductSizes.Any(sn => sn.Size.Name == pb.SizeName)) &&
-                            productsInBag.All(pb => pb.Id != x.Id))
+                .Where(x => x.Price <= maxPrice && productsInBag.All(pb => pb.Id != x.Id))
                 .Select(x => new ProductViewModel()
                 {
                     Id = x.Id,

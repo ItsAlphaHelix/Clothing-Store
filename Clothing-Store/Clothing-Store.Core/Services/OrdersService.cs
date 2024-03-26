@@ -114,7 +114,7 @@
         {
             var products = this.orderProductsRepository
                 .AllAsNoTracking()
-                .Where(x => x.Order.OrderNumber == numberOfOrder)
+                .Where(x => x.Order.OrderNumber == numberOfOrder && x.Quantity != 0)
                 .Select(x => new ProductOrderViewModel()
                 {
                     Id = x.Id,

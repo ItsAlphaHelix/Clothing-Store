@@ -211,7 +211,7 @@
                                                 <div class="mg-product-icon">
                                                     @if (userFavoriteProducts.Any(x => x.Id == product.Id))
                                                     {
-                                                        <a asp-controller="Favorites" asp-action="All" asp-route-id="@product.Id"><img class="mg-product-icon-img" src="~/images/svgs/red-heart-icon.svg" style="opacity: 1" alt="" /></a>
+                                                        <a asp-controller="Favorites" asp-action="All"><img class="mg-product-icon-img" src="~/images/svgs/red-heart-icon.svg" style="opacity: 1" alt="" /></a>
                                                     }
                                                     else
                                                     {
