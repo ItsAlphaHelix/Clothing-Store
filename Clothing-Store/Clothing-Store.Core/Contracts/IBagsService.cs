@@ -1,6 +1,7 @@
 ﻿namespace Clothing_Store.Core.Contracts
 {
     using Clothing_Store.Core.ViewModels.Bags;
+    using Clothing_Store.Core.ViewModels.Products;
 
     public interface IBagsService
     {
@@ -21,5 +22,7 @@
         public Task DecrementQuantityOfProductAsync(string sizeName, int productId, string userId);
 
         public Task IncrementQuantityOfProductAsync(string sizeName, int productId, string userId, int currentQuantity);
+
+        public Task<IEnumerable<ProductViewModel>> GetRecommendedProductsInBag(string userId);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Clothing_Store.Core.ViewModels.Bags
+﻿using Clothing_Store.Core.ViewModels.Products;
+
+namespace Clothing_Store.Core.ViewModels.Bags
 {
     public class ProductBagViewModel
     {

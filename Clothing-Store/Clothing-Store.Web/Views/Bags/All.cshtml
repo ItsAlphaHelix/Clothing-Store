@@ -3,18 +3,22 @@
 @using System.Security.Claims;
 @using Clothing_Store.Core.ViewModels.Shared;
 @model PaginatedViewModel<ProductBagViewModel>
-@inject IBagsService shoppingBagService
+@inject IBagsService bagsService
+@inject IFavoritesService favoritesService
 
 @{
     ViewData["Title"] = "Вашата чанта";
 
     string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-    string temporaryUserId = shoppingBagService.GetOrCreateTemporaryUserId();
+    string temporaryUserId = bagsService.GetOrCreateTemporaryUserId();
     userId ??= temporaryUserId;
 
-    decimal totalPrice = await this.shoppingBagService.CalculateTotalPrice(userId);
+    decimal totalPrice = await this.bagsService.CalculateTotalPrice(userId);
     string priceWithShipping = totalPrice == 0 ? totalPrice.ToString("F2") : (totalPrice + 5).ToString("F2");
+
+    var recommendedProducts = await this.bagsService.GetRecommendedProductsInBag(userId);
+    var userFavoriteProducts = await this.favoritesService.AllUserFavoriteProductsAsync(userId);
 }
 
 <div class="mg-page-outer">
@@ -48,7 +52,7 @@
                                                 <div class="mg-cart-quantiy-outer">
                                                     <button onclick="decrementQuantity(@product.Id, '@product.SizeName', '@product.Quantity')" class="mg-quantity-step-btn"><i class="fa fa-minus" aria-hidden="true"></i></button>
                                                     @{
-                                                        int totalQuantity = await shoppingBagService.GetTotalQuantityOfSizeOfProduct(product.SizeName, product.Id);
+                                                        int totalQuantity = await bagsService.GetTotalQuantityOfSizeOfProduct(product.SizeName, product.Id);
                                                     }
                                                     <input class="mg-cart-quantity" min="1" name="quantity" max="@totalQuantity" value="@product.Quantity" type="number" >
                                                     <button onclick="incrementQuantity(@product.Id, '@product.SizeName', '@product.Quantity')" class="mg-quantity-step-btn"><i class="fa fa-plus" aria-hidden="true"></i></button>
@@ -194,206 +198,50 @@
                             <h2 class="mg-heading">Препоръчани продукти</h2>
                         </div>
                         <div class="mg-you-may-like-product-carousal">
-                            <div>
-                                <div class="mg-product-main mg-img-hdark">
-                                    <div class="position-relative">
-                                        <div class="mg-product-image">
-                                            <a href="product.html"><img class="img-fluid" src="assets/images/fproducts-1.jpg" alt="" /></a>
-                                            <a href="product.html"><img class="img-fluid mg-hover-img" src="assets/images/fproducts-1.2.jpg" alt="" /></a>
-                                        </div>
-                                        <div class="mg-product-icons-outer">
-                                            <div class="mg-product-icon">
-                                                <a href="#"><img class="mg-product-icon-img" src="assets/images/heart-icon.svg" alt="" /></a>
+                            @foreach (var product in recommendedProducts)
+                            {
+                                <div>
+                                    <div class="mg-product-main mg-img-hdark">
+                                        <div class="position-relative">
+                                            <div class="mg-product-image">
+                                                <a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id"><img class="img-fluid" src="@product.Images[0]" alt="" /></a>
+                                                <a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id"><img class="img-fluid mg-hover-img" src="@product.Images[0]" alt="" /></a>
                                             </div>
-                                            <div class="mg-product-icon">
-                                                <a data-bs-toggle="modal" data-bs-target="#mg-quick-view-modal" href="javascript:void(0)"><img class="mg-product-icon-img" src="assets/images/view-icon.svg" alt="" /></a>
+                                            <div class="mg-product-icons-outer">
+                                                <div class="mg-product-icon">
+                                                    @if (userFavoriteProducts.Any(x => x.Id == product.Id))
+                                                    {
+                                                        <a asp-controller="Favorites" asp-action="All" asp-route-id="@product.Id"><img class="mg-product-icon-img" src="~/images/svgs/red-heart-icon.svg" style="opacity: 1" alt="" /></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a asp-controller="Favorites"
+                                                           asp-action="Add"
+                                                           asp-route-id="@product.Id"
+                                                           asp-route-page="@ViewData["CurrentPage"]"
+                                                           asp-route-sorting="@ViewData["CurrentSort"]"
+                                                           asp-route-selectedProducts="@ViewData["CurrentSelectedProducts"]"
+                                                           asp-route-selectedPrice="@ViewData["CurrentSelectedPrice"]"
+                                                           asp-route-selectedSizes="@ViewData["CurrentSelectedSizes"]">
+                                                            <img class="mg-product-icon-img" src="~/images/svgs/red-heart-icon.svg" alt="" />
+                                                        </a>
+                                                    }
+                                                </div>
+                                                <div class="mg-product-icon">
+                                                    <a href="javascript:void(0)" onclick="loadProductDetails(@product.Id)"><img class="mg-product-icon-img" src="~/images/svgs/view-icon.svg" alt="" /></a>
+                                                </div>
                                             </div>
+                                            @* <div class="mg-product-add-to-cart-btn-outer">
+                                        <a class="mg-product-add-to-cart-btn" href="cart.html">Add To Bag</a>
+                                        </div> *@
                                         </div>
-                                        <div class="mg-product-add-to-cart-btn-outer">
-                                            <a class="mg-product-add-to-cart-btn" href="cart.html">Add To Bag</a>
+                                        <div class="mg-product-tittles text-center">
+                                            <a class="mg-product-name" href="product.html">@product.Category</a>
+                                            <div class="mg-regular-price"><span class="mg-discount-price"></span>@product.Price ЛВ</div>
                                         </div>
-                                    </div>
-                                    <div class="mg-product-tittles text-center">
-                                        <a class="mg-product-name" href="product.html">Jumper With Detailing</a>
-                                        <div class="mg-regular-price"><span class="mg-discount-price">$25.00</span>$20.00</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="mg-product-main mg-img-hdark">
-                                    <div class="position-relative">
-                                        <div class="mg-product-image">
-                                            <a href="product.html"><img class="img-fluid" src="assets/images/fproducts-2.jpg" alt="" /></a>
-                                            <a href="product.html"><img class="img-fluid mg-hover-img" src="assets/images/fproducts-2.2.jpg" alt="" /></a>
-                                        </div>
-                                        <div class="mg-product-icons-outer">
-                                            <div class="mg-product-icon">
-                                                <a href="#"><img class="mg-product-icon-img" src="assets/images/heart-icon.svg" alt="" /></a>
-                                            </div>
-                                            <div class="mg-product-icon">
-                                                <a data-bs-toggle="modal" data-bs-target="#mg-quick-view-modal" href="javascript:void(0)"><img class="mg-product-icon-img" src="assets/images/view-icon.svg" alt="" /></a>
-                                            </div>
-                                        </div>
-                                        <div class="mg-product-add-to-cart-btn-outer">
-                                            <a class="mg-product-add-to-cart-btn" href="cart.html">Add To Bag</a>
-                                        </div>
-                                    </div>
-                                    <div class="mg-product-tittles text-center">
-                                        <a class="mg-product-name" href="product.html">Jumper With Detailing</a>
-                                        <div class="mg-regular-price">$20.00</div>
                                     </div>
                                 </div>
-                            </div>
-                            <div>
-                                <div class="mg-product-main mg-img-hdark">
-                                    <div class="position-relative">
-                                        <div class="mg-product-image">
-                                            <a href="product.html"><img class="img-fluid" src="assets/images/fproducts-3.jpg" alt="" /></a>
-                                            <a href="product.html"><img class="img-fluid mg-hover-img" src="assets/images/fproducts-3.2.jpg" alt="" /></a>
-                                        </div>
-                                        <div class="mg-product-icons-outer">
-                                            <div class="mg-product-icon">
-                                                <a href="#"><img class="mg-product-icon-img" src="assets/images/heart-icon.svg" alt="" /></a>
-                                            </div>
-                                            <div class="mg-product-icon">
-                                                <a data-bs-toggle="modal" data-bs-target="#mg-quick-view-modal" href="javascript:void(0)"><img class="mg-product-icon-img" src="assets/images/view-icon.svg" alt="" /></a>
-                                            </div>
-                                        </div>
-                                        <div class="mg-product-add-to-cart-btn-outer">
-                                            <a class="mg-product-add-to-cart-btn" href="cart.html">Add To Bag</a>
-                                        </div>
-                                    </div>
-                                    <div class="mg-product-tittles text-center">
-                                        <a class="mg-product-name" href="product.html">Jumper With Detailing</a>
-                                        <div class="mg-regular-price">$20.00</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="mg-product-main mg-img-hdark">
-                                    <div class="position-relative">
-                                        <div class="mg-product-image">
-                                            <a href="product.html"><img class="img-fluid" src="assets/images/fproducts-4.jpg" alt="" /></a>
-                                            <a href="product.html"><img class="img-fluid mg-hover-img" src="assets/images/fproducts-4.2.jpg" alt="" /></a>
-                                        </div>
-                                        <div class="mg-product-icons-outer">
-                                            <div class="mg-product-icon">
-                                                <a href="#"><img class="mg-product-icon-img" src="assets/images/heart-icon.svg" alt="" /></a>
-                                            </div>
-                                            <div class="mg-product-icon">
-                                                <a data-bs-toggle="modal" data-bs-target="#mg-quick-view-modal" href="javascript:void(0)"><img class="mg-product-icon-img" src="assets/images/view-icon.svg" alt="" /></a>
-                                            </div>
-                                        </div>
-                                        <div class="mg-product-add-to-cart-btn-outer">
-                                            <a class="mg-product-add-to-cart-btn" href="cart.html">Add To Bag</a>
-                                        </div>
-                                    </div>
-                                    <div class="mg-product-tittles text-center">
-                                        <a class="mg-product-name" href="product.html">Jumper With Detailing</a>
-                                        <div class="mg-regular-price">$20.00</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="mg-product-main mg-img-hdark">
-                                    <div class="position-relative">
-                                        <div class="mg-product-image">
-                                            <a href="product.html"><img class="img-fluid" src="assets/images/fproducts-5.jpg" alt="" /></a>
-                                            <a href="product.html"><img class="img-fluid mg-hover-img" src="assets/images/fproducts-5.2.jpg" alt="" /></a>
-                                        </div>
-                                        <div class="mg-product-icons-outer">
-                                            <div class="mg-product-icon">
-                                                <a href="#"><img class="mg-product-icon-img" src="assets/images/heart-icon.svg" alt="" /></a>
-                                            </div>
-                                            <div class="mg-product-icon">
-                                                <a data-bs-toggle="modal" data-bs-target="#mg-quick-view-modal" href="javascript:void(0)"><img class="mg-product-icon-img" src="assets/images/view-icon.svg" alt="" /></a>
-                                            </div>
-                                        </div>
-                                        <div class="mg-product-add-to-cart-btn-outer">
-                                            <a class="mg-product-add-to-cart-btn" href="cart.html">Add To Bag</a>
-                                        </div>
-                                    </div>
-                                    <div class="mg-product-tittles text-center">
-                                        <a class="mg-product-name" href="product.html">Rayban Sunglasses</a>
-                                        <div class="mg-regular-price"><span class="mg-discount-price">$25.00</span>$20.00</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="mg-product-main mg-img-hdark">
-                                    <div class="position-relative">
-                                        <div class="mg-product-image">
-                                            <a href="product.html"><img class="img-fluid" src="assets/images/fproducts-6.jpg" alt="" /></a>
-                                            <a href="product.html"><img class="img-fluid mg-hover-img" src="assets/images/fproducts-6.2.jpg" alt="" /></a>
-                                        </div>
-                                        <div class="mg-product-icons-outer">
-                                            <div class="mg-product-icon">
-                                                <a href="#"><img class="mg-product-icon-img" src="assets/images/heart-icon.svg" alt="" /></a>
-                                            </div>
-                                            <div class="mg-product-icon">
-                                                <a data-bs-toggle="modal" data-bs-target="#mg-quick-view-modal" href="javascript:void(0)"><img class="mg-product-icon-img" src="assets/images/view-icon.svg" alt="" /></a>
-                                            </div>
-                                        </div>
-                                        <div class="mg-product-add-to-cart-btn-outer">
-                                            <a class="mg-product-add-to-cart-btn" href="cart.html">Add To Bag</a>
-                                        </div>
-                                    </div>
-                                    <div class="mg-product-tittles text-center">
-                                        <a class="mg-product-name" href="product.html">Black Leather Hand Bag</a>
-                                        <div class="mg-regular-price">$20.00</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="mg-product-main mg-img-hdark">
-                                    <div class="position-relative">
-                                        <div class="mg-product-image">
-                                            <a href="product.html"><img class="img-fluid" src="assets/images/fproducts-7.jpg" alt="" /></a>
-                                            <a href="product.html"><img class="img-fluid mg-hover-img" src="assets/images/fproducts-7.2.jpg" alt="" /></a>
-                                        </div>
-                                        <div class="mg-product-icons-outer">
-                                            <div class="mg-product-icon">
-                                                <a href="#"><img class="mg-product-icon-img" src="assets/images/heart-icon.svg" alt="" /></a>
-                                            </div>
-                                            <div class="mg-product-icon">
-                                                <a data-bs-toggle="modal" data-bs-target="#mg-quick-view-modal" href="javascript:void(0)"><img class="mg-product-icon-img" src="assets/images/view-icon.svg" alt="" /></a>
-                                            </div>
-                                        </div>
-                                        <div class="mg-product-add-to-cart-btn-outer">
-                                            <a class="mg-product-add-to-cart-btn" href="cart.html">Add To Bag</a>
-                                        </div>
-                                    </div>
-                                    <div class="mg-product-tittles text-center">
-                                        <a class="mg-product-name" href="product.html">Black Leather Belt</a>
-                                        <div class="mg-regular-price">$20.00</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="mg-product-main mg-img-hdark">
-                                    <div class="position-relative">
-                                        <div class="mg-product-image">
-                                            <a href="product.html"><img class="img-fluid" src="assets/images/fproducts-8.jpg" alt="" /></a>
-                                            <a href="product.html"><img class="img-fluid mg-hover-img" src="assets/images/fproducts-8.2.jpg" alt="" /></a>
-                                        </div>
-                                        <div class="mg-product-icons-outer">
-                                            <div class="mg-product-icon">
-                                                <a href="#"><img class="mg-product-icon-img" src="assets/images/heart-icon.svg" alt="" /></a>
-                                            </div>
-                                            <div class="mg-product-icon">
-                                                <a data-bs-toggle="modal" data-bs-target="#mg-quick-view-modal" href="javascript:void(0)"><img class="mg-product-icon-img" src="assets/images/view-icon.svg" alt="" /></a>
-                                            </div>
-                                        </div>
-                                        <div class="mg-product-add-to-cart-btn-outer">
-                                            <a class="mg-product-add-to-cart-btn" href="cart.html">Add To Bag</a>
-                                        </div>
-                                    </div>
-                                    <div class="mg-product-tittles text-center">
-                                        <a class="mg-product-name" href="product.html">Grey Stylish Cap</a>
-                                        <div class="mg-regular-price">$20.00</div>
-                                    </div>
-                                </div>
-                            </div>
+                            }                                                                                                      
                         </div>
                     </div>
                 </div>
@@ -404,6 +252,19 @@
 </div>
 
 @section Scripts {
+    <script src="~/js/loadModalProductDetails.js" asp-append-version="true"></script>
+    <script src="~/js/addToBag.js" asp-append-version="true"></script>
+    <script>
+        var page = '@ViewData["CurrentPage"]';
+        var sorting = '@ViewData["CurrentSort"]';
+        var selectedProducts = '@Html.Raw(ViewData["CurrentSelectedProducts"])'
+        var selectedPrice = '@ViewData["CurrentSelectedPrice"]';
+        var selectedSizes = '@ViewData["CurrentSelectedSizes"]';
+
+        function handleAddToBagClick(productId) {
+            addProductToBag(productId, page, sorting, selectedProducts, selectedPrice, selectedSizes);
+        }
+    </script>
     <script>
 
         function decrementQuantity(productId, sizeName, currentQuantity) {

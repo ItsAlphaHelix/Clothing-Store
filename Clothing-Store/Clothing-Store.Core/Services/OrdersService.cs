@@ -59,7 +59,7 @@
                         TotalPrice = x.TotalPrice,
                         Quantity = x.Quantity,
                         SizeName = x.SizeName
-                    })
+                    }).ToList()
                 })
                 .FirstOrDefaultAsync();
 

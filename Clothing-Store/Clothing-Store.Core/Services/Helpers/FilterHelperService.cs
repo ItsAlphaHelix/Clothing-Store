@@ -15,7 +15,7 @@
             if (!string.IsNullOrWhiteSpace(model.SelectedSizes))
             {
                 string[] splitSelectedSizes = model.SelectedSizes.Split(",");
-                products = products.Where(x => x.ProductSizes.Any(x => splitSelectedSizes.Contains(x.SizeName)));
+                products = products.Where(x => x.ProductSizes.Any(x => splitSelectedSizes.Contains(x)));
             }
 
             if (!string.IsNullOrEmpty(model.SelectedPrice))

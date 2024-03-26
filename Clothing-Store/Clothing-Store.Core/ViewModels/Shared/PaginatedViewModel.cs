@@ -15,5 +15,7 @@
         public string SelectedPrice { get; set; }
 
         public string SelectedSizes { get; set; }
+
+        public IEnumerable<ProductViewModel> RecommendedProducts { get; set; } = new List<ProductViewModel>();
     }
 }
