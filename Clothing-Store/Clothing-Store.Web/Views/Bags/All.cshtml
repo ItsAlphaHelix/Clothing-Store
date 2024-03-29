@@ -191,61 +191,7 @@
                 </div>
             </div>
             <!-- You may also like section start -->
-            <section>
-                <div class="mg-you-may-like-section-outer">
-                    <div>
-                        <div class="mg-section-tittles text-center">
-                            <h2 class="mg-heading">Препоръчани продукти</h2>
-                        </div>
-                        <div class="mg-you-may-like-product-carousal">
-                            @foreach (var product in recommendedProducts)
-                            {
-                                <div>
-                                    <div class="mg-product-main mg-img-hdark">
-                                        <div class="position-relative">
-                                            <div class="mg-product-image">
-                                                <a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id"><img class="img-fluid" src="@product.Images[0]" alt="" /></a>
-                                                <a asp-controller="Products" asp-action="ProductDetails" asp-route-id="@product.Id"><img class="img-fluid mg-hover-img" src="@product.Images[0]" alt="" /></a>
-                                            </div>
-                                            <div class="mg-product-icons-outer">
-                                                <div class="mg-product-icon">
-                                                    @if (userFavoriteProducts.Any(x => x.Id == product.Id))
-                                                    {
-                                                        <a asp-controller="Favorites" asp-action="All"><img class="mg-product-icon-img" src="~/images/svgs/red-heart-icon.svg" style="opacity: 1" alt="" /></a>
-                                                    }
-                                                    else
-                                                    {
-                                                        <a asp-controller="Favorites"
-                                                           asp-action="Add"
-                                                           asp-route-id="@product.Id"
-                                                           asp-route-page="@ViewData["CurrentPage"]"
-                                                           asp-route-sorting="@ViewData["CurrentSort"]"
-                                                           asp-route-selectedProducts="@ViewData["CurrentSelectedProducts"]"
-                                                           asp-route-selectedPrice="@ViewData["CurrentSelectedPrice"]"
-                                                           asp-route-selectedSizes="@ViewData["CurrentSelectedSizes"]">
-                                                            <img class="mg-product-icon-img" src="~/images/svgs/red-heart-icon.svg" alt="" />
-                                                        </a>
-                                                    }
-                                                </div>
-                                                <div class="mg-product-icon">
-                                                    <a href="javascript:void(0)" onclick="loadProductDetails(@product.Id)"><img class="mg-product-icon-img" src="~/images/svgs/view-icon.svg" alt="" /></a>
-                                                </div>
-                                            </div>
-                                            @* <div class="mg-product-add-to-cart-btn-outer">
-                                        <a class="mg-product-add-to-cart-btn" href="cart.html">Add To Bag</a>
-                                        </div> *@
-                                        </div>
-                                        <div class="mg-product-tittles text-center">
-                                            <a class="mg-product-name" href="product.html">@product.Category</a>
-                                            <div class="mg-regular-price"><span class="mg-discount-price"></span>@product.Price ЛВ</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            }                                                                                                      
-                        </div>
-                    </div>
-                </div>
-            </section>
+            @await Html.PartialAsync("_RecommendedProductsPartial", recommendedProducts)
             <!-- You may also like section end -->
         </div>
     </div>
@@ -330,6 +276,11 @@
                         console.log('Error.')
                 }
             });
+        }
+
+        function redirectOnProductFavoritePage(event, productId) {
+            event.preventDefault();
+            console.log(productId)
         }
     </script>
 }

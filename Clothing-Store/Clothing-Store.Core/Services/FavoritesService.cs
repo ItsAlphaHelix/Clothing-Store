@@ -73,6 +73,7 @@
             var products = productFavoritesRepository
                 .AllAsNoTracking()
                 .Where(x => x.Favorite.UserId == userId && !x.IsDeleted)
+                .OrderByDescending(x => x.ProductId)
                 .Select(x => new ProductViewModel()
                 {
                     Id = x.ProductId,
@@ -83,6 +84,7 @@
                     IsDeleted = x.IsDeleted
                 })
                 .AsQueryable();
+
 
             return products;
         }
