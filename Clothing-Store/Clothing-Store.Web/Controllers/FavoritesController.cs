@@ -35,6 +35,7 @@
 
             var paginated = await PaginatedList<ProductViewModel>.CreateAsync(products, page, 3);
 
+
             var paginatedView = new PaginatedViewModel<ProductViewModel>()
             {
                 Models = paginated
@@ -51,6 +52,17 @@
             var user = await GetUserAsync();
 
             await this.favoritesService.AddFavoriteProduct(user.Id, id);
+
+            var currentContextUrl = Request.Headers["Referer"].ToString();
+
+            if (currentContextUrl.Contains("ProductDetails"))
+            {
+                return Redirect(currentContextUrl);
+            }
+            else if (currentContextUrl.Contains("Bags"))
+            {
+                return Redirect(currentContextUrl);
+            }
 
             var redirection = new
             {

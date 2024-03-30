@@ -122,6 +122,7 @@
             var products = this.productsBagRepository
                 .AllAsNoTracking()
                 .Where(x => x.Bag.UserId == userId && !x.IsDeleted)
+                .OrderByDescending(x => x.ProductId)
                 .Select(x => new ProductBagViewModel()
                 {
                     Id = x.ProductId,
@@ -235,30 +236,33 @@
                 return temporaryUserId;
             }
         }
-
         public async Task<IEnumerable<ProductViewModel>> GetRecommendedProductsInBag(string userId)
         {
             var productsInBag = this.GetAllProductsInBagAsQueryable(userId);
 
-            var maxPrice = await productsInBag.MaxAsync(x => (x.Price * x.Quantity)); 
-            
+            var maxPrice = await productsInBag.MaxAsync(x => (x.Price * x.Quantity));
+
+
             var recommendedProducts = await this.productsRepository
-                .AllAsNoTracking()
-                .Where(x => x.Price <= maxPrice && productsInBag.All(pb => pb.Id != x.Id))
-                .Select(x => new ProductViewModel()
-                {
-                    Id = x.Id,
-                    Category = x.Category,
-                    Price = x.Price,
-                    Images = x.Images.Select(x => x.Url).Take(2).ToList(),
-                    ProductSizes = x.ProductSizes
-                    .Where(x => x.Count != 0)
-                    .Select(x => x.Size.Name)
-                    .ToList()
-                })
-                .OrderBy(x => Guid.NewGuid())
-                .Take(10)
-                .ToListAsync();
+               .AllAsNoTracking()
+               .Where(x => x.Price <= maxPrice &&
+                           x.ProductSizes.Any(x => x.Count != 0) &&
+                           productsInBag.All(pb => pb.Id != x.Id))
+               .Select(x => new ProductViewModel()
+               {
+                   Id = x.Id,
+                   Category = x.Category,
+                   Price = x.Price,
+                   Images = x.Images.Select(x => x.Url).Take(2).ToList(),
+                   ProductSizes = x.ProductSizes
+                   .Where(x => x.Count != 0)
+                   .Select(x => x.Size.Name)
+                   .ToList()
+               })
+               .OrderBy(x => Guid.NewGuid())
+               .Take(10)
+               .ToListAsync();
+
 
             return recommendedProducts;
         }

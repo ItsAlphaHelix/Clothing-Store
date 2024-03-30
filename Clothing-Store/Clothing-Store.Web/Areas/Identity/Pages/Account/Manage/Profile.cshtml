@@ -1,0 +1,215 @@
+﻿@page
+@model Clothing_Store.Areas.Identity.Pages.Account.Manage.Profile   
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Моят профил";
+}
+
+<!--MG Breadcrumb-->
+<div class="mg-breadcrumb-outer">
+    <div class="container-fluid gx-5">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item active">Profile</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<!--MG Breadcrumb End Here-->
+<!--MG Page Start Here-->
+<div class="mg-page-outer">
+    <div class="container-lg gx-lg-5 gx-md-4">
+        <div class="mg-profile-page-outer">
+            <div class="mg-user-profile-details-outer text-center">
+                <div class="mg-user-image">
+                    <img src="assets/images/blog/blog4.jpg" alt="" />
+                </div>
+                <div class="mg-profile-user-name">
+                    <h2>@Model.ProfileModel.FirstName @Model.ProfileModel.LastName</h2>
+                </div>
+                <div class="mg-profile-user-login-details">
+                    <p class="mg-profile-user-details-list-des" id="phoneText">@Model.ProfileModel.Phone <a href="#" onclick="editPhone(event)"><i class="fa fa-pencil" aria-hidden="true"></i></a></p>
+                    <p class="mg-profile-user-details-list-des" id="emailText">@Model.ProfileModel.Email <a href="#" onclick="editEmail(event)"><i class="fa fa-pencil" aria-hidden="true"></i></a></p>
+                </div>
+            </div>
+            <div class="mg-profile-user-details-list-main">
+                <div class="mg-profile-user-details-list-grid">
+                    <div class="row gx-2">
+                        <div class="col-6">
+                            <p class="mg-profile-user-details-list-heading">Моите поръчки</p>
+                        </div>
+                        <div class="col-6 text-end">
+                            <p class="mg-profile-user-details-list-des"><a asp-controller="Orders" asp-action="MineOrders">Вижте поръчките си</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mg-profile-user-details-list-grid">
+                    <div class="row gx-2">
+                        <div class="col-6">
+                            <p class="mg-profile-user-details-list-heading">Моите харесани продукти</p>
+                        </div>
+                        <div class="col-6 text-end">
+                            <p class="mg-profile-user-details-list-des"><a asp-controller="Favorites" asp-action="All">Вижте продуктите си</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mg-profile-user-details-list-grid">
+                    <div class="row gx-2">
+                        <div class="col-6">
+                            <p class="mg-profile-user-details-list-heading">Моите адреси</p>
+                        </div>
+                        <div class="col-6 text-end">
+                            <p class="mg-profile-user-details-list-des"><a href="#">Вижте адресите си</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mg-profile-user-details-list-grid">
+                    <div class="row gx-2">
+                        <div class="col-6">
+                            <p class="mg-profile-user-details-list-heading">Настройки на профила</p>
+                        </div>
+                        <div class="col-6 text-end">
+                            <p class="mg-profile-user-details-list-des"><a href="settings.html">Виццте настройките си</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mg-profile-logout-btn mg-btn-fullwidth-half text-center">
+                <a class="mg-btn mg-light-bg-btn mg-form-btn" asp-page="/Account/Logout" asp-route-returnUrl="/Home/Index">Излизане от профила Ви.</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--MG Page End Here-->
+@section Scripts{
+    <script>
+        function editPhone(event) {
+            event.preventDefault();
+            console.log("Edited.");
+            var phoneText = $('#phoneText').text().trim();
+
+            var inputElement = $('<input>', {
+                type: 'text',
+                value: phoneText,
+                class: 'inputText'
+            });
+
+            var clearIcon = $('<i>', {
+                class: 'fa fa-times-circle mg-profile-user-details-list-des',
+                'aria-hidden': 'true'
+            });
+
+            var inputContainer = $('<div>', {
+                class: 'inputContainer'
+            });
+
+            inputContainer.append(inputElement);
+            inputContainer.append(clearIcon);
+
+            $('#phoneText').replaceWith(inputContainer);
+
+            inputElement.attr('name', 'Phone');
+
+            inputElement.focus();
+            var inputValue = inputElement.val();
+            inputElement.val('').val(inputValue);
+
+            clearIcon.on('click', function () {
+                inputElement.val(''); 
+                inputElement.focus(); 
+            });
+
+            inputElement.keypress(function (event) {
+                if (event.key === 'Enter') {
+                    $.ajax({
+                        url: '/Identity/Account/Manage/Profile?handler=EditPhoneNumber',
+                        type: 'POST',
+                        data: { phone: inputElement.val() },
+                        success: function (response) {
+                            location.reload(); 
+                            console.log('AJAX request succeeded');
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('AJAX request failed');
+                            console.error('XHR:', xhr);
+                            console.error('Status:', status);
+                            console.error('Error:', error);
+                        }
+                    });
+                }
+            });
+
+            inputElement.on('blur', function () {
+                if (!clearIcon.is(':hover')) {
+                    location.reload();
+                }
+            });
+        }
+
+        function editEmail(event) {
+            event.preventDefault();
+            console.log("Edited.");
+            var emailText = $('#emailText').text().trim();
+
+            var inputElement = $('<input>', {
+                type: 'text',
+                value: emailText,
+                class: 'inputText'
+            });
+
+            var clearIcon = $('<i>', {
+                class: 'fa fa-times-circle mg-profile-user-details-list-des',
+                'aria-hidden': 'true'
+            });
+
+            var inputContainer = $('<div>', {
+                class: 'inputContainer'
+            });
+
+            inputContainer.append(inputElement);
+            inputContainer.append(clearIcon);
+
+            $('#emailText').replaceWith(inputContainer);
+
+            inputElement.attr('name', 'Email');
+
+
+            inputElement.focus();
+            var inputValue = inputElement.val();
+            inputElement.val('').val(inputValue);
+
+
+            clearIcon.on('click', function () {
+                inputElement.val(''); 
+                inputElement.focus(); 
+            });
+
+            inputElement.keypress(function (event) {
+                if (event.key === 'Enter') {
+                    $.ajax({
+                        url: '/Identity/Account/Manage/Profile?handler=EditEmailAddress',
+                        type: 'POST',
+                        data: { email: inputElement.val() },
+                        success: function (response) {
+                            location.reload(); 
+                            console.log('AJAX request succeeded');
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('AJAX request failed');
+                            console.error('XHR:', xhr);
+                            console.error('Status:', status);
+                            console.error('Error:', error);
+                        }
+                    });
+                }
+            });
+
+            inputElement.on('blur', function () {
+                if (!clearIcon.is(':hover')) {
+                    location.reload();
+                }
+            });
+        }
+    </script>
+}

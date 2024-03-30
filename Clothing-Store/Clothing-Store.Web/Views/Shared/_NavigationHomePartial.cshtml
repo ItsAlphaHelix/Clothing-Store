@@ -49,7 +49,7 @@
                                     </div>
                                 </div>
                             </li>
-                            @if(isCustomerHasOrders)
+                            @if (isCustomerHasOrders)
                             {
                                 <li class="menu-item">
                                     <a asp-controller="Orders" asp-action="MineOrders">Моите поръчки</a>
@@ -58,6 +58,12 @@
                             <li class="menu-item">
                                 <a href="contact-us.html">Контакти</a>
                             </li>
+                            @if (this.User?.Identity?.IsAuthenticated ?? false)
+                            {
+                                <li class="menu-item">
+                                    <a asp-area="Identity" asp-page="/Account/Manage/Profile">Моят Профил</a>
+                                </li>
+                            }
                         </ul>
                     </nav>
                     <div>
@@ -73,21 +79,21 @@
                 <div class="header-icons-outer mg-header-icon-style2">
                     <ul>
                         <li class="mg-search-icon mg-search-box-main">
-                            
+
                             <div class="mg-search-box">
                                 <div class="input-group">
                                     <div class="form-outline">
                                         <form id="searchForm" asp-controller="Search" asp-action="ProductsByQuery" method="get">
-                                        <input name="searchBy" type="search" placeholder="Search Here.." class="form-control">
+                                            <input name="searchBy" type="search" placeholder="Search Here.." class="form-control">
                                         </form>
                                     </div>
                                     <button type="button" class="btn" id="searchButton">
-                                        <img src="/images/svgs/search-white.svg" alt=""/>
+                                        <img src="/images/svgs/search-white.svg" alt="" />
                                     </button>
                                 </div>
-                            </div>                         
+                            </div>
                         </li>
-                        @if(this.User?.Identity?.IsAuthenticated ?? false)
+                        @if (this.User?.Identity?.IsAuthenticated ?? false)
                         {
                             @if (countOfFavoriteProducts != 0)
                             {
@@ -106,7 +112,7 @@
                         {
                             <li><a id="account" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Context.Request.Path"><img src="~/images/svgs/account-white.svg" alt="" /></a></li>
                         }
-                        @if(countOfProductsInBag != 0)
+                        @if (countOfProductsInBag != 0)
                         {
                             <li><a asp-controller="Bags" asp-action="All"><img src="~/images/svgs/shopping-bag-white.svg" alt="" /><span class="mg-header-icon-counter cart-counter">@countOfProductsInBag</span></a></li>
                         }

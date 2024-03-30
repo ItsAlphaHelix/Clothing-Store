@@ -51,7 +51,10 @@ function addProductToBag(productId, page, sorting, selectedProducts, selectedPri
         success: function () {
 
             if (window.location.href.includes("ProductDetails")) {
-                 return window.location.href = ' ';
+                return window.location.href = ' ';
+            }
+            else if (window.location.href.includes("Bag")) {
+                return window.location.href = ' ';
             }
 
             var action = getCurrentAction();
@@ -63,7 +66,6 @@ function addProductToBag(productId, page, sorting, selectedProducts, selectedPri
             var resultSearchBy = searchBy !== ' ' && searchBy != undefined ? `&searchBy=${searchBy}` : ' ';
 
             window.location.href = `/${controller}/${action}?page=${page}&sorting=${sorting}${resultSelectedProducts}${resultSelectedPrice}${resultSelectedSizes}${resultSearchBy}`;
-            console.log(window.location.href)
 
         },
         error: function (xhr, status, error) {

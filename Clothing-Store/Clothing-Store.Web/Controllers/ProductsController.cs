@@ -5,22 +5,25 @@
     using Clothing_Store.Core.ViewModels.Reviews;
     using Clothing_Store.Core.ViewModels.Shared;
     using Clothing_Store.Data.Data.Models;
+    using Clothing_Store.Data.Repositories;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
     using System.Linq;
     using System.Security.Claims;
 
     public class ProductsController : ControllerBase
     {
         private readonly IProductsService productsService;
+        private readonly UserManager<ApplicationUser> usersManager;
         public ProductsController(
             IProductsService productsService,
             UserManager<ApplicationUser> usersManager)
             : base(usersManager, null)
         {
             this.productsService = productsService;
-
+            this.usersManager = usersManager;
         }
 
         [HttpGet]
