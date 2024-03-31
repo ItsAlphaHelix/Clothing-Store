@@ -23,7 +23,8 @@
         <div class="mg-profile-page-outer">
             <div class="mg-user-profile-details-outer text-center">
                 <div class="mg-user-image">
-                    <img src="assets/images/blog/blog4.jpg" alt="" />
+                    <img src="@Model.ProfileModel.ProfileImageUrl" alt="" id="upload-trigger" />
+                    <input type="file" id="image-input" style="display: none;" />
                 </div>
                 <div class="mg-profile-user-name">
                     <h2>@Model.ProfileModel.FirstName @Model.ProfileModel.LastName</h2>
@@ -212,4 +213,45 @@
             });
         }
     </script>
+    <script>
+        $(document).ready(function () {
+            // When the image is clicked
+            $('#upload-trigger').click(function () {
+                // Trigger the click event of the input field
+                $('#image-input').click();
+            });
+
+            // Handle file selection
+            $('#image-input').change(function () {
+                // Get the selected file
+                const selectedFile = this.files[0];
+                console.log('Selected file:', selectedFile);
+
+                // Create form data object and append file to it
+                var formData = new FormData();
+                formData.append('file', selectedFile);
+                //formData.append('transformation', `w_${435},h_${441},c_scale`);
+
+                // Send AJAX request to server
+                $.ajax({
+                    url: '/Identity/Account/Manage/Profile?handler=UploadImage', // Replace with the appropriate URL for your server endpoint
+                    type: 'POST',
+                    data: formData ,
+                    processData: false,
+                    contentType: false,
+                    success: function () {
+                        // Handle success response if needed
+                        console.log('Upload successful');
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error response if needed
+                        console.error('Upload failed:', error);
+                    }
+                });
+            });
+        });
+    </script>
+
+
 }

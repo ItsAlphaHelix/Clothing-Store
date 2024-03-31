@@ -1,9 +1,13 @@
 ﻿@using Clothing_Store.Core.ViewModels.Orders;
 @using Clothing_Store.Core.ViewModels.Shared;
+@using Clothing_Store.Data.Data.Models;
+@using Microsoft.AspNetCore.Identity;
 @model PaginatedViewModel<OrderViewModel>
+@inject UserManager<ApplicationUser> usersManager;
 
 @{
     ViewData["Title"] = "Моите поръчки";
+    var user = await usersManager.FindByNameAsync(this.User.Identity.Name);
 }
 
 <div class="mg-breadcrumb-outer">
@@ -23,14 +27,14 @@
                 <div class="mg-my-order-page-outer">
                     <div class="mg-user-profile-details-outer text-center">
                         <div class="mg-user-image">
-                            <img src="assets/images/blog/blog4.jpg" alt=""/>
+                            <img src="@user.ProfileImageUrl" alt=""/>
                         </div>
                         <div class="mg-profile-user-name">
                             <h2>@Model.CustomerModel.FirstName @Model.CustomerModel.LastName</h2>
                         </div>
                         <div class="mg-profile-user-login-details">
-                            <p>@Model.CustomerModel.Phone <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a></p>
-                            <p>@Model.CustomerModel.Email <a href=""><i class="fa fa-pencil" aria-hidden="true"></i></a></p>
+                            <p>@user.PhoneNumber <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a></p>
+                            <p>@user.Email <a href=""><i class="fa fa-pencil" aria-hidden="true"></i></a></p>
                         </div>
                     </div>
                     <div class="mg-order-details-list-outer">

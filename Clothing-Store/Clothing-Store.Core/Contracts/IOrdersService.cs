@@ -1,5 +1,6 @@
 ﻿namespace Clothing_Store.Core.Contracts
 {
+    using Clothing_Store.Core.ViewModels.Customers;
     using Clothing_Store.Core.ViewModels.Orders;
 
     public interface IOrdersService

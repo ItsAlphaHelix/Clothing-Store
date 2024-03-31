@@ -1,4 +1,6 @@
-﻿namespace Clothing_Store.Core.ViewModels.Orders
+﻿using Clothing_Store.Core.ViewModels.Customers;
+
+namespace Clothing_Store.Core.ViewModels.Orders
 {
     public class CompletedOrderViewModel : CustomerViewModel
     {

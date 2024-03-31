@@ -1,6 +1,6 @@
 ﻿namespace Clothing_Store.Core.ViewModels.Shared
 {
-    using Clothing_Store.Core.ViewModels.Orders;
+    using Clothing_Store.Core.ViewModels.Customers;
     using Clothing_Store.Core.ViewModels.Products;
     public class PaginatedViewModel<T>
     {

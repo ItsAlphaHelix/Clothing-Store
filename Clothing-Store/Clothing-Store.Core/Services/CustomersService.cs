@@ -1,7 +1,7 @@
 ﻿namespace Clothing_Store.Core.Services
 {
     using Clothing_Store.Core.Contracts;
-    using Clothing_Store.Core.ViewModels.Orders;
+    using Clothing_Store.Core.ViewModels.Customers;
     using Clothing_Store.Data.Data.Models;
     using Clothing_Store.Data.Repositories;
     using Microsoft.AspNetCore.Identity;
@@ -32,7 +32,7 @@
                 Email = user.Email,
                 Phone = user.PhoneNumber,
                 FirstName = userFirstName,
-                LastName = userLastName
+                LastName = userLastName,
             };
 
             var result = await this.SaveInformationAboutCustomerForNextTimeAsync(customer, userId);
@@ -120,6 +120,7 @@
 
         public async Task<Customer> GetOrCreateCustomerAsync(CustomerViewModel customerModel, string userId)
         {
+            var user = await usersManager.FindByIdAsync(userId);
             var customer = await this.customersRepository
                 .All()
                 .FirstOrDefaultAsync(x => x.CustomerId == userId);
@@ -137,12 +138,11 @@
                     Phone = customerModel.Phone,
                     Region = customerModel.Region,
                     IsInformationSaved = customerModel.IsInformationSaved,
-                    IsCustomerWantsToPayOnline = customerModel.IsCustomerWantsToPayOnline
+                    IsCustomerWantsToPayOnline = customerModel.IsCustomerWantsToPayOnline,                   
 
                 };
                 await customersRepository.AddAsync(customer);
             }
-
 
             return customer;
         }

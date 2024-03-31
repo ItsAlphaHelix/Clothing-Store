@@ -1,6 +1,7 @@
 ﻿namespace Clothing_Store.Controllers
 {
     using Clothing_Store.Core.Contracts;
+    using Clothing_Store.Core.ViewModels.Customers;
     using Clothing_Store.Core.ViewModels.Orders;
     using Clothing_Store.Core.ViewModels.Shared;
     using Clothing_Store.Data.Data.Models;

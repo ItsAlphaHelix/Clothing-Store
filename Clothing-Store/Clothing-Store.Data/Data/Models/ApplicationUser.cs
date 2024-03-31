@@ -17,5 +17,7 @@
         [Required]
         [MaxLength(30)]
         public string LastName { get; set; }
+
+        public string? ProfileImageUrl { get; set; }
     }
 }

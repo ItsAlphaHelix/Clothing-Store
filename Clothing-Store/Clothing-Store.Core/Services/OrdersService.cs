@@ -1,6 +1,7 @@
 ﻿namespace Clothing_Store.Core.Services
 {
     using Clothing_Store.Core.Contracts;
+    using Clothing_Store.Core.ViewModels.Customers;
     using Clothing_Store.Core.ViewModels.Orders;
     using Clothing_Store.Data.Data.Models;
     using Clothing_Store.Data.Repositories;

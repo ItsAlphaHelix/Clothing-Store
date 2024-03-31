@@ -2,6 +2,8 @@
 namespace Clothing_Store.Areas.Identity.Pages.Account.Manage
 {
     using Clothing_Store.Data.Data.Models;
+    using CloudinaryDotNet;
+    using CloudinaryDotNet.Actions;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,10 +13,18 @@ namespace Clothing_Store.Areas.Identity.Pages.Account.Manage
     public class Profile : PageModel
     {
         private readonly UserManager<ApplicationUser> usersManager;
-
-        public Profile(UserManager<ApplicationUser> usersManager)
+        private readonly Cloudinary cloudinary;
+        public Profile(UserManager<ApplicationUser> usersManager, IConfiguration configuration)
         {
             this.usersManager = usersManager;
+
+            Account account = new Account(
+                    configuration["CloudinarySettings:Name"],
+                    configuration["CloudinarySettings:ApiKey"],
+                    configuration["CloudinarySettings:SecretKey"]);
+
+            cloudinary = new Cloudinary(account);
+
         }
 
         [BindProperty]
@@ -30,6 +40,8 @@ namespace Clothing_Store.Areas.Identity.Pages.Account.Manage
             public string Email { get; set; }
 
             public string Phone { get; set; }
+
+            public string ProfileImageUrl { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -43,7 +55,9 @@ namespace Clothing_Store.Areas.Identity.Pages.Account.Manage
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
-                Phone = user.PhoneNumber
+                Phone = user.PhoneNumber,
+                ProfileImageUrl = user.ProfileImageUrl
+                
             };
 
             return Page();
@@ -72,5 +86,46 @@ namespace Clothing_Store.Areas.Identity.Pages.Account.Manage
 
             return Page();
         }
+        public async Task<IActionResult> OnPostUploadImageAsync(IFormFile file)
+        {
+            var uploadResult = new ImageUploadResult();
+
+            var user = await this.GetUserAsync();
+            string publicId = "profile" + user.Id;
+            int heigth = 441;
+            int width = 435;
+
+            if (file.Length > 0)
+            {
+                using var stream = file.OpenReadStream();
+                var uploadParams = new ImageUploadParams
+                {
+                    File = new FileDescription(file.FileName, stream),
+                    PublicId = publicId,
+                    Transformation = new Transformation()
+                    .Height(heigth).Width(width)
+                };
+                uploadResult = await cloudinary.UploadAsync(uploadParams);
+            }
+
+            if (uploadResult.Error != null)
+            {
+                return BadRequest(uploadResult.Error.Message);
+            }
+
+            user.ProfileImageUrl = uploadResult.SecureUri.AbsoluteUri;
+
+            await this.usersManager.UpdateAsync(user);
+
+            return new ContentResult
+            {
+                Content = "Upload successful",
+                StatusCode = 200,
+                ContentType = "text/plain"
+            };
+        }
+
+        private async Task<ApplicationUser> GetUserAsync()
+        => await this.usersManager.FindByIdAsync(this.User.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
     }
 }

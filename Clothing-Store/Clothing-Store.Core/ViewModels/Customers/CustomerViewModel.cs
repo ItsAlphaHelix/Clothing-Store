@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Clothing_Store.Core.ViewModels.Orders;
 
-namespace Clothing_Store.Core.ViewModels.Orders
+namespace Clothing_Store.Core.ViewModels.Customers
 {
     public class CustomerViewModel
     {
@@ -37,7 +38,6 @@ namespace Clothing_Store.Core.ViewModels.Orders
         public string Phone { get; set; }
 
         public bool IsInformationSaved { get; set; }
-
 
         public bool IsCustomerWantsToPayOnline { get; set; }
 
