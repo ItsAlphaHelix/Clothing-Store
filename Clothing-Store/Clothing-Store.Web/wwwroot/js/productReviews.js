@@ -1,12 +1,12 @@
-﻿function bindRazorProperties(productId, userFullName) {
+﻿function bindRazorProperties(productId, userFullName, userProfileImageUrl) {
 
     $(document).on('click', '#post-review', function (event) {
         event.preventDefault();
 
-        //var userFullName = '@Html.Raw(ViewBag.UserFullName)';
-        // var productId = '@Model.Id';
-
-        var data = $(".mg-form").serialize() + "&productId=" + productId + "&userFullName=" + userFullName;
+        var data = $(".mg-form").serialize() +
+            "&productId=" + productId +
+            "&userFullName=" + userFullName +
+            "&userProfileImageUrl=" + userProfileImageUrl;
 
         console.log(data)
         $.ajax({
@@ -22,7 +22,7 @@
             <div class="col-9">
                 <div class="mg-customer-review-user-details-outer">
                     <div class="mg-customer-review-user-detail-image">
-                        <img src="assets/images/product8.jpg" alt="" /> <!-- Consider dynamically setting this based on user data -->
+                        <img src="${result.userProfileImageUrl}" /> <!-- Consider dynamically setting this based on user data -->
                     </div>
                     <div class="mg-customer-review-user-details">
                         <div class="mg-customer-username">${DOMPurify.sanitize(result.userFullName)}</div>

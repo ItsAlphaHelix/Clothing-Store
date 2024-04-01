@@ -17,5 +17,7 @@ namespace Clothing_Store.Core.ViewModels.Reviews
         public string Message { get; set; } = null!;
 
         public DateTime Date { get; set; }
+
+        public string? UserProfileImageUrl { get; set; }
     }
 }

@@ -164,11 +164,14 @@
                 .All()
                 .Include(x => x.Bag)
                 .Where(x => x.ProductId == productId || x.Bag.UserId == userId)
-                .FirstOrDefaultAsync();
+                .ToListAsync();
 
-            productsInBag.IsDeleted = true;
-            productsInBag.Quantity = 0;
-            productsInBag.DeletedOn = DateTime.UtcNow;
+            foreach (var productInBag in productsInBag)
+            {
+                productInBag.IsDeleted = true;
+                productInBag.Quantity = 0;
+                productInBag.DeletedOn = DateTime.UtcNow;
+            }
 
             await this.productsBagRepository.SaveChangesAsync();
         }

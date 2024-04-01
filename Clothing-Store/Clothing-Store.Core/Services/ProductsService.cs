@@ -137,7 +137,8 @@
                         UserFullName = x.UserFullName,
                         Rating = x.Rating,
                         Message = x.Message,
-                        Date = x.Date
+                        Date = x.Date,
+                        UserProfileImageUrl = x.UserProfileImageUrl
                     }),
                     Sizes = x.ProductSizes
                     .Where(x => x.Count != 0)
@@ -164,7 +165,8 @@
                 UserFullName = userFullName,
                 Rating = productReview.Rating,
                 Message = productReview.Message,
-                Date = DateTime.Now
+                Date = DateTime.Now,
+                UserProfileImageUrl = user.ProfileImageUrl,
             };
 
             var product = await this.productsRepository

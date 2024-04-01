@@ -142,23 +142,22 @@
         {
             ViewData["IsHomePage"] = false;
             var userId = await GetUserIdAsync();
-            MineOrdersViewModel model = new();
+            IQueryable<OrderViewModel> mineOrders;
 
             try
             {
-                model = await this.ordersService.GetCustomerWithHisOrdersAsync(userId);
+                mineOrders = this.ordersService.GetCustomerOrdersAsQueryable(userId);
             }
             catch (NullReferenceException)
             {
                 return RedirectToAction("Index", "Home");
             }
 
-            var paginated = await PaginatedList<OrderViewModel>.CreateAsync(model.OrdersModel, page, 3);
+            var paginated = await PaginatedList<OrderViewModel>.CreateAsync(mineOrders, page, 3);
 
             var viewModel = new PaginatedViewModel<OrderViewModel>()
             {
                 Models = paginated,
-                CustomerModel = model.CustomerModel
             };
 
             return View(viewModel);

@@ -6,7 +6,6 @@
     {
         public PaginatedList<T> Models { get; set; }
 
-        public CustomerViewModel CustomerModel { get; set; }
 
         public SortEnum Sorting { get; set; }
 

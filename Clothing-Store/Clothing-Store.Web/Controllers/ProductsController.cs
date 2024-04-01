@@ -129,6 +129,7 @@
                 var user = await GetUserAsync();
 
                 ViewBag.UserFullName = $"{user.FirstName} {user.LastName}";
+                ViewBag.UserProfileImageUrl = user.ProfileImageUrl;
             }
 
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")

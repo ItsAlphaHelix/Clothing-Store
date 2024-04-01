@@ -33,6 +33,6 @@
         /// <returns></returns>
         public IQueryable<ProductOrderViewModel> GetProductsInOrderAsQueryable(string numberOfOrder);
 
-        Task<MineOrdersViewModel> GetCustomerWithHisOrdersAsync(string userId);
+        IQueryable<OrderViewModel> GetCustomerOrdersAsQueryable(string userId);
     }
 }

@@ -67,22 +67,8 @@
             return userOrder;
         }
 
-        public async Task<MineOrdersViewModel> GetCustomerWithHisOrdersAsync(string userId)
+        public IQueryable<OrderViewModel> GetCustomerOrdersAsQueryable(string userId)
         {
-            var customer = await this
-                .customersRepository
-                .AllAsNoTracking()
-                .Where(x => x.CustomerId == userId)
-                .Select(x => new CustomerViewModel()
-                {
-                    FirstName = x.FirstName,
-                    LastName = x.LastName,
-                    Email = x.Email,
-                    Phone = x.Phone,
-                })
-                .FirstOrDefaultAsync();
-
-
             var orders = this.ordersRepository
                 .AllAsNoTracking()
                 .Where(x => x.CustomerId == userId && x.StripePaymentStatus != "refunded")
@@ -97,7 +83,7 @@
                 .AsQueryable();
 
 
-            if (customer == null || !orders.Any())
+            if (!orders.Any())
             {
                 throw new NullReferenceException("Вие все още нямате поръчки.");
             }
@@ -105,10 +91,9 @@
             var mineOrderModel = new MineOrdersViewModel()
             {
                 OrdersModel = orders,
-                CustomerModel = customer
             };
 
-            return mineOrderModel;
+            return orders;
         }
 
         public IQueryable<ProductOrderViewModel> GetProductsInOrderAsQueryable(string numberOfOrder)

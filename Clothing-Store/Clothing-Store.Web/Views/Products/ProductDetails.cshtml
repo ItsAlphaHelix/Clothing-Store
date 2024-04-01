@@ -458,7 +458,8 @@
     <script>
         var userFullName = '@Html.Raw(ViewBag.UserFullName)';
         var productId = '@Model.Id';
-        bindRazorProperties(productId, userFullName);
+        var userProfileImageUrl = '@ViewBag.UserProfileImageUrl';
+        bindRazorProperties(productId, userFullName, userProfileImageUrl);
     </script>
     <script src="~/js/loadModalProductDetails.js" asp-append-version="true"></script>
     <script src="~/js/addToBag.js" asp-append-version="true"></script>
