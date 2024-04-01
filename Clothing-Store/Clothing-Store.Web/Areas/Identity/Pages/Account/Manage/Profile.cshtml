@@ -5,6 +5,10 @@
     ViewData["Title"] = "Моят профил";
 }
 
+<link rel="stylesheet" href="~/css/spinner.css" asp-append-version="true" />
+
+<partial name="_LoadingPartial" />
+
 <!--MG Breadcrumb-->
 <div class="mg-breadcrumb-outer">
     <div class="container-fluid gx-5">
@@ -213,8 +217,11 @@
             });
         }
     </script>
+
     <script>
         $(document).ready(function () {
+            var loadingDiv = document.getElementById('loading');
+
             // When the image is clicked
             $('#upload-trigger').click(function () {
                 // Trigger the click event of the input field
@@ -231,7 +238,7 @@
                 var formData = new FormData();
                 formData.append('file', selectedFile);
                 //formData.append('transformation', `w_${435},h_${441},c_scale`);
-
+                loadingDiv.style.visibility = 'visible';
                 // Send AJAX request to server
                 $.ajax({
                     url: '/Identity/Account/Manage/Profile?handler=UploadImage', // Replace with the appropriate URL for your server endpoint
@@ -241,11 +248,13 @@
                     contentType: false,
                     success: function () {
                         // Handle success response if needed
+                        loadingDiv.style.visibility = 'hidden';
                         console.log('Upload successful');
                         location.reload();
                     },
                     error: function (xhr, status, error) {
                         // Handle error response if needed
+                        loadingDiv.style.visibility = 'hidden';
                         console.error('Upload failed:', error);
                     }
                 });

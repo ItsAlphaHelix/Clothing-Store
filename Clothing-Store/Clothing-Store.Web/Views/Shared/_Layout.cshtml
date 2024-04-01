@@ -14,10 +14,13 @@
     <link rel="stylesheet" href="~/css/mg-menu.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/jquery.highlight.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/magnific-popup.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/spinner.css" asp-append-version="true" />
 
     <partial name="_ValidationScriptsPartial" />
 </head>
 <body class="home-2">
+
+    <partial name="_LoadingPartial" />
 
     @if (this.ViewBag.IsHomePage)
     {
@@ -39,12 +42,8 @@
     <main role="main">
         @RenderBody()
     </main>
+
     <partial name="_FooterPartial.cshtml" />
-    @* <footer class="border-top footer text-muted">
-    <div class="container">
-    &copy; 2024 - Clothing_Store - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </div>
-    </footer> *@
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
@@ -58,7 +57,15 @@
     <script src="~/js/mg-home-2.js" asp-append-version="true"></script>
     <script src="~/js/mg-common.js" asp-append-version="true"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js" asp-append-version="true"></script>
-
+    <script>
+        function displayBusyIndicator() {
+            var loadingDiv = document.getElementById('loading');
+            loadingDiv.style.visibility = 'visible';
+        }
+        $(window).on('beforeunload', function () {
+            displayBusyIndicator();
+        });
+    </script>
     @await Component.InvokeAsync("Notyf") 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

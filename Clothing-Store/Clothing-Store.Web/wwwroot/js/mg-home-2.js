@@ -1,5 +1,12 @@
 $(document).ready(function () {
-    
+    $(document).ajaxStart(function () {
+        $("#loader").show(); // Show spinner when AJAX request starts
+    });
+
+    $(document).ajaxStop(function () {
+        $("#loader").hide(); // Hide spinner when all AJAX requests are complete
+    });
+
     /*
      * Home Slider
      */
@@ -70,5 +77,4 @@ $(document).ready(function () {
             }
         ]
     });
-    
 });
