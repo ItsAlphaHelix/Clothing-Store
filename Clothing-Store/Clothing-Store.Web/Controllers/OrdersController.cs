@@ -33,18 +33,6 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> ChangePaymentMethod(CustomerViewModel customerModel)
-        {
-            ViewData["IsHomePage"] = false;
-
-            var userId = await GetUserIdAsync();
-
-            await this.customersService.ChangeCustomerPaymentMethodAsync(customerModel, userId);
-
-            return RedirectToAction(nameof(Checkout));
-        }
-
-        [HttpGet]
         public async Task<IActionResult> RefundOrder(string numberOfOrder)
         {
             ViewData["IsHomePage"] = false;

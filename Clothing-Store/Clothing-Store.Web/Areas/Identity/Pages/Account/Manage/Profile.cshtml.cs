@@ -1,6 +1,7 @@
 
 namespace Clothing_Store.Areas.Identity.Pages.Account.Manage
 {
+    using AspNetCoreHero.ToastNotification.Abstractions;
     using Clothing_Store.Data.Data.Models;
     using CloudinaryDotNet;
     using CloudinaryDotNet.Actions;
@@ -14,9 +15,11 @@ namespace Clothing_Store.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> usersManager;
         private readonly Cloudinary cloudinary;
-        public Profile(UserManager<ApplicationUser> usersManager, IConfiguration configuration)
+        private readonly INotyfService toast; 
+        public Profile(UserManager<ApplicationUser> usersManager, IConfiguration configuration, INotyfService toast)
         {
             this.usersManager = usersManager;
+            this.toast = toast;
 
             Account account = new Account(
                     configuration["CloudinarySettings:Name"],

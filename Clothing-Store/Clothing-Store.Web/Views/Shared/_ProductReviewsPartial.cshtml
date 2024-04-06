@@ -12,7 +12,7 @@
                 <div class="col-9">
                     <div class="mg-customer-review-user-details-outer">
                         <div class="mg-customer-review-user-detail-image">
-                            <img src="@review.UserProfileImageUrl" alt="" />
+                        <img src="@(review.UserProfileImageUrl == null ? "/images/pngs/profile.png" : review.UserProfileImageUrl)" alt="" />
                         </div>
                         <div class="mg-customer-review-user-details">
                             <div class="mg-customer-username">@review.UserFullName</div>

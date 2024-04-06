@@ -8,8 +8,6 @@
 
         Task<bool> IsCustomerHasOrdersAsync(string userId);
 
-        Task ChangeCustomerPaymentMethodAsync(CustomerViewModel customerModel, string userId);
-
         void UpdateCustomerInformation(CustomerViewModel newCustomer, Customer oldCustomer);
 
         Task<CustomerViewModel> SaveInformationAboutCustomerForNextTimeAsync(CustomerViewModel customer, string userId);

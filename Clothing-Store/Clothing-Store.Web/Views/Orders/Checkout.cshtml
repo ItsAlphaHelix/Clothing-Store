@@ -108,14 +108,14 @@
                                 </div>
                             </div>
                             <div class="text-center mg-checkout-btn mt-4">
-                                @if(@Model.CustomerModel.IsCustomerWantsToPayOnline)
+                               @*  @if(@Model.CustomerModel.IsCustomerWantsToPayOnline)
                                 {
                                     <button type="submit" class="btn mg-btn mg-light-bg-btn mg-form-btn">Онлайн плащане</button>
                                 }
                                 else
                                 {
-                                    <button type="submit" class="btn mg-btn mg-light-bg-btn mg-form-btn">Наложен платеж</button>
-                                }
+                                } *@
+                                 <button type="submit" class="btn mg-btn mg-light-bg-btn mg-form-btn" id="payment-button">Наложен платеж</button>
                             </div>
                         </form>
                     </div>
@@ -230,17 +230,13 @@
 
     <script>
         function onChangePayment(checkbox) {
-            var isCustomerWantsToPayOnline = checkbox.checked
-            $.ajax({
-                type: "GET",
-                url: '/Orders/ChangePaymentMethod',
-                data: {
-                    "customerModel.IsCustomerWantsToPayOnline": isCustomerWantsToPayOnline
-                },
-                success: function () {
-                   window.location.href = 'Checkout';
-                }
-            });
+
+            if (checkbox.checked) {
+                $('#payment-button').text('Онлайн плащане');
+
+            } else {
+                $('#payment-button').text('Наложен платеж');
+            }
         }
     </script>
 }

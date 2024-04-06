@@ -10,7 +10,6 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
-    using System.Drawing.Printing;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -107,7 +106,7 @@
         {
             int countOfReviews = await this.GetProductReviewsCountAsync(productId);
             double averageRatingOfProduct = await this.CalculateAverageOfCurrentProduct(productId);
-
+            
             var product = await this.productsRepository
                 .AllAsNoTracking()
                 .Where(x => x.Id == productId)

@@ -1793,6 +1793,16 @@ img.img-fluid.mg-hover-img {
             color: #8F6B6C;
         }
 
+
+#edit-profile-image {
+    margin-left: 10px;
+}
+
+#edit-profile-image:hover,
+#edit-profile-image:active {
+    color: #8F6B6C;
+}
+
 .mg-btn-fullwidth-half .mg-btn {
     width: auto;
     min-width: 50%;

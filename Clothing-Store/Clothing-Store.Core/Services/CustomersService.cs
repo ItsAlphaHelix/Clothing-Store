@@ -6,6 +6,7 @@
     using Clothing_Store.Data.Repositories;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Identity.Client;
     using System.Threading.Tasks;
 
     public class CustomersService : ICustomersService
@@ -55,24 +56,6 @@
             }
 
             return false;
-        }
-
-        public async Task ChangeCustomerPaymentMethodAsync(CustomerViewModel customerModel, string userId)
-        {
-            var customer = await this.customersRepository
-                .All()
-                .FirstOrDefaultAsync(x => x.CustomerId == userId);
-
-            if (customerModel.IsCustomerWantsToPayOnline == true)
-            {
-                customer.IsCustomerWantsToPayOnline = customerModel.IsCustomerWantsToPayOnline;
-            }
-            else
-            {
-                customer.IsCustomerWantsToPayOnline = customerModel.IsCustomerWantsToPayOnline;
-            }
-
-            await this.customersRepository.SaveChangesAsync();
         }
 
         public void UpdateCustomerInformation(CustomerViewModel newCustomer, Customer oldCustomer)

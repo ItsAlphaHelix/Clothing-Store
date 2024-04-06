@@ -27,7 +27,7 @@
                 <div class="mg-my-order-page-outer">
                     <div class="mg-user-profile-details-outer text-center">
                         <div class="mg-user-image">
-                            <img src="@user.ProfileImageUrl" alt=""/>
+                    <img src="@(user.ProfileImageUrl == null ? "/images/pngs/profile.png" : user.ProfileImageUrl)" alt="" />
                         </div>
                         <div class="mg-profile-user-name">
                             <h2>@user.FirstName @user.LastName</h2>

@@ -27,9 +27,11 @@
         <div class="mg-profile-page-outer">
             <div class="mg-user-profile-details-outer text-center">
                 <div class="mg-user-image">
-                    <img src="@Model.ProfileModel.ProfileImageUrl" alt="" id="upload-trigger" />
+                    <img src="@(Model.ProfileModel.ProfileImageUrl == null ? "/images/pngs/profile.png" : Model.ProfileModel.ProfileImageUrl)" alt="" onclick="uploadImage()" />
+                    <i onclick="uploadImage()" id="edit-profile-image" class="fa fa-pencil" aria-hidden="true"></i>
                     <input type="file" id="image-input" style="display: none;" />
                 </div>
+
                 <div class="mg-profile-user-name">
                     <h2>@Model.ProfileModel.FirstName @Model.ProfileModel.LastName</h2>
                 </div>
@@ -219,15 +221,13 @@
     </script>
 
     <script>
+        
+        function uploadImage(){
+
+            $('#image-input').click();
+        }
         $(document).ready(function () {
             var loadingDiv = document.getElementById('loading');
-
-            // When the image is clicked
-            $('#upload-trigger').click(function () {
-                // Trigger the click event of the input field
-                $('#image-input').click();
-            });
-
             // Handle file selection
             $('#image-input').change(function () {
                 // Get the selected file

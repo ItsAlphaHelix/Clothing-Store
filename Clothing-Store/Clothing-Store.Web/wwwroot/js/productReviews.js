@@ -22,7 +22,7 @@
             <div class="col-9">
                 <div class="mg-customer-review-user-details-outer">
                     <div class="mg-customer-review-user-detail-image">
-                        <img src="${result.userProfileImageUrl}" /> <!-- Consider dynamically setting this based on user data -->
+                        <img src="${result.userProfileImageUrl == null ? '/images/pngs/profile.png' : result.userProfileImageUrl}" /> <!-- Consider dynamically setting this based on user data -->
                     </div>
                     <div class="mg-customer-review-user-details">
                         <div class="mg-customer-username">${DOMPurify.sanitize(result.userFullName)}</div>
