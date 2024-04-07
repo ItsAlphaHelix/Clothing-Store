@@ -86,7 +86,7 @@
             }
 
             await this.ordersService.CreateOrderAsync(model.CustomerModel, userId);
-            await this.bagsService.DeleteProductFromBagAsync(null, userId);
+            await this.bagsService.DeleteAllProductsFromBagAsync(userId);
 
             return RedirectToAction(nameof(OrderConfirmation));
         }
@@ -115,7 +115,7 @@
                         session.Id, 
                         session.PaymentIntentId);
 
-                    await this.bagsService.DeleteProductFromBagAsync(null, userId);
+                    await this.bagsService.DeleteAllProductsFromBagAsync(userId);
                 }
             }
 

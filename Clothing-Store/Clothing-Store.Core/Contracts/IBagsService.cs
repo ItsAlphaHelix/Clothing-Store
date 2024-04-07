@@ -5,24 +5,26 @@
 
     public interface IBagsService
     {
-        public IQueryable<ProductBagViewModel> GetAllProductsInBagAsQueryable(string userId);
+        IQueryable<ProductBagViewModel> GetAllProductsInBagAsQueryable(string userId);
 
-        public Task AddProductToBagAsync(int productId, string sizeName, int quantity, string userId);
+        Task AddProductToBagAsync(int productId, string sizeName, int quantity, string userId);
 
-        public Task<decimal> CalculateTotalPrice(string userId);
+        Task<decimal> CalculateTotalPrice(string userId);
 
-        public Task<int> CountOfProductsInBagAsync(string userId);
+        Task<int> CountOfProductsInBagAsync(string userId);
 
         string GetOrCreateTemporaryUserId();
 
-        public Task DeleteProductFromBagAsync(int? productId, string userId = null);
+        Task DeleteProductFromBagAsync(int productId, string sizeName, string userId);
 
-        public Task<int> GetTotalQuantityOfSizeOfProduct(string sizeName, int productId);
+        Task DeleteAllProductsFromBagAsync(string userId);
 
-        public Task DecrementQuantityOfProductAsync(string sizeName, int productId, string userId);
+        Task<int> GetTotalQuantityOfSizeOfProduct(string sizeName, int productId);
 
-        public Task IncrementQuantityOfProductAsync(string sizeName, int productId, string userId, int currentQuantity);
+        Task DecrementQuantityOfProductAsync(string sizeName, int productId, string userId);
 
-        public Task<IEnumerable<ProductViewModel>> GetRecommendedProductsInBag(string userId);
+        Task IncrementQuantityOfProductAsync(string sizeName, int productId, string userId, int currentQuantity);
+
+        Task<IEnumerable<ProductViewModel>> GetRecommendedProductsInBag(string userId);
     }
 }

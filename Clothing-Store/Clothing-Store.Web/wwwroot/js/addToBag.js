@@ -69,15 +69,16 @@ function addProductToBag(productId, page, sorting, selectedProducts, selectedPri
 
         },
         error: function (xhr, status, error) {
-            var jsonResponse = JSON.parse(xhr.responseText);
-            var errorMessage = jsonResponse;
+            console.log(xhr.responseText)
+            //var jsonResponse = JSON.parse(xhr.responseText);
+            //var errorMessage = jsonResponse;
 
-            if (errorMessage.sizeError) {
-                displayErrorMessage(errorMessage.sizeError, 'size-error-message');
-            } if (errorMessage.quantityError) {
-                displayErrorMessage(errorMessage.quantityError, 'quantity-error-message');
-                clearErrorMessage('size-error-message')
-            }
+            //if (errorMessage.sizeError) {
+            //    displayErrorMessage(errorMessage.sizeError, 'size-error-message');
+            //} if (errorMessage.quantityError) {
+            //    displayErrorMessage(errorMessage.quantityError, 'quantity-error-message');
+            //    clearErrorMessage('size-error-message')
+            //}
         }
     });
 }

@@ -44,8 +44,8 @@
 
             var bag = await bagsRepository
                 .All()
-                .Include(x => x.ProductBags)
                 .Where(x => x.UserId == userId)
+                .Include(x => x.ProductBags)
                 .FirstOrDefaultAsync();
 
             if (bag == null)
@@ -59,25 +59,16 @@
                 await bagsRepository.AddAsync(bag);
             }
 
-            var productBag = await this.productsBagRepository
-                    .All()
-                    .Where(x => x.Bag.UserId == userId && x.ProductId == productId)
-                    .FirstOrDefaultAsync();
+            var productBag = bag.ProductBags
+                    .FirstOrDefault(x => x.ProductId == productId && x.SizeName == sizeName);
 
             if (productBag == null)
             {
-                var product = await this.productsRepository
-                    .All()
-                    .Where(x => x.Id == productId)
-                    .FirstOrDefaultAsync();
-
                 productBag = new ProductBag
                 {
-                    Product = product,
                     ProductId = productId,
                     SizeName = sizeName,
                     Bag = bag,
-                    BagId = bag.Id,
                     Quantity = quantity,
                     CreatedOn = DateTime.UtcNow
                 };
@@ -97,7 +88,6 @@
             {
                 throw new QuantityException("Няма достатъчно бройки от този размер.");
             }
-
 
             var currentProduct = await this.productsBagRepository
                 .All()
@@ -158,15 +148,30 @@
             return count;
         }
 
-        public async Task DeleteProductFromBagAsync(int? productId, string userId)
+        public async Task DeleteProductFromBagAsync(int productId, string sizeName, string userId)
         {
-            var productsInBag = await this.productsBagRepository
+            var productInBag = await this.productsBagRepository
                 .All()
                 .Include(x => x.Bag)
-                .Where(x => x.ProductId == productId || x.Bag.UserId == userId)
+                .Where(x => x.ProductId == productId && x.Bag.UserId == userId && x.SizeName == sizeName)
+                .FirstOrDefaultAsync();
+
+             productInBag.IsDeleted = true;
+             productInBag.Quantity = 0;
+             productInBag.DeletedOn = DateTime.UtcNow;
+
+            await this.productsBagRepository.SaveChangesAsync();
+        }
+
+        public async Task DeleteAllProductsFromBagAsync(string userId)
+        {
+            var allProductsInBag = await this.productsBagRepository
+                .All()
+                .Include(x => x.Bag)
+                .Where(x => x.Bag.UserId == userId && !x.IsDeleted)
                 .ToListAsync();
 
-            foreach (var productInBag in productsInBag)
+            foreach (var productInBag in allProductsInBag)
             {
                 productInBag.IsDeleted = true;
                 productInBag.Quantity = 0;

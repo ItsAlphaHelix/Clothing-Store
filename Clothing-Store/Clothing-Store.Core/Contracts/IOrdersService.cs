@@ -11,7 +11,7 @@
         /// <param name="customerModel">Customer model comes from model binder, with his help you can create the customer.</param>
         /// <param name="userId">The user's id helps to find current customer in the app.</param>
         /// <returns></returns>
-        public Task CreateOrderAsync(
+            Task CreateOrderAsync(
             CustomerViewModel newCustomer,
             string userId,
             string stripePaymentStatus = null,
@@ -23,7 +23,7 @@
         /// </summary>
         /// <param name="userId">The user's id helps to find the user's order.</param>
         /// <returns>Returns </returns>
-        public Task<CompletedOrderViewModel> GetCurrentUserOrderAsync(string userId);
+        Task<CompletedOrderViewModel> GetCurrentUserOrderAsync(string userId);
 
 
         /// <summary>
@@ -31,7 +31,7 @@
         /// </summary>
         /// <param name="numberOfOrder">The number's of order helps to getting current order.</param>
         /// <returns></returns>
-        public IQueryable<ProductOrderViewModel> GetProductsInOrderAsQueryable(string numberOfOrder);
+        IQueryable<ProductOrderViewModel> GetProductsInOrderAsQueryable(string numberOfOrder);
 
         IQueryable<OrderViewModel> GetCustomerOrdersAsQueryable(string userId);
     }

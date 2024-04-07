@@ -10,14 +10,14 @@
         /// Getting all products.
         /// </summary>
         /// <returns></returns>
-        public IQueryable<ProductViewModel> GetAllProductsAsQueryable(PaginatedViewModel<ProductViewModel> model);
+        IQueryable<ProductViewModel> GetAllProductsAsQueryable(PaginatedViewModel<ProductViewModel> model);
 
         /// <summary>
         /// Getting current product by his id.
         /// </summary>
         /// <param name="productId"></param>
         /// <returns></returns>
-        public Task<ProductViewModel> GetProductByIdAsync(int productId);
+        Task<ProductViewModel> GetProductByIdAsync(int productId);
 
         /// <summary>
         /// Getting current product's information.
@@ -30,12 +30,12 @@
         /// Getting all products by gender.
         /// </summary>
         /// <returns></returns>
-        public IQueryable<ProductViewModel> GetAllProductsByGenderAsQueryable(PaginatedViewModel<ProductViewModel> model, bool isMale);
+        IQueryable<ProductViewModel> GetAllProductsByGenderAsQueryable(PaginatedViewModel<ProductViewModel> model, bool isMale);
 
-        public Task<IEnumerable<SizeViewModel>> GetAllSizesAsync();
+        Task<IEnumerable<SizeViewModel>> GetAllSizesAsync();
 
-        public Task PostProductReviewAsync(PostProductReviewViewModel productReview, string userId);
+        Task PostProductReviewAsync(PostProductReviewViewModel productReview, string userId);
 
-        public Task<IEnumerable<ProductViewModel>> GetRecommendedProductsAsync(int productId);
+        Task<IEnumerable<ProductViewModel>> GetRecommendedProductsAsync(int productId);
     }
 }

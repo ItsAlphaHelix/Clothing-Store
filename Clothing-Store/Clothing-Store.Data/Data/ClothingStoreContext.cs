@@ -44,7 +44,7 @@
                 .HasKey(x => new { x.ProductId, x.FavoriteId });
 
             builder.Entity<ProductBag>()
-                .HasKey(x => new { x.ProductId, x.BagId });
+                .HasKey(x => new { x.ProductId, x.BagId, x.SizeName });
 
 
             base.OnModelCreating(builder);

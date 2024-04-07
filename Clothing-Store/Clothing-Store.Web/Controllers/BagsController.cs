@@ -71,10 +71,10 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Delete(int productId, int page = 1)
+        public async Task<IActionResult> Delete(int productId, string sizeName, int page = 1)
         {
-            await this.bagsService.DeleteProductFromBagAsync(productId);
             string userId = await GetUserIdAsync();
+            await this.bagsService.DeleteProductFromBagAsync(productId, sizeName, userId);
             var products = this.bagsService.GetAllProductsInBagAsQueryable(userId);
             var paginated = await PaginatedList<ProductBagViewModel>.CreateAsync(products, page, 3);
 
