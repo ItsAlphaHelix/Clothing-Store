@@ -48,7 +48,8 @@
 ## 🔨 Built Using
 
 ### Back-End Part
-
+----
+ 
 #### - ASP.NET Core 7.0
 #### - Microsoft.AspNetCore.Identity
 #### - MS SQL
@@ -62,6 +63,7 @@
 #### - Repository Pattern
 ---
 ### Front-End Part
+----
 
 #### - Bootstrap
 #### - Font Awesome
