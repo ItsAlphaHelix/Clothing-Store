@@ -30,3 +30,6 @@
 
 ## My Orders
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/My-Orders.png?raw=true)
+
+### 🌐 Database Diagram
+![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Database-Diagram.png?raw=true)
