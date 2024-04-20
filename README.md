@@ -10,7 +10,6 @@
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Homepage.png?raw=true)
 
 ## Shop
-
 ### Here you can see all the products on the website.
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/All-Products.png?raw=true)
 
@@ -35,7 +34,7 @@
 ### Here you see the user's stripe payment view.
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Stripe-Online-Payment.png?raw=true)
 
-## My Orders View
+### Here you can view the use's all successfully completed orders.
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/My-Orders.png?raw=true)
 
 ### 🌐 Database Diagram 
