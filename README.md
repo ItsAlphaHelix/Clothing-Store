@@ -33,3 +33,7 @@
 
 ### 🌐 Database Diagram
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Database-Diagram.png?raw=true)
+
+## 📜 License
+
+#### This project is licensed with the MIT license [MIT](https://choosealicense.com/licenses/mit/)
