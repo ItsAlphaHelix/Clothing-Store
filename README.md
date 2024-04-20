@@ -18,3 +18,6 @@
 
 ## Favorite Products
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Favorite-Products.png?raw=true)
+
+## Bag
+![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Bag.png?raw=true)
