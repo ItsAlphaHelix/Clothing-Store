@@ -47,20 +47,20 @@
 
 ## 🔨 Built Using
  
-#### - ASP.NET Core 7.0
-#### - Microsoft.AspNetCore.Identity
-#### - MS SQL
-#### - ASP.NET Core WebAPI
-#### - Entity Framework Core 7.0
-#### - MSSQL Server
-#### - Visual Studio 2022
-#### - Cloudinary
-#### - Stripe
-#### - Newtonsoft.Json
-#### - Repository Pattern
+- ASP.NET Core 7.0
+- Microsoft.AspNetCore.Identity
+- MS SQL
+- ASP.NET Core WebAPI
+- Entity Framework Core 7.0
+- MSSQL Server
+- Visual Studio 2022
+- Cloudinary
+- Stripe
+- Newtonsoft.Json
+- Repository Pattern
 ---
 
--- Bootstrap
+- Bootstrap
 - Font Awesome
 - AJAX
 - JQuery
