@@ -12,27 +12,34 @@
 ## Shop
 #### All Products View
 
-##### Тук може да видите всички продукти в сайта.
+##### Here you can see all the products on the website.
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/All-Products.png?raw=true)
 
 #### All Men Products View
+##### Here you can see all men's products on the website.
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/All-Men-Products.png?raw=true)
 
 #### All WomenProducts View
+##### Here you can see all women's products on the website.
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/All-Women-Products.png?raw=true)
 ## My Profile
+### Here you can view the user's profile.
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Profile.png?raw=true)
 
 ## Favorite Products View
+### Here you can view the user's favorite products.
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Favorite-Products.png?raw=true)
 
 ## Bag View
+### Here you can view the user's bag with his products.
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Bag.png?raw=true)
 
 ## Checkout View
+### Here you can view the user's "checkout" options.
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Checkout.png?raw=true)
 
 ## Stripe Payment View
+### Here you see the user's stripe payment view.
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Stripe-Online-Payment.png?raw=true)
 
 ## My Orders View
