@@ -31,6 +31,9 @@
 ### Here you can view the user's "checkout" options.
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Checkout.png?raw=true)
 
+### Here you can view what happens when a user successfully creates their order.
+![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Order-Confirmation.png?raw=true)
+
 ### Here you see the user's stripe payment view.
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Stripe-Online-Payment.png?raw=true)
 
