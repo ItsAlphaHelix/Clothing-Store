@@ -45,6 +45,32 @@
 ### Here you can view the use's all successfully completed orders.
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/My-Orders.png?raw=true)
 
+## 🔨 Built Using
+
+### Back-End Part
+
+#### - ASP.NET Core 7.0
+#### - Microsoft.AspNetCore.Identity
+#### - MS SQL
+#### - ASP.NET Core WebAPI
+#### - Entity Framework Core 7.0
+#### - MSSQL Server
+#### - Visual Studio 2022
+#### - Cloudinary
+#### - Stripe
+#### - Newtonsoft.Json
+#### - Repository Pattern
+---
+### Front-End Part
+
+#### - Bootstrap
+#### - Font Awesome
+#### - AJAX
+#### - JQuery
+#### - Sweet Awert
+#### - Html/CSS 
+#### - Javascript
+
 ### 🌐 Database Diagram 
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Database-Diagram.png?raw=true)
 
