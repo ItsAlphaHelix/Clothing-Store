@@ -2,7 +2,7 @@
 
 ## 📃 Project Description
 
-### The Clothing-Store project is a website for selling clothes. The site provides an easy way to select a product based on various criteria such as price, rating, size, or product name. Each user of the site, after creating their profile, can add a product they like to their so-called favorite products and access them at any time. The user can choose a product to purchase. After selecting it, they will go to their shopping bag, and with a few clicks, they can create their first order. The site has two implemented payment methods: cash on delivery or online via the Stripe service. After creating their first order, the user can review it in the "Моите поръчки" section.
+### The Clothing-Store project is a website designed for selling clothing items. It provides a user-friendly interface that enables customers to effortlessly browse and select products based on various criteria such as price, rating, size, or product name. Once users create their profiles, they can add items they like to their list of favorite products and access them at any time. Additionally, users have the option to visit the "My Profile" section where they can upload a profile picture or update their contact information. Moreover, they can choose a product to purchase, proceed to their shopping bag, and with just a few clicks, complete their first order. The website supports two payment methods: cash on delivery or online payments via the Stripe service. After placing their first order, users can review it in the "My Orders" section.
 
 ### Every user who visits the site is automatically assigned a user ID, which is stored as a cookie. After 1 month, this cookie changes, and therefore all products saved in the user's shopping bag are deleted. To prevent the deletion of the user's shopping bag, it is desirable for them to create an account. Then they will have a single ID, which will be stored in the database along with all their activity. This means that their orders, product ratings, and so on will be saved forever.
 
@@ -24,7 +24,7 @@
 ### Here you can see all women's products on the website.
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/All-Women-Products.png?raw=true)
 
-### Here you can view the user's profile.
+### Here you can view the user's profile. 
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Profile.png?raw=true)
 
 ### Here you can view the user's favorite products.
