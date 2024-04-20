@@ -15,7 +15,6 @@
 ## Login Page
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Login.png?raw=true)
 
-## Shop
 ### Here you can see all the products on the website.
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/All-Products.png?raw=true)
 
