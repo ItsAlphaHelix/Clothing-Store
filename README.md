@@ -21,3 +21,12 @@
 
 ## Bag
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Bag.png?raw=true)
+
+## Checkout
+![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Checkout.png?raw=true)
+
+## Stripe Payment
+![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Stripe-Online-Payment.png?raw=true)
+
+## My Orders
+![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/My-Orders.png?raw=true)
