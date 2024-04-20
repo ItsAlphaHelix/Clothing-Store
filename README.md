@@ -2,6 +2,10 @@
 
 ## 📃 Project Description
 
+### The Clothing-Store project is a website for selling clothes. The site provides an easy way to select a product based on various criteria such as price, rating, size, or product name. Each user of the site, after creating their profile, can add a product they like to their so-called favorite products and access them at any time. The user can choose a product to purchase. After selecting it, they will go to their shopping bag, and with a few clicks, they can create their first order. The site has two implemented payment methods: cash on delivery or online via the Stripe service. After creating their first order, the user can review it in the "Моите поръчки" section.
+
+Every user who visits the site is automatically assigned a user ID, which is stored as a cookie. After 1 month, this cookie changes, and therefore all products saved in the user's shopping bag are deleted. To prevent the deletion of the user's shopping bag, it is desirable for them to create an account. Then they will have a single ID, which will be stored in the database along with all their activity. This means that their orders, product ratings, and so on will be saved forever.
+
 ## Home Page
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Homepage.png?raw=true)
 
