@@ -9,10 +9,10 @@
 ## Home Page
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Homepage.png?raw=true)
 
-##Register Page
+## Register Page
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Register.png?raw=true)
 
-##Login Page
+## Login Page
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Login.png?raw=true)
 
 ## Shop
