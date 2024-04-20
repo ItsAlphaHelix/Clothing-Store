@@ -48,6 +48,8 @@
 ### 🌐 Database Diagram 
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Database-Diagram.png?raw=true)
 
+EVERY PRODUCT IS STOLEN FROM [https://way-ve.com/](https://www.lcwaikiki.bg/bg-BG/BG) ONLY FOR TEACHING THINGS.
+
 ## 👦 Author
 
 #### - Linkedin [Dimitar Georgiev](https://www.linkedin.com/in/dimitar-georgiev-551a16242/)
