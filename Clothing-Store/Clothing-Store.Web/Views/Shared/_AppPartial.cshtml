@@ -8,6 +8,20 @@
 
 @{
     var sizes = await this.productsService.GetAllSizesAsync();
+    string url = Context.Request.Path;
+    string navigation = string.Empty;
+    if (url.Contains("AllMenProducts"))
+    {
+        navigation = "Всички мъжки продукти";
+    }
+    else if (url.Contains("AllWomenProducts"))
+    {
+        navigation = "Всички женски продукти";
+    }
+    else
+    {
+        navigation = "Всички продукти";
+    }
 }
 
 <partial name="_SearchPartial" />
@@ -16,12 +30,13 @@
     <div class="container-fluid gx-5">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
-                <li class="breadcrumb-item active">Collection</li>
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Начална страница</a></li>
+                <li class="breadcrumb-item active">@navigation</li>
             </ol>
         </nav>
     </div>
 </div>
+
 <!--MG Breadcrumb End Here-->
 <!--MG Page Start Here-->
 <div class="mg-page-outer collection-page-outer">

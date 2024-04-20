@@ -12,8 +12,8 @@
     var productReview = new PostProductReviewViewModel();
     productReview.ProductId = Model.Id;
 
-    var gender = Model.IsMale ? "Мъжки" : "Женски";
-    var navigation = Model.IsMale ? "AllMenProducts" : "AllWomenProducts";
+    string gender = Model.IsMale ? "Мъжки" : "Женски";
+    string navigation = Model.IsMale ? "AllMenProducts" : "AllWomenProducts";
 
     string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
     var userFavoriteProducts = await this.favoritesService.AllUserFavoriteProductsAsync(userId);
@@ -26,7 +26,7 @@
     <div class="container-fluid gx-5">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Начална страница</a></li>
                 <li class="breadcrumb-item"><a asp-controller="Products" asp-action="@navigation">@gender</a></li>
                 <li class="breadcrumb-item active">@Model.Category</li>
             </ol>
