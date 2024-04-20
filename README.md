@@ -60,13 +60,13 @@
 #### - Repository Pattern
 ---
 
-#### - Bootstrap
-#### - Font Awesome
-#### - AJAX
-#### - JQuery
-#### - Sweet Awert
-#### - Html/CSS 
-####- Javascript
+-- Bootstrap
+- Font Awesome
+- AJAX
+- JQuery
+- Sweet Awert
+- Html/CSS 
+- Javascript
 
 ### 🌐 Database Diagram 
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Database-Diagram.png?raw=true)
