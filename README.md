@@ -48,6 +48,10 @@
 ### 🌐 Database Diagram 
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Database-Diagram.png?raw=true)
 
+## 👦 Author
+
+#### - Linkedin [Dimitar Georgiev](https://www.linkedin.com/in/dimitar-georgiev-551a16242/)
+
 ## 📜 License
 
 #### This project is licensed with the MIT license [MIT](https://choosealicense.com/licenses/mit/)
