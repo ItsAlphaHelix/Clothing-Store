@@ -10,32 +10,35 @@
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Homepage.png?raw=true)
 
 ## Shop
-#### All Products
+#### All Products View
+
+##### Тук може да видите всички продукти в сайта.
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/All-Products.png?raw=true)
 
-#### All Men Products
+#### All Men Products View
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/All-Men-Products.png?raw=true)
-#### All WomenProducts
+
+#### All WomenProducts View
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/All-Women-Products.png?raw=true)
 ## My Profile
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Profile.png?raw=true)
 
-## Favorite Products
+## Favorite Products View
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Favorite-Products.png?raw=true)
 
-## Bag
+## Bag View
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Bag.png?raw=true)
 
-## Checkout
+## Checkout View
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Checkout.png?raw=true)
 
-## Stripe Payment
+## Stripe Payment View
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Stripe-Online-Payment.png?raw=true)
 
-## My Orders
+## My Orders View
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/My-Orders.png?raw=true)
 
-### 🌐 Database Diagram
+### 🌐 Database Diagram 
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Database-Diagram.png?raw=true)
 
 ## 📜 License
