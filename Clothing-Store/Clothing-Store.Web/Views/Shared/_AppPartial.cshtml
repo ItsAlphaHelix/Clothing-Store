@@ -85,10 +85,10 @@
                                         <div class="mg-filter-panel">
                                             <div class="mg-filter-checkbox">
                                                 <ul>
-                                                    <li><a href="#" name="selectedPrice" value="5-15" onclick="handleChangePrices(this)">5 BGN - 15 BGN</a></li>
-                                                    <li><a href="#" name="selectedPrice" value="15-30" onclick="handleChangePrices(this)">15 BGN - 30 BGN</a></li>
-                                                    <li><a href="#" name="selectedPrice" value="30-50" onclick="handleChangePrices(this)">30 BGN - 50 BGN</a></li>
-                                                    <li><a href="#" name="selectedPrice" value="50-100" onclick="handleChangePrices(this)">50 BGN - 100 BGN</a></li>
+                                                    <li><a href="#" name="selectedPrice" value="5-15" onclick="handleChangePrices(this)">5 ЛВ - 15 ЛВ</a></li>
+                                                    <li><a href="#" name="selectedPrice" value="15-30" onclick="handleChangePrices(this)">15 ЛВ - 30 ЛВ</a></li>
+                                                    <li><a href="#" name="selectedPrice" value="30-50" onclick="handleChangePrices(this)">30 ЛВ - 50 ЛВ</a></li>
+                                                    <li><a href="#" name="selectedPrice" value="50-100" onclick="handleChangePrices(this)">50 ЛВ - 100 ЛВ</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -174,14 +174,14 @@
                         <div class="mg-sorting-outer mb-3">
                             <!--Select Input Sorting-->                     
                                 <div class="mg-sorting">
-                                    <label>Shorted By:</label>
+                                    <label>Сортиране по:</label>
                                     <select asp-for="@Model.Sorting" class="form-control" onchange="callChangeOrder(this.value)">
-                                        <option value="Default">Default</option>
-                                        <option value="AverageRating">Average Rating</option>
-                                        <option value="PriceAsc">Low To High</option>
-                                        <option value="PriceDesc">High To Low</option>
-                                        <option value="Newest">Newest</option>
-                                        <option value="Oldest">Oldest</option>
+                                        <option value="Default">Подразбиране</option>
+                                        <option value="AverageRating">Среден рейтинг</option>
+                                        <option value="PriceAsc">Към Висока цена</option>
+                                        <option value="PriceDesc">Към Ниска цена</option>
+                                        <option value="Newest">Нови</option>
+                                        <option value="Oldest">Стари</option>
                                     </select>
                                 </div>
                         </div>

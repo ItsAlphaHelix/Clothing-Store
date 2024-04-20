@@ -2,10 +2,9 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Вписване";
 }
-
-<div class="modal-dialog modal-dialog-fix">
+<div class="modal-dialog">
     <div class="tab-pane" id="mg-signup">
         <div class="mg-account-form-outer">
             <form class="mg-form" asp-route-returnUrl="@Model.ReturnUrl" method="post">
@@ -16,7 +15,7 @@
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Password</label>
+                    <label class="form-label">Парола</label>
                     <input asp-for="Input.Password" class="form-control mg-input" type="password" placeholder="Въведете парола">
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
@@ -42,8 +41,7 @@
             </div> *@
         </div>
     </div>
-</div>
-
+</div> 
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

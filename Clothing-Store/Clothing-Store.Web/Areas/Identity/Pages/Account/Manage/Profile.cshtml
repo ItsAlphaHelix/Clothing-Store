@@ -95,7 +95,7 @@
             event.preventDefault();
             console.log("Edited.");
             var phoneText = $('#phoneText').text().trim();
-
+            console.log(phoneText.length);
             var inputElement = $('<input>', {
                 type: 'text',
                 value: phoneText,

@@ -25,13 +25,13 @@
     @if (this.ViewBag.IsHomePage)
     {
         <header class="mg-transparent-header">
-            <partial name="_NavigationHomePartial.cshtml" />
+            <partial name="_NavigationHomePartial" />
         </header>
     }
     else
     {
         <header>
-            <partial name="_GlobalNavigationPartial.cshtml" />
+            <partial name="_GlobalNavigationPartial" />
         </header>
     }
 
@@ -43,7 +43,7 @@
         @RenderBody()
     </main>
 
-    <partial name="_FooterPartial.cshtml" />
+    @* <partial name="_FooterPartial" /> *@
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
