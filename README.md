@@ -56,6 +56,8 @@
 - Visual Studio 2022
 - Cloudinary
 - Stripe
+- Selenium
+- Html Agility Pack
 - Newtonsoft.Json
 - Repository Pattern
 ---
