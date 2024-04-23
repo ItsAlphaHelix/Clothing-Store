@@ -8,6 +8,12 @@ namespace Clothing_Store.Data.Data.Models
         public int Id { get; set; }
 
         [Required]
+        public string LCProductId { get; set; }
+
+        [Required]
+        public string LCProductColorId { get; set; }
+
+        [Required]
         public string Category { get; set; } = null!;
 
         public decimal Price { get; set; }

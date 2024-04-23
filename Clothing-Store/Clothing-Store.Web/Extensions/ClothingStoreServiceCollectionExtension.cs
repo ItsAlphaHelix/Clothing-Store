@@ -3,6 +3,7 @@
     using AspNetCoreHero.ToastNotification;
     using Clothing_Store.Core.Contracts;
     using Clothing_Store.Core.Services;
+    using Clothing_Store.Core.WebScrapper;
     using Clothing_Store.Data.Repositories;
 
     public static class ClothingStoreServiceCollectionExtension
@@ -17,6 +18,7 @@
             services.AddScoped<IOrdersService, OrdersService>();
             services.AddScoped<IPaymentsService, PaymentsService>();
             services.AddScoped<ICustomersService, CustomersService>();
+            services.AddScoped<IScrape, Scrape>();
             services.AddNotyf(configuration =>
             {
                 configuration.DurationInSeconds = 5;

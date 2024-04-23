@@ -1,9 +1,10 @@
 ﻿namespace Clothing_Store.Data.Data
 {
     using Clothing_Store.Data.Data.Models;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
-    public class ClothingStoreContext : IdentityDbContext<ApplicationUser>
+    public class ClothingStoreContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
     {
         public ClothingStoreContext(DbContextOptions<ClothingStoreContext> options)
             : base(options)

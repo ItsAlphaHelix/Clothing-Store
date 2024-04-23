@@ -2,7 +2,9 @@ using AspNetCoreHero.ToastNotification.Extensions;
 using Clothing_Store.Data.Data;
 using Clothing_Store.Data.Data.Models;
 using Clothing_Store.Extensions;
+using Clothing_Store.Middlewares;
 using Clothing_Store.Providers;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Stripe;
@@ -17,6 +19,7 @@ builder.Services.AddDbContext<ClothingStoreContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
+    .AddRoles<IdentityRole>()
     .AddErrorDescriber<IdentityErrorDescriberProvider>()
     .AddEntityFrameworkStores<ClothingStoreContext>();
 
@@ -39,7 +42,6 @@ StripeConfiguration.ApiKey = builder.Configuration.GetValue<string>("StripeSetti
 builder.Services.AddApplicationServices(builder.Configuration);
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
@@ -50,6 +52,8 @@ else
     app.UseHsts();
 }
 
+
+app.Seed();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -60,9 +64,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.UseCustomEndpoints();
 
 app.UseNotyf();
 app.MapRazorPages();

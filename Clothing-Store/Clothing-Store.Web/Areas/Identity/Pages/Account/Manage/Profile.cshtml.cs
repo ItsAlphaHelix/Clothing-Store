@@ -70,8 +70,7 @@ namespace Clothing_Store.Areas.Identity.Pages.Account.Manage
         {
             ViewData["IsHomePage"] = false;
             var user = await this.usersManager.FindByIdAsync(this.User.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
-
-
+           
             user.PhoneNumber = model.Phone;
             await this.usersManager.UpdateAsync(user);
 
@@ -83,7 +82,7 @@ namespace Clothing_Store.Areas.Identity.Pages.Account.Manage
             ViewData["IsHomePage"] = false;
             var user = await this.usersManager.FindByIdAsync(this.User.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
 
-
+            user.UserName = model.Email;
             user.Email = model.Email;
             await this.usersManager.UpdateAsync(user);
 

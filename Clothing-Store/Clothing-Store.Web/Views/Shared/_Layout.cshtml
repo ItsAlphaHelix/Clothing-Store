@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string CurrentURL = this.Context.Request.Path;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -24,15 +28,18 @@
 
     @if (this.ViewBag.IsHomePage)
     {
-        <header class="mg-transparent-header">
-            <partial name="_NavigationHomePartial" />
-        </header>
+            <header class="mg-transparent-header">
+                <partial name="_NavigationHomePartial" />
+            </header>        
     }
     else
     {
-        <header>
-            <partial name="_GlobalNavigationPartial" />
-        </header>
+        if (!CurrentURL.Contains("Administration"))
+        {
+            <header>
+                <partial name="_GlobalNavigationPartial" />
+            </header>
+        }
     }
 
     <div class="modal fade mg-quick-view-modal-outer" id="mg-quick-view-modal" tabindex="-1" aria-labelledby="mg-quick-view-modal" aria-hidden="true">
@@ -56,7 +63,7 @@
     <script src="~/js/mg-collection.js" asp-append-version="true"></script>
     <script src="~/js/mg-home-2.js" asp-append-version="true"></script>
     <script src="~/js/mg-common.js" asp-append-version="true"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js" asp-append-version="true"></script>
+    <script src="https://unpkg.com/sweetalert/dist/v.min.js" asp-append-version="true"></script>
     <script>
         function displayBusyIndicator() {
             var loadingDiv = document.getElementById('loading');
@@ -66,7 +73,7 @@
             displayBusyIndicator();
         });
     </script>
-    @await Component.InvokeAsync("Notyf") 
+    @await Component.InvokeAsync("Notyf")
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

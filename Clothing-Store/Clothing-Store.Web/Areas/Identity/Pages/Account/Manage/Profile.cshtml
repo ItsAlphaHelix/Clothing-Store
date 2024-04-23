@@ -41,6 +41,19 @@
                 </div>
             </div>
             <div class="mg-profile-user-details-list-main">
+                @if(this.User.IsInRole("Admin"))
+                {
+                    <div class="mg-profile-user-details-list-grid">
+                        <div class="row gx-2">
+                            <div class="col-6">
+                                <p class="mg-profile-user-details-list-heading">Администрация</p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p class="mg-profile-user-details-list-des"><a asp-area="Administration" asp-controller="Dashboard" asp-action="Index">Администрация</a></p>
+                            </div>
+                        </div>
+                    </div>
+                }
                 <div class="mg-profile-user-details-list-grid">
                     <div class="row gx-2">
                         <div class="col-6">
