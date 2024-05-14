@@ -68,7 +68,7 @@
                     Currency = "bgn",
                     ProductData = new SessionLineItemPriceDataProductDataOptions()
                     {
-                        Name = "Shipping",
+                        Name = "Доставка",
                     }
                 },
                 Quantity = 1

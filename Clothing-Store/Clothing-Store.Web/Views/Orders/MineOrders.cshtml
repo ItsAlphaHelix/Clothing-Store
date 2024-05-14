@@ -7,6 +7,7 @@
 
 @{
     ViewData["Title"] = "Моите поръчки";
+    var userName = this.User.Identity.Name;
     var user = await usersManager.FindByNameAsync(this.User.Identity.Name);
 }
 
