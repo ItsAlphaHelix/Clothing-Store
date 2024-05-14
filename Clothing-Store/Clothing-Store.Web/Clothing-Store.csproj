@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-Clothing_Store-97962c6e-f58d-4574-bb44-33de257f9863</UserSecretsId>
     <RootNamespace>Clothing_Store</RootNamespace>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>.</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>
@@ -36,9 +38,6 @@
     <Folder Include="Models\" />
     <Folder Include="Views\Shared\" />
     <Folder Include="wwwroot\css\" />
-    <Folder Include="wwwroot\images\" />
-    <Folder Include="wwwroot\images\banners\" />
-    <Folder Include="wwwroot\images\jpgs\" />
     <Folder Include="wwwroot\js\" />
     <Folder Include="wwwroot\lib\bootstrap\" />
     <Folder Include="wwwroot\lib\bootstrap\dist\css\" />
