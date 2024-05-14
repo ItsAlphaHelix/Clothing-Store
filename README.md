@@ -30,8 +30,11 @@
 ### Here you can view the user's favorite products.
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Favorite-Products.png?raw=true)
 
-### Here you can view how to write some revie of product.
+### Here you can view how to write some review of the product you desire.
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Post-Review.png?raw=true)
+
+### Here you can view all reviews of the product.
+![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/All-Reviews.png?raw=true)
 
 ### Here you can view the user's bag with his products.
 ![image](https://github.com/ItsAlphaHelix/Clothing-Store/blob/main/Pngs/Bag.png?raw=true)
